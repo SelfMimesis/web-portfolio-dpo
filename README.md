@@ -629,10 +629,12 @@ El diseño está en `css/scene-timelines.css`: marco técnico, scanlines estáti
 
 Validación local: avance y retroceso de la secuencia, móvil de 390 px, recorrido completo ART/DEV, About Me correctamente situado después del pin y retorno a inicio sin pin-spacers de los recorridos.
 
-### Animación ASCII LED de desarrollo de apps
+### Dibujo animado de micro-LED dentro de la ventana
 
-Encima de la ventana narrativa, alineada con su borde derecho, aparece una pequeña pantalla ASCII verde. Representa cuatro fases: `CODE`, `BUILD`, `TEST` y `LIVE`, con un editor de código conectado a una app. Los caracteres cambian por pasos cada 120 ms; cada fase dura ocho pasos. La textura LED es una cuadrícula CSS estática, sin filtros ni ruido animado.
+El primer bloque ASCII exterior se ha sustituido por una ilustración de puntos LED **dentro de la ventana narrativa, a la derecha del título**. No muestra código: una matriz circular forma un teléfono con iconos, un puntero que toca la pantalla, una respuesta circular y una confirmación.
 
-El marcado y el fotograma de respaldo están en `.app-ascii` de `index.html`; `js/app-ascii.js` controla la secuencia y `css/scene-timelines.css` su aspecto y posición. Se inicializa desde `js/main.js`. Solo se muestra dentro de DIGITAL PROPS, no en la portada dividida. Es decorativa (`aria-hidden`) y no añade controles ni anuncios al lector de pantalla. El único temporizador GSAP se detiene cuando sale de pantalla o la pestaña se oculta; con movimiento reducido o sin GSAP queda un fotograma estático. Los listeners y el observer se limpian al abandonar la página.
+La cuadrícula de 25 × 25 posiciones contiene 481 puntos visibles dentro del círculo. Cada punto conserva su posición física; únicamente cambia entre encendido (94 %), persistencia (12 %) y apagado (6,5 %). Hay 32 fotogramas precalculados, separados por 120 ms. La animación usa la paleta verde de DIGITAL PROPS, sin brillo ni desenfoque.
 
-Verificado por HTTP en escritorio 1440 px y móvil 390 px: encaje por encima de la ventana, alineación derecha, ausencia de recorte horizontal y modo reducido sin cambios de fotograma.
+El dibujo se genera como SVG en `.app-glyph` de `index.html`. Su controlador permanece en `js/app-ascii.js` por continuidad del módulo existente, aunque ya no produce caracteres ASCII. `css/scene-timelines.css` coloca título y matriz en dos columnas dentro del marco. El módulo conserva la pausa fuera de pantalla, al ocultar la pestaña y con movimiento reducido. Sin GSAP se dibuja un fotograma estático. Es decorativo y no modifica el contenido accesible del mensaje.
+
+Validado mediante HTTP en 1440 px y 390 px: dibujo dentro de la ventana, sin desbordamiento, fotogramas activos y estado estático con movimiento reducido.
