@@ -36,6 +36,11 @@ export function createPlaybackServices(panel,{mobile=false}={}) {
   const paintGradient=tick=>{if(tick!==lastGradient){lastGradient=tick;ascii.textContent=gradient(tick);}};
   const timeline=gsap.timeline({paused:true});
   if(!mobile){
+    const background = panel.querySelectorAll('.playback-copy, .playback-photo, .panel-meta');
+    // A restrained bloom on the chapter artwork, never on the service window.
+    timeline.fromTo(background,
+      {filter:'blur(0px) brightness(1) drop-shadow(0px 0px 0px rgba(193,217,155,0))'},
+      {filter:'blur(1.4px) brightness(1.08) drop-shadow(0px 0px 5px rgba(193,217,155,0.24))',duration:.24,ease:'power1.out'},.08);
     timeline.to(panel.querySelector('.playback-copy'),{opacity:1,duration:.2},0)
       .to(panel.querySelector('.playback-photo'),{opacity:1,duration:.2},0);
     cards.forEach((card,i)=>{
@@ -45,6 +50,7 @@ export function createPlaybackServices(panel,{mobile=false}={}) {
     timeline.fromTo(cards[0].querySelector('img'),{opacity:.2,clipPath:'inset(0 100% 0 0)'},{opacity:1,clipPath:'inset(0 0% 0 0)',duration:.25,ease:'steps(5)'},.3);
     timeline.to(panel.querySelector('.playback-copy'),{opacity:1,duration:.2},cards.length+.14)
       .to(panel.querySelector('.playback-photo'),{opacity:1,duration:.2},cards.length+.14);
+    timeline.to(background,{filter:'blur(0px) brightness(1) drop-shadow(0px 0px 0px rgba(193,217,155,0))',duration:.2,ease:'power1.inOut'},cards.length+.14);
   }else{
     cards.forEach(card=>gsap.from(card,{y:40,opacity:.15,duration:1,scrollTrigger:{trigger:card,start:'top 92%',end:'top 55%',scrub:true,onUpdate:self=>draw(self.progress)}}));
   }

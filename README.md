@@ -686,3 +686,9 @@ Los logos se almacenan localmente en `assets/protoio-logo.svg` y `assets/protopi
 La duración de la pausa se calcula según el número de servicios: `max(número × 700 px, altura de ventana × (número + 0,4))`. La timeline también calcula su duración desde el número de ventanas, para conservar el tiempo de lectura al añadir la quinta. En móvil continúan en flujo vertical.
 
 Validación a 1440 px: las cinco ventanas quedan entre el límite derecho del texto y el izquierdo de la foto, con el capítulo inmóvil. Ambos logos cargan correctamente. A 390 px, las cinco ventanas aparecen en orden sin desbordamiento ni pins internos.
+
+### Centrado y separación visual de las ventanas
+
+Las cinco ventanas comparten ahora una misma celda de grid centrada vertical y horizontalmente en el hueco central, independientemente de su altura. Durante la secuencia, GSAP aplica a título, foto (incluido el gradiente ASCII) y metadatos un desenfoque de 1,4 px, brillo 1,08 y un halo verde de 5 px al 24 %. Es un efecto visual de bloom, no HDR real. Las ventanas de servicios permanecen nítidas.
+
+El efecto entra y sale con la misma timeline, desaparece al finalizar y se revierte al subir. No se aplica sobre toda la página ni añade un bucle de renderizado. La lectura vertical móvil y el modo reducido conservan los elementos sin filtro. Validación en las cinco ventanas: diferencia respecto al centro inferior a 0,01 px, filtro ausente en las ventanas y valores neutros antes y después de la secuencia.

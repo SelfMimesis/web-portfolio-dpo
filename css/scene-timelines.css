@@ -123,3 +123,10 @@
 .prototype-brands>span{display:flex;align-items:center;gap:5px;font:14px var(--sans);white-space:nowrap}
 .prototype-brands>span img{width:24px;height:24px;object-fit:contain}
 .service-prototypes>svg{flex:1;min-height:0}
+
+/* All five windows share a centre regardless of their individual height. */
+@media(min-width:701px){
+ body:not(.vertical-mode) .playback-services{inset:var(--header) 32.76% 40px 37.96%;display:grid;align-items:center}
+ body:not(.vertical-mode) .playback-service{position:relative;inset:auto;grid-area:1 / 1;margin:0;width:100%}
+}
+@media(prefers-reduced-motion:reduce){.panel--playback .playback-copy,.panel--playback .playback-photo,.panel--playback .panel-meta{filter:none!important}}
