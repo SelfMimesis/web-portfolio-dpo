@@ -1,4 +1,4 @@
-import { driveLCD, driveFlightDisplay } from './lcd-display.js';
+import { driveLCD } from './lcd-display.js';
 
 const clamp = value => Math.max(0, Math.min(1, value));
 
@@ -24,7 +24,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
       timeline.fromTo(visual, { y: index === 0 ? 0 : 28, scale: index === 0 ? 1 : .92 }, { y: 0, scale: 1, duration: .38, ease: 'power2.out' }, 0);
       timeline.to(title, { x: distance * .5, opacity: .25, duration: .32, ease: 'power1.in' }, .68);
       timeline.to(visual, { y: -24, scale: mobile ? .98 : .94, duration: .32, ease: 'none' }, .68);
-      entries.push({ timeline, progress: -1, flight: panel.querySelector('.flight-deck') });
+      entries.push({ timeline, progress: -1 });
     });
     if (!mobile) {
       frame = document.createElement('div');
@@ -45,7 +45,6 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     if (entry.progress === next) return;
     entry.progress = next;
     entry.timeline.progress(next);
-    if (entry.flight) driveFlightDisplay(entry.flight, Math.min(11, Math.floor(next * 12)));
     if (index === 1) {
       // Quantized physical poses: scroll never interpolates pixels or coordinates.
       const nextFrame = Math.min(17, Math.floor(next * 18));
@@ -66,7 +65,6 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     },
     destroy() {
       context.revert(); frame?.remove(); driveLCD(lcd, 0);
-      entries.forEach(entry => { if (entry.flight) driveFlightDisplay(entry.flight, 1); });
     }
   };
 }

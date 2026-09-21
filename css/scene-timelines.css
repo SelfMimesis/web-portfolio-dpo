@@ -20,9 +20,6 @@
 .portrait-card.ambient-running { animation-play-state:running }
 .flight-deck .nav-sweep,.flight-deck .nav-horizon,.flight-deck .nav-target,.flight-deck .thrust-bars i:nth-child(6) { animation-play-state:paused }
 .flight-deck.ambient-running .nav-sweep,.flight-deck.ambient-running .nav-horizon,.flight-deck.ambient-running .nav-target,.flight-deck.ambient-running .thrust-bars i:nth-child(6) { animation-play-state:running }
-.flight-deck .flight-pose,.flight-deck .thrust-bars i:nth-child(6) { animation:none }
-.flight-deck .flight-pose[data-lcd-state] { fill:none }
-.flight-deck .thrust-bars i { background:currentColor }
 @media(max-width:700px) {
  .panel--signal { display:flex;gap:24px;padding-bottom:80px }
  .panel--signal h2 { font-size:clamp(44px,10.5vw,72px) }

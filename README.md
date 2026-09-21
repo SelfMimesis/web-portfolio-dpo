@@ -108,7 +108,7 @@ docs/
 | `scene-timelines.js` | Animación interna del primer tramo DEV | Ajustas su ritmo sin tocar el pin |
 | `mobile-story.js` | Animaciones reversibles de capítulos móviles | Ajustas la narrativa vertical existente |
 | `world-links.js` | Botones finales y descenso a About | Cambias el acceso entre universos |
-| `lcd-display.js` | Matriz, segmentos, ENTER, boot y poses ORBIT | Cambias estados electrónicos |
+| `lcd-display.js` | Matriz, segmentos, ENTER y boot | Cambias estados electrónicos del LCD |
 | `ambient-motion.js` | Pausa loops CSS fuera de pantalla | Controlas movimiento ambiental |
 | `cursor.js` | Cursor compartido y aviso de scroll | Ajustas respuesta, forma y color |
 | `three-scene.js` | Pequeña capa WebGL opcional | Ajustas exclusivamente ese adorno |
@@ -146,7 +146,7 @@ El navegador carga `index.html`, estilos y librerías, y ejecuta `main.js` como 
 1. Registra ScrollTrigger si está disponible.
 2. Detecta móvil y movimiento reducido.
 3. Ejecuta `buildScenes()` y añade Next World.
-4. Inicializa LCD, poses ORBIT y visibilidad de loops.
+4. Inicializa LCD y visibilidad de loops.
 5. Conecta navegación, portada, cursor y Three.js.
 6. Prepara About y filmografía.
 7. Lee `#art` o `#dev` de la URL para entrar directamente si corresponde.
@@ -239,13 +239,13 @@ Al salir del universo, `destroy()` revierte estilos, retira el marco y restaura 
 
 ## 6. ORBIT y LCD
 
-### Terminal rediseñada
+### Terminal original restaurada
 
-ORBIT combina cabecera de gran escala, lectura principal de velocidad, instrumento circular con divisiones físicas y columnas secundarias. Tiene menos perspectiva y una paleta monocromática oliva, sin neon ni glow.
+Por petición posterior, ORBIT vuelve a la versión publicada al principio de esta sesión, antes del rediseño: misma posición, dimensiones, perspectiva, sombras, textura de pantalla y distribución de datos. Se han recuperado el HTML y `digital-props.css` del commit `f666c64` sin revertir las mejoras de scroll, navegación, filmografía o progreso.
 
-La [referencia ZRK](https://www.zrk.technology/) sirve para estudiar jerarquía, escala y marcos. No se copian sus imágenes, marca, textos o producto. ORBIT sigue siendo una interfaz ficticia de navegación espacial propia del portfolio.
+La [referencia ZRK](https://www.zrk.technology/) se estudió durante la evolución narrativa. El rediseño de terminal inspirado en ella se ha retirado. ORBIT conserva su identidad anterior como interfaz ficticia de navegación espacial.
 
-El radar mantiene un barrido continuo. Objetivos y horizonte tienen grupos SVG separados en posiciones predeterminadas: se enciende una pose y se apagan o dejan en ghost las otras. No se mueve un sprite suavemente entre posiciones.
+Se recuperan el barrido del radar, el movimiento del horizonte y las pulsaciones originales. Estos loops siguen pausándose fuera de pantalla y con movimiento reducido. Las poses discretas añadidas al rediseño ya no se aplican a ORBIT; el lenguaje LCD se conserva en los instrumentos LCD y el botón final.
 
 ### Sistema LCD reutilizado
 
@@ -267,7 +267,7 @@ Dos controles comparten este lenguaje:
 
 El reloj del botón se detiene fuera de pantalla, con pestaña oculta o con movimiento reducido. `data-lcd-running` permite inspeccionar si está activo; el LCD dirigido por scroll debe mostrar `false`.
 
-`initFlightDisplays()` prepara las poses de ORBIT. `driveFlightDisplay()` cambia segmentos, barras y etiquetas ACQUIRE / ENGAGED / TRACK. Los datos son ficción, no telemetría real.
+ORBIT vuelve a usar su SVG original y sus animaciones CSS. Sus datos son ficción, no telemetría real.
 
 Los marcos y captions son la capa impresa. Los indicadores son la capa electrónica. ART conserva su lenguaje material y su barra de progreso lisa.
 
@@ -360,7 +360,7 @@ Se combinan JAK local, sans del sistema, monospace/Courier y Georgia. Conserva l
 
 ### Terminal
 
-Edita `.flight-deck` en HTML y `digital-props.css`. Conserva `.nav-target`, `.nav-horizon`, `.flight-nav-label b` y `.thrust-bars` si quieres mantener el controlador existente. Para estados LCD edita `lcd-display.js`; no añadas interpolación CSS suave a los píxeles.
+Edita `.flight-deck` en HTML y `digital-props.css`. Conserva las clases `.nav-target`, `.nav-horizon` y `.thrust-bars` para sus animaciones CSS originales. Para los instrumentos LCD independientes edita `lcd-display.js`; no añadas interpolación CSS suave a sus píxeles.
 
 ### Añadir o sustituir un crédito
 
@@ -502,8 +502,7 @@ Este registro describe el código conservado; no atribuye fechas exactas a cada 
 - `scene-timelines.js` para el tramo inicial de DEV.
 - Marco continuo, pausa tipográfica y cambios de escala contenidos.
 - Intro con matriz LCD existente, dirigida por scroll y sin reloj propio.
-- Poses físicas ORBIT y cambios discretos de barras/etiquetas.
-- Terminal rediseñada con instrumento circular y jerarquía técnica propia.
+- Se ensayaron poses físicas ORBIT y un rediseño de terminal; ambos se retiraron por petición posterior para recuperar la versión original.
 - Progreso cacheado y cambios de capítulo sin escrituras repetidas innecesarias.
 - Loops CSS pausados fuera de pantalla y gate explícito de viewport en Three.js.
 - Cursor oculto durante scroll; pulsación digital sin glow ni rebote genérico.
@@ -515,6 +514,7 @@ Este registro describe el código conservado; no atribuye fechas exactas a cada 
 - Corrección del índice móvil del último capítulo: se conserva la lista de artículos aunque el pin los envuelva en un spacer.
 - Pausa final ampliada y barra reversible en el botón lateral, sincronizada con el inicio del descenso vertical.
 - VIEW desactivado dentro de los universos; EXPLORE y SCROLL / CONTENT ocultos en la portada expandida.
+- Terminal ORBIT restaurada desde `f666c64`, incluida su posición original en escritorio y móvil, sin deshacer las demás mejoras.
 
 No se ha reemplazado el sistema narrativo ni aplicado una nueva coreografía a todos los capítulos. Los helpers de rendimiento sí benefician a ambos universos.
 

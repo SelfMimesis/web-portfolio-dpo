@@ -3,7 +3,7 @@ const WIDTH = 12;
 const HEIGHT = 16;
 const DIGITS = ['1111110', '0110000', '1101101', '1111001', '0110011', '1011011', '1011111', '1110000', '1111111', '1111011'];
 const controllers = new WeakMap();
-const flightDisplays = new WeakMap();
+
 const LETTERS = {
   E: ['11111','10000','10000','11110','10000','10000','11111'],
   N: ['10001','11001','11001','10101','10011','10011','10001'],
@@ -127,44 +127,6 @@ function createLCDDisplay(element) {
 
 export function driveLCD(element, frame, mode = 'ready') {
   controllers.get(element)?.setFrame(frame, mode);
-}
-
-export function initFlightDisplays() {
-  document.querySelectorAll('.flight-deck').forEach(deck => {
-    if (flightDisplays.has(deck)) return;
-    const poses = ['.nav-target', '.nav-horizon'].map(selector => {
-      const original = deck.querySelector(selector);
-      return [-1, 0, 1].map((position, index) => {
-        const pose = original.cloneNode(true);
-        pose.classList.add('flight-pose');
-        // These are separate physical segments, not animated sprite coordinates.
-        pose.setAttribute('transform', selector === '.nav-target' ? `translate(${position * 24} ${position * 12})` : `rotate(${position * 5} 150 113)`);
-        pose.dataset.lcdState = index === 1 ? 'on' : 'off';
-        original.before(pose);
-        if (index === 2) original.remove();
-        return pose;
-      });
-    });
-    flightDisplays.set(deck, { poses, bars: [...deck.querySelectorAll('.thrust-bars i')], readout: deck.querySelector('.flight-nav-label b'), frame: -1 });
-    driveFlightDisplay(deck, 1);
-  });
-}
-
-export function driveFlightDisplay(deck, frame) {
-  const display = flightDisplays.get(deck);
-  if (!display || display.frame === frame) return;
-  display.frame = frame;
-  const active = frame % 3;
-  display.poses.forEach(poses => poses.forEach((pose, index) => {
-    const next = index === active ? 'on' : index === (active + 2) % 3 ? 'ghost' : 'off';
-    if (pose.dataset.lcdState !== next) pose.dataset.lcdState = next;
-  }));
-  display.bars.forEach((bar, i) => {
-    const next = i < 4 + active ? 'on' : 'off';
-    if (bar.dataset.lcdState !== next) bar.dataset.lcdState = next;
-  });
-  const label = ['ACQUIRE', 'ENGAGED', 'TRACK'][active];
-  if (display.readout.textContent !== label) display.readout.textContent = label;
 }
 
 export function initLCDDisplays() {

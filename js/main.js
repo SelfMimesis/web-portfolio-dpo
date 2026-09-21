@@ -6,7 +6,7 @@ import { initThreeScene } from './three-scene.js';
 import { initAboutStory } from './about.js';
 import { initFilmography } from './filmography.js';
 import { buildWorldLinks, initWorldLinks } from './world-links.js';
-import { initLCDDisplays, initFlightDisplays, lcdDisplayMarkup } from './lcd-display.js';
+import { initLCDDisplays, lcdDisplayMarkup } from './lcd-display.js';
 import { initAmbientMotion } from './ambient-motion.js';
 
 function buildScenes() {
@@ -56,7 +56,7 @@ function buildScenes() {
 }
 export function initApp() {
   if (window.gsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
-  syncPreferences(); buildScenes(); buildWorldLinks(); initLCDDisplays(); initFlightDisplays(); initAmbientMotion(); initNavigation(); initWorldLinks(); initHeroSelector(selectWorld); initCursor(); initThreeScene();
+  syncPreferences(); buildScenes(); buildWorldLinks(); initLCDDisplays(); initAmbientMotion(); initNavigation(); initWorldLinks(); initHeroSelector(selectWorld); initCursor(); initThreeScene();
   initAboutStory();
   initFilmography();
   const world = location.hash.slice(1);

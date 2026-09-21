@@ -52,3 +52,9 @@ Later chapter choreography remains intact. No new framework, scroll library or W
 The end pause is now 95% of viewport height, clamped to 600–1100px of scroll. A destination-styled meter in the final rail follows the actual pin progress (not the delayed track scrub), reaching 100% at vertical release and reversing when scrolling back. Mobile only shows it when the final panel can pin; reduced motion/static fallback omit it. No extra ScrollTrigger or timer was added.
 
 VIEW is suppressed while a universe is active; the initial SCROLL cue remains. EXPLORE and SCROLL / CONTENT are hidden in the expanded cover and restored at home. Desktop 1440×900 and mobile 390×844 checks passed for both worlds at start, midpoint, release and reverse; tested pauses were 855px and 802px. Reduced-motion checks confirmed no added hold/meter, and home reset left no journey pin-spacers. Visually inspected the final rail with the meter half filled.
+
+## Follow-up: restore the original terminal
+
+At the user's request, restored the original ORBIT composition from commit `f666c64aa789570fa146183a812e645756bac2ed`, before the day's redesign. Its HTML matches that historical block exactly; the entire `digital-props.css` file matches the historical hash. Removed the later desktop/mobile positioning overrides and discrete flight-pose controller. Original perspective, panel proportions, texture, shadows, orbital outlines and CSS instrument motion are restored. Visibility/reduced-motion gates remain.
+
+This is a targeted restoration, not a repository rollback: the extended final pause, progress meter, hidden VIEW/EXPLORE prompts, scene narratives, Murderbot preload and other improvements remain. Desktop and mobile visual inspection passed; the intro's reversible LCD behavior still passes, with no JavaScript errors in the instrumented check. README updated to distinguish the withdrawn terminal redesign from the retained work.
