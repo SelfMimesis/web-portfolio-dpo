@@ -710,3 +710,7 @@ El trazo naranja de la terminal conserva las seis geometrías y sus transiciones
 Cada subtrazo SVG se muestrea por separado. Esto evita dibujar conexiones artificiales entre círculos, cuadrados o arcos independientes. Los trazos presentes en ambas composiciones se transforman; los que solo existen en una mantienen su geometría mientras su opacidad cambia gradualmente. El final de la transición conserva exactamente la misma representación muestreada, evitando el salto que antes ocurría al restaurar las curvas originales. El fundido comparte la timeline GSAP existente y sus pausas de visibilidad y movimiento reducido.
 
 Verificación: opacidades intermedias de 0,5 en entradas y salidas; continuidad hasta 0 o 1 al completar la transición, incluido el cierre del ciclo; ninguna coordenada NaN.
+
+### Geometría áurea por encima de la terminal
+
+La capa naranja ya no queda recortada por el rectángulo del gráfico. Se amplía un 6 %, centrada sobre su posición original, y se coloca por encima de ventanas, indicadores y textura frontal. El glow puede sobresalir de los bordes. Se mantienen las proporciones áureas, los fundidos y las transiciones existentes; la capa no intercepta el ratón.

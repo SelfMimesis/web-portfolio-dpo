@@ -37,7 +37,12 @@
 .cockpit-spectrum{left:61.803399%;top:61.803399%;width:14.589803%;height:23.606798%}
 .cockpit-route{left:67.376208%;top:85.410197%;width:9.016994%;height:14.589803%}
 .cockpit-grid::before{content:'';position:absolute;left:61.803399%;top:85.410197%;width:5.572809%;height:14.589803%;border:1px solid #a3ba7e66;background:repeating-linear-gradient(0deg,transparent 0 5px,#c1d99b18 5px 6px),repeating-linear-gradient(90deg,transparent 0 5px,#c1d99b18 5px 6px)}
-.cockpit-grid>.golden-display{inset:0;width:100%;height:100%;z-index:5;pointer-events:none;overflow:hidden}
+.cockpit-grid>.golden-display{inset:-3%;width:106%;height:106%;z-index:10;pointer-events:none;overflow:visible}
+/* Let the luminous geometry overlap the terminal chrome as well as its windows. */
+.flight-deck.cockpit{isolation:isolate;overflow:visible}
+.cockpit-grid{isolation:auto;overflow:visible}
+.cockpit-grid>.cockpit-window{z-index:0}
+.cockpit::after{z-index:1}
 .cockpit-grid .golden-line{stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:1.4 .8;filter:drop-shadow(0 0 1px var(--accent)) drop-shadow(0 0 3px color-mix(in srgb,var(--accent) 45%,transparent))}
 @media(max-width:700px){.cockpit-grid .golden-line{stroke-width:1.5;stroke-dasharray:1 .7;filter:drop-shadow(0 0 1px var(--accent))}}
 /* Static pixel mask: no animated noise, blur or glow. */
