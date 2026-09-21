@@ -579,3 +579,14 @@ Archivos responsables:
 Las curvas se muestrean una vez al iniciar. Solo se modifica el trazado SVG durante las transiciones. Las formas con contornos separados pueden unirse temporalmente durante el morphing y recuperan sus contornos exactos al terminar. El controlador se pausa fuera del viewport y con la pestaña oculta. Con movimiento reducido, permanece la primera forma con valores estables; sin GSAP, queda el cockpit estático del HTML. No se añaden librerías, plugins ni un sistema de build. El conjunto es una ilustración decorativa con descripción accesible, no un panel de controles reales.
 
 Validación local mediante HTTP: composición completa en escritorio de 1440 px y móvil de 390 px, transformaciones activas, ausencia de desbordamiento horizontal y modo reducido. Se mantiene la navegación existente entre universos.
+### Revisión: ventanas áureas, capa global y textura LED
+
+La distribución del cockpit ahora reproduce la subdivisión del rectángulo áureo de la referencia, en lugar de una cuadrícula convencional: navegación ocupa el cuadrado grande izquierdo; telemetría, el superior derecho; reactor, el inferior derecho; señal y aproximación ocupan los siguientes cuadrados más pequeños. La superficie completa tiene proporción 1,618:1 y las cinco ventanas son cuadradas. Los instrumentos pequeños muestran información condensada para respetar sus dimensiones.
+
+El SVG `.golden-display` es ahora hijo directo de `.cockpit-grid`: cubre **todas las ventanas**, comparte sus coordenadas y queda por encima con `pointer-events: none`. La línea sigue usando exclusivamente el naranja de ART. Los marcos, datos y gráficos permanecen verdes.
+
+Una máscara estática de puntos de 3 px crea la textura LED sin ruido animado. Los gráficos de señal, barras, indicadores y balizas actualizan sus estados cada 120 ms mediante la misma timeline GSAP; no se añade otro temporizador. Las curvas electrónicas tienen ocho fotogramas precalculados. La trayectoria naranja mantiene su transformación continua, mientras la electrónica cambia por pasos. Tanto esta electrónica como el morphing se pausan fuera de pantalla, al ocultar la pestaña y con movimiento reducido.
+
+La terminal está centrada en su mitad de la portada, dentro de la zona de composición equivalente a las cartas de ART. La portada expandida conserva el espacio necesario para visualizar los instrumentos.
+
+Comprobado por HTTP a 1440 y 390 px: cinco ventanas de relación 1:1, SVG global, cambios de señal activos, naranja `rgb(217, 75, 43)`, ausencia de desbordamiento horizontal y electrónica inmóvil con movimiento reducido.

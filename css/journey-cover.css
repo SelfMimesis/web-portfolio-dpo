@@ -48,3 +48,7 @@ html{scrollbar-gutter:stable}
  .panel--hero .hero-selector .world--dev .world-bottom{grid-row:4}
  .panel--hero .world--dev .flight-deck.cockpit{max-width:70svh;left:50%;transform:translate(-50%,-50%);box-shadow:4px 7px 0 #10171055}
 }
+
+/* Centre the cockpit in its cover composition, mirroring the ART objects. */
+.hero-selector:not(.is-journey-cover) .flight-deck.cockpit{left:50%;top:48%;width:82%;max-width:min(500px,52svh);transform:translate(-50%,-50%) perspective(1200px) rotateY(-5deg) rotateZ(2deg)}
+@media(max-width:700px){.hero-selector:not(.is-journey-cover) .flight-deck.cockpit{left:50%;top:50%;width:100%;transform:translate(-50%,-50%) rotate(-3deg)}}

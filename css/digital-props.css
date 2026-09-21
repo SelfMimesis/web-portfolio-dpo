@@ -24,3 +24,38 @@
 .dev-composition .code-tag{right:5%;top:0;bottom:auto;font-size:calc(6px * var(--display-scale,1));letter-spacing:.07em}
 @media(max-width:700px){.hero-selector .flight-deck.cockpit{width:100%;left:0;top:50%;padding:3%;transform:translateY(-50%) rotate(-3deg)}.cockpit-head>b{font-size:4cqw}.cockpit-head>b>span{font-size:1.6cqw}.cockpit-head>span{font-size:1.3cqw}.cockpit-head>span:last-child{display:none}.golden-line{stroke-width:.8}.cockpit-window{padding:1.5cqw}.cockpit-label{font-size:1.2cqw}.cockpit small{font-size:1.2cqw}.cockpit-data{font-size:1.2cqw}.cockpit-nav-footer{font-size:1cqw}}
 @media(prefers-reduced-motion:reduce){.cockpit *{animation:none!important}}
+
+/* One physical golden rectangle: successive squares, clockwise subdivision.
+   Coordinates share the SVG's 323.60679775 × 200 reference plane. */
+.cockpit-grid{position:relative;display:block;aspect-ratio:1.61803398875;isolation:isolate;background:#141b13}
+.cockpit-grid>.cockpit-window{position:absolute;box-sizing:border-box;margin:0;border-color:#a3ba7e66;padding:1.4cqw;min-height:0}
+.cockpit-navigation{left:0;top:0;width:61.803399%;height:100%;display:flex;flex-direction:column}
+.cockpit-vitals{left:61.803399%;top:0;width:38.196601%;height:61.803399%}
+.cockpit-power{left:76.393202%;top:61.803399%;width:23.606798%;height:38.196601%}
+.cockpit-spectrum{left:61.803399%;top:61.803399%;width:14.589803%;height:23.606798%}
+.cockpit-route{left:67.376208%;top:85.410197%;width:9.016994%;height:14.589803%}
+.cockpit-grid::before{content:'';position:absolute;left:61.803399%;top:85.410197%;width:5.572809%;height:14.589803%;border:1px solid #a3ba7e66;background:repeating-linear-gradient(0deg,transparent 0 5px,#c1d99b18 5px 6px),repeating-linear-gradient(90deg,transparent 0 5px,#c1d99b18 5px 6px)}
+.cockpit-grid>.golden-display{inset:0;width:100%;height:100%;z-index:5;pointer-events:none;overflow:hidden}
+.cockpit-grid .golden-line{stroke-width:1.5}
+/* Static pixel mask: no animated noise, blur or glow. */
+.cockpit-window::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background-image:radial-gradient(ellipse at center,transparent 45%,#070d0799 70%);background-size:3px 3px;opacity:.55}
+.cockpit-window{color:var(--green);background:linear-gradient(125deg,#27332088,#0b130bbb)}
+.cockpit-window strong,.cockpit-data b{color:var(--green);font-family:var(--mono);font-variant-numeric:tabular-nums}
+.cockpit-navigation .cockpit-radar{flex:1;min-height:0;aspect-ratio:auto}
+.cockpit-navigation .cockpit-label{font-size:1cqw}
+.cockpit-vitals .cockpit-label{font-size:.95cqw;margin-bottom:1cqw;padding-bottom:.8cqw}
+.cockpit-vitals>strong{font-size:5cqw;margin:.6cqw 0}
+.cockpit-vitals .cockpit-altitude{font-size:3cqw}
+.cockpit-vitals>svg{height:5cqw;margin:1cqw 0}
+.cockpit-vitals .cockpit-data{grid-template-columns:repeat(3,1fr);gap:1cqw;margin-top:1cqw;font-size:.8cqw}
+.cockpit-vitals .cockpit-data>span{display:block}.cockpit-vitals .cockpit-data b{display:block;margin-top:.4cqw}
+.cockpit-power .cockpit-label{font-size:.8cqw;padding-bottom:.6cqw;margin-bottom:.5cqw}
+.cockpit-power strong{font-size:3cqw;margin:.4cqw 0}.cockpit-power>small{font-size:.8cqw}
+.cockpit-power .cockpit-bars{height:4cqw;margin:.5cqw 0}.cockpit-power .cockpit-data{margin-top:.5cqw;gap:.3cqw;font-size:.7cqw;grid-template-columns:1fr 1fr;align-items:center}
+.cockpit-power .cockpit-alert{font-size:.65cqw;margin-top:.6cqw}
+.cockpit-grid>.cockpit-spectrum{padding:.8cqw;display:flex;flex-direction:column}
+.cockpit-spectrum .cockpit-label{font-size:.65cqw;line-height:1.4;margin:0;padding-bottom:.6cqw}.cockpit-spectrum .cockpit-label>span{display:none}
+.cockpit-spectrum>svg{flex:1;width:100%;min-height:0;height:auto;shape-rendering:crispEdges}
+.cockpit-spectrum-foot{font-size:.6cqw;line-height:1.3}.cockpit-spectrum-foot>span:first-child{display:none}
+.cockpit-grid>.cockpit-route{padding:.5cqw}.cockpit-route .cockpit-label{font-size:.55cqw;padding:0;margin:0;border:0}.cockpit-route .cockpit-label>span{display:none}
+.cockpit-route-body{height:calc(100% - 1cqw)}.cockpit-route-body>svg{width:100%;height:100%;shape-rendering:crispEdges}.cockpit-route-body>div{display:none}

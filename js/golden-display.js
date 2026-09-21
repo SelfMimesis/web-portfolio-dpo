@@ -54,6 +54,26 @@ export function initGoldenDisplays() {
     const power=deck.querySelector('[data-cockpit-power]');
     const frame=deck.querySelector('[data-cockpit-frame]');
     const bars=[...deck.querySelectorAll('.cockpit-bars i')];
+    const charts=[...deck.querySelectorAll('.cockpit-chart')];
+    const targets=[...deck.querySelectorAll('.cockpit-target')];
+    const beacons=[...deck.querySelectorAll('.cockpit-route circle')];
+    const meters=[...deck.querySelectorAll('.cockpit-meter i')];
+    const waveFrames=Array.from({length:8},(_,f)=>charts.map(chart=>{
+      const box=chart.ownerSVGElement.viewBox.baseVal;
+      return Array.from({length:45},(_,j)=>`${j?'L':'M'}${j*box.width/44} ${box.height*(.5+Math.sin(j*1.7+f*.8)*Math.sin(j*.31+f*.4)*.36)}`).join(' ');
+    }));
+    let lastFrame=-1;
+    const electronicFrame = tick => {
+      if(tick===lastFrame)return;
+      lastFrame=tick;
+      const f=tick%8;
+      charts.forEach((chart,j)=>chart.setAttribute('d',waveFrames[f][j]));
+      bars.forEach((bar,j)=>{bar.style.transform=`scaleY(${.45+((f*3+j*2)%9)*.06})`;});
+      targets.forEach((target,j)=>{target.style.opacity=(f+j)%4===0?'.12':'.9';});
+      beacons.forEach((beacon,j)=>{beacon.style.opacity=(f+j)%3===0?'.12':'.94';});
+      meters.forEach((meter,j)=>{meter.style.transform=`scaleX(${1-((f+j)%3)*.025})`;});
+      if(frame)frame.textContent=`FRAME / ${String(f+1).padStart(3,'0')}`;
+    };
     const proxy={mix:0};
     const show = i => {
       line.setAttribute('d',paths[i]);
@@ -67,6 +87,7 @@ export function initGoldenDisplays() {
       bars.forEach((bar,j)=>{bar.style.transform=`scaleY(${.65+((i*3+j*2)%7)*.05})`;});
     };
     const timeline=gsap.timeline({paused:true,repeat:-1});
+    timeline.eventCallback('onUpdate',()=>electronicFrame(Math.floor(timeline.time()/.12)));
     for(let i=0;i<paths.length;i++) {
       const next=(i+1)%paths.length, from=samples[i], to=samples[next];
       timeline.fromTo(proxy,{mix:0},{mix:1,duration:1.65,delay:2.3,ease:'sine.inOut',immediateRender:false,
@@ -75,10 +96,11 @@ export function initGoldenDisplays() {
       });
     }
     show(0);
-    controllers.set(svg,{timeline,show,visible:false});
+    electronicFrame(0);
+    controllers.set(svg,{timeline,show,electronicFrame,visible:false});
   });
-  const sync=()=>controllers.forEach(({timeline,show,visible})=>{
-    if(reduced.matches){timeline.pause(0);show(0);}
+  const sync=()=>controllers.forEach(({timeline,show,electronicFrame,visible})=>{
+    if(reduced.matches){timeline.pause(0);show(0);electronicFrame(0);}
     else if(visible&&!document.hidden)timeline.play();
     else timeline.pause();
   });
