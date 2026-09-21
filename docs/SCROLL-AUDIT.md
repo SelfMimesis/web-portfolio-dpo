@@ -64,3 +64,9 @@ This is a targeted restoration, not a repository rollback: the extended final pa
 Reproduced the reported empty desktop gallery at 2539×1249: Murderbot was downloaded (`complete=true`, natural width 2000) and selected (`aria-hidden=false`), but its figure had no inline styles and inherited the default opacity 0 / visibility hidden. Preloading alone did not fix this presentation bug.
 
 The selected figure now has a visible CSS baseline independent of GSAP context restoration. Inline GSAP styles still control transitions between posters. Explicit immediate selection can reapply the selected state, and decode no longer temporarily hides the image. Verified visibility before pin entry and after refresh, desktop/mobile layout changes, return to the first poster, world switches and home reset; subsequent poster transitions still settle to one visible figure.
+
+## Follow-up: navigation follows About visibility
+
+The header marker now follows visible page sections instead of staying tied to `state.activeWorld`. An IntersectionObserver covers the full About container, including filmography; a ResizeObserver adjusts the header exclusion margin. ScrollTrigger refresh and navigation completion synchronize it after pin geometry changes. Updates only write `aria-current` when the marked section changes, without adding a scroll loop or changing the selected universe/history.
+
+About remains selected while any part is visible below the header, including when a short Contact section shares the viewport with its ending. Reverse scroll restores ART/DEV after About leaves the viewport, and home resets the marker. Direct About navigation uses the same behavior.

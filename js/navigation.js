@@ -6,15 +6,54 @@ import { bootLCD } from './lcd-display.js';
 import { startScrollCue, armScrollCue, clearScrollCue } from './cursor.js';
 const hero = () => document.querySelector('.hero-selector');
 let homeSlot;
+let syncNavigationMarker = () => {};
+
+function initSectionMarker() {
+  const header = document.querySelector('.site-header');
+  const links = [...header.querySelectorAll('nav a')];
+  const about = document.querySelector('#about');
+  const contact = document.querySelector('#contact');
+  let marked;
+  let observer;
+  let headerHeight = -1;
+  syncNavigationMarker = () => {
+    if (state.transitionInProgress) return;
+    const aboutBounds = about.getBoundingClientRect();
+    const contactBounds = contact.getBoundingClientRect();
+    const visible = bounds => bounds.top < innerHeight - 1 && bounds.bottom > headerHeight;
+    // About includes its opening, five chapters and the entire filmography.
+    // Keep it selected until its last visible portion passes under the header.
+    const section = visible(aboutBounds) ? 'about' : visible(contactBounds) ? 'contact' : state.activeWorld;
+    if (marked === section) return;
+    marked = section;
+    links.forEach(link => {
+      if (link.hash === `#${section}`) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  };
+  const observe = () => {
+    const height = header.offsetHeight;
+    if (height === headerHeight) return;
+    headerHeight = height;
+    observer?.disconnect();
+    observer = new IntersectionObserver(syncNavigationMarker, {
+      rootMargin: `-${headerHeight}px 0px -1px 0px`, threshold: 0
+    });
+    observer.observe(about); observer.observe(contact);
+    syncNavigationMarker();
+  };
+  observe();
+  // Follow viewport/section geometry without adding a scroll ticker.
+  new ResizeObserver(observe).observe(header);
+  window.ScrollTrigger?.addEventListener('refresh', syncNavigationMarker);
+}
 function restoreHero() {
   homeSlot.after(hero());
   resetHero();
 }
 function updateNavigation() {
   document.querySelector('.world-indicator').textContent = state.activeWorld === 'art' ? 'ART →     PROPS' : state.activeWorld === 'dev' ? 'ART     PROPS →' : 'ART / PROPS →';
-  document.querySelectorAll('nav [data-world]').forEach(link => {
-    if (link.dataset.world === state.activeWorld) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
-  });
+  syncNavigationMarker();
   document.querySelector('.scroll-progress').hidden = !state.activeWorld;
   document.querySelector('.scroll-progress').dataset.world = state.activeWorld || 'art';
 }
@@ -51,6 +90,7 @@ export async function selectWorld(world, updateHash = true, source = null) {
   document.body.classList.remove('is-transitioning');
   (world === 'art' ? initArtScrollytelling : initDevScrollytelling)();
   state.transitionInProgress = false;
+  syncNavigationMarker();
   armScrollCue();
   focusScene(selectedSection);
   if (updateHash) history.pushState(null, '', `#${world}`);
@@ -66,12 +106,14 @@ export function resetToHome(updateHash = true) {
   updateNavigation(); updateThreeScene(null);
   window.ScrollTrigger?.refresh();
   window.scrollTo({ top: 0, behavior: 'instant' });
+  syncNavigationMarker();
   if (updateHash) history.pushState(null, '', '#home');
   document.querySelector('.wordmark').focus({ preventScroll: true });
 }
 export function initNavigation() {
   homeSlot = document.createComment('Home cover returns here between journeys');
   hero().before(homeSlot);
+  initSectionMarker();
   document.querySelectorAll('[data-world]').forEach(link => link.addEventListener('click', event => {
     event.preventDefault();
     if (state.transitionInProgress) return;

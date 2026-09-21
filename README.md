@@ -277,6 +277,8 @@ Los marcos y captions son la capa impresa. Los indicadores son la capa electrón
 
 `resetToHome()` restaura la portada dividida. About y Contact llevan a sus secciones. El historial permite volver a rutas de universo.
 
+El subrayado de la navegación sigue la sección visible. En cuanto About entra en pantalla se marca **ABOUT ME**, y se mantiene durante sus cinco capítulos, la filmografía y su cierre. Al volver hacia arriba al recorrido se recupera ART o DIGITAL PROPS. El universo guardado no cambia por estar leyendo About. Mientras quede parte de About visible debajo de la cabecera, tiene prioridad; Contact se marca cuando About ya ha salido. Esto también funciona sin GSAP, mediante un observador de visibilidad, sin añadir un bucle continuo al scroll.
+
 Existe un único cursor:
 
 - ART: naranja, circular y amortiguado.
