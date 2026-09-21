@@ -46,3 +46,9 @@ The ZRK reference informs sustained framing, scale and pauses, not the portfolio
 ## Remaining scope
 
 Later chapter choreography remains intact. No new framework, scroll library or WebGL scene was introduced. Large image optimization, a static reduced-motion logo, replacement of prototype contact behavior and broader physical-device performance testing remain separate work. The minimal helpers are extended across both worlds; further scene redesign should be incremental.
+
+## Follow-up: final pause and cover affordances
+
+The end pause is now 95% of viewport height, clamped to 600–1100px of scroll. A destination-styled meter in the final rail follows the actual pin progress (not the delayed track scrub), reaching 100% at vertical release and reversing when scrolling back. Mobile only shows it when the final panel can pin; reduced motion/static fallback omit it. No extra ScrollTrigger or timer was added.
+
+VIEW is suppressed while a universe is active; the initial SCROLL cue remains. EXPLORE and SCROLL / CONTENT are hidden in the expanded cover and restored at home. Desktop 1440×900 and mobile 390×844 checks passed for both worlds at start, midpoint, release and reverse; tested pauses were 855px and 802px. Reduced-motion checks confirmed no added hold/meter, and home reset left no journey pin-spacers. Visually inspected the final rail with the meter half filled.

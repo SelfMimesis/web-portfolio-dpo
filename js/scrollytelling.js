@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { animateMobileChapter } from './mobile-story.js';
-import { setWorldLinkDescent } from './world-links.js';
+import { setWorldLinkDescent, setWorldLinkPause } from './world-links.js';
 import { createDevSceneTimelines } from './scene-timelines.js';
 let context;
 let observer;
@@ -11,7 +11,7 @@ let scenes;
 let progressUI;
 let panels = [];
 let previousPanel = -1;
-const endPause = () => Math.min(520, Math.max(260, innerHeight * .48));
+const endPause = () => Math.min(1100, Math.max(600, innerHeight * .95));
 const names = { art: ['COVER', 'INTRO', 'SELECTED WORK', 'PROJECT DETAIL', 'PROCESS', 'ARCHIVE', 'NEXT WORLD'], dev: ['COVER', 'INTRO', 'SELECTED WORK', 'INTERACTION', 'PLAYBACK', 'ARCHIVE', 'NEXT WORLD'] };
 const lastPanel = () => names[state.activeWorld].length - 1;
 export function updateProgress(progress) {
@@ -61,8 +61,8 @@ function initScrollytelling(world) {
         ScrollTrigger.create({
           trigger: finalPanel, start: 'bottom bottom', end: () => `+=${canPin ? endPause() : 1}`,
           pin: canPin ? finalPanel : false, refreshPriority: 90, invalidateOnRefresh: true,
-          onUpdate: self => setWorldLinkDescent(section, self.progress >= 1),
-          onRefresh: self => setWorldLinkDescent(section, self.progress >= 1, true)
+          onUpdate: self => { setWorldLinkPause(section, self.progress, canPin); setWorldLinkDescent(section, self.progress >= 1); },
+          onRefresh: self => { setWorldLinkPause(section, self.progress, canPin); setWorldLinkDescent(section, self.progress >= 1, true); }
         });
       }, section);
     }
@@ -79,6 +79,7 @@ function initScrollytelling(world) {
       return horizontalDistance;
     };
     distance();
+    const updatePause = self => setWorldLinkPause(section, (self.progress - travelFraction) / (1 - travelFraction));
     animation = gsap.fromTo(track, { x: 0 }, {
       x: () => -distance(),
       // Finish the journey before releasing the pin: the remaining scroll is a reading pause.
@@ -89,9 +90,10 @@ function initScrollytelling(world) {
         pin: section.querySelector('.scrolly-sticky'), scrub: .75,
         invalidateOnRefresh: true, refreshPriority: 100,
         onToggle: self => { document.querySelector('.scroll-progress').hidden = !self.isActive; },
-        onUpdate: self => setWorldLinkDescent(section, self.progress >= 1),
+        onUpdate: self => { updatePause(self); setWorldLinkDescent(section, self.progress >= 1); },
         onRefresh: self => {
           document.querySelector('.scroll-progress').hidden = !self.isActive;
+          updatePause(self);
           setWorldLinkDescent(section, self.progress >= 1, true);
         }
       },
@@ -111,7 +113,7 @@ export function destroyScrollTriggers() {
   context?.revert(); context = null; animation = null;
   mobileCleanup.forEach(remove => remove()); mobileCleanup = [];
   observer?.disconnect(); observer = null;
-  document.querySelectorAll('.scrolly').forEach(section => setWorldLinkDescent(section, false, true));
+  document.querySelectorAll('.scrolly').forEach(section => { setWorldLinkDescent(section, false, true); setWorldLinkPause(section, 0, false); });
   document.querySelectorAll('.panel').forEach(panel => { panel.inert = false; });
   document.querySelectorAll('.horizontal-track').forEach(track => track.style.removeProperty('--panel-width'));
   panels = []; previousPanel = -1;

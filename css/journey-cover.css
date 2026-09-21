@@ -7,6 +7,8 @@ html{scrollbar-gutter:stable}
 .panel--hero .world-bottom p{font-size:calc(12px * var(--display-scale,1));line-height:1.5;max-width:none;margin:0}
 .panel--hero .art-composition,.panel--hero .dev-composition{width:auto;height:calc(290px * var(--display-scale,1));min-height:calc(240px * var(--display-scale,1));margin:calc(5px * var(--display-scale,1)) -3vw 0;flex:1}
 .hero-selector.is-journey-cover .explore{padding-right:16px}
+.hero-selector.is-journey-cover .explore{display:none}
+.hero-selector.is-journey-cover .world-foot>span:last-child{visibility:hidden}
 .world h1[tabindex="-1"]:focus,.world h2[tabindex="-1"]:focus{outline:none}
 /* The journey rule and the centre of its instrument share one baseline. */
 :root{--journey-baseline:calc(40px * var(--display-scale,1))}

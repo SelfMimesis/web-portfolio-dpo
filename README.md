@@ -199,7 +199,7 @@ El signo negativo permite entrar al siguiente panel situado a la derecha.
 
 - **Pin:** mantiene la ventana fija mientras se consume distancia vertical.
 - **Scrub `.75`:** suaviza la relación entre scroll y desplazamiento.
-- **Pausa final:** añade 260–520 px de scroll con el último panel quieto.
+- **Pausa final:** añade 600–1100 px de scroll (95 % de la altura, dentro de esos límites) con el último panel quieto. La barra del botón lateral pasa de 0 a 100 % durante ese tramo. Al llenarse empieza el descenso vertical; al subir se vacía de nuevo. Es distancia de scroll, no un temporizador.
 - **Pin spacing:** reserva espacio para que About no aparezca antes de tiempo.
 - **`refreshPriority: 100`:** calcula primero el recorrido situado encima de About.
 - **`invalidateOnRefresh`:** permite recalcular al cambiar el tamaño de ventana.
@@ -284,7 +284,7 @@ Existe un único cursor:
 - LCD final: desplazamiento por pasos de retícula.
 - Logo: sin cursor personalizado ni animación hover especial.
 
-La física se detiene en reposo. Durante el scroll el cursor se oculta, evitando consultar continuamente qué hay bajo el puntero; vuelve al mover el ratón sobre algo interactivo. El aviso SCROLL inicial tiene su propia limpieza.
+La física se detiene en reposo. El cursor VIEW solo se utiliza fuera de los universos activos: no reaparece al mover el ratón dentro de ART o DIGITAL PROPS. El aviso SCROLL inicial se conserva y desaparece al comenzar el desplazamiento. Al entrar se ocultan también EXPLORE y las indicaciones SCROLL / CONTENT de la portada expandida; vuelven al regresar al inicio.
 
 La entrada de títulos dura menos de un segundo aproximadamente y no bloquea controles. Si se entra inmediatamente en un universo, se revierte para no competir con la expansión.
 
@@ -307,6 +307,8 @@ La composición desktop llega al 94 % de ancho, con máximo de 1440 px, y se ada
 ## 9. Móvil y accesibilidad
 
 Para anchos **<= 700px**: lectura vertical, movimientos laterales reversibles donde corresponden, imágenes grandes, sin WebGL ni hover obligatorio. La pausa final móvil solo se fija si cabe el panel y se permite movimiento.
+
+La barra de espera final solo se muestra cuando existe esa pausa fijada. Se omite con movimiento reducido, sin GSAP o cuando el panel móvil no cabe completo; no se exige llenar una barra en la lectura vertical de respaldo.
 
 Con `prefers-reduced-motion: reduce`, se evita el recorrido horizontal fijado, las nuevas timelines de scrub y los loops; el contenido se muestra directamente. La navegación sigue disponible. El GIF del logo necesita una alternativa estática para detener también su animación interna: CSS no pausa los fotogramas de un GIF.
 
@@ -511,6 +513,8 @@ Este registro describe el código conservado; no atribuye fechas exactas a cada 
 - README ampliado para explicar uso, edición, arquitectura y mantenimiento.
 - Precarga prioritaria y decodificación anticipada del primer cartel, Murderbot.
 - Corrección del índice móvil del último capítulo: se conserva la lista de artículos aunque el pin los envuelva en un spacer.
+- Pausa final ampliada y barra reversible en el botón lateral, sincronizada con el inicio del descenso vertical.
+- VIEW desactivado dentro de los universos; EXPLORE y SCROLL / CONTENT ocultos en la portada expandida.
 
 No se ha reemplazado el sistema narrativo ni aplicado una nueva coreografía a todos los capítulos. Los helpers de rendimiento sí benefician a ambos universos.
 

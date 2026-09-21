@@ -42,7 +42,16 @@
 .world-link-about{display:flex;align-items:center;gap:24px;margin-top:42px;padding:12px 0;border-bottom:1px solid currentColor;font:11px/1.5 var(--mono)}
 .world-link-about span{font-size:20px}
 .world-link-about:hover{color:var(--accent)}
-@media(max-width:1000px){.panel--next{--rail-width:30vw}.world-link{padding:18px 14px}.world-link-paper{padding:18px 12px}.world-link-intro h2{font-size:6.8vw}}
+.world-link{padding-bottom:56px}
+.world-link-scroll{position:absolute;bottom:16px;left:22px;right:22px;z-index:3;pointer-events:none;font:8px/1.5 var(--mono);font-variant-numeric:tabular-nums}
+.world-link-scroll[hidden]{display:none}
+.world-link-scroll-caption{display:flex;justify-content:space-between;gap:8px;margin-bottom:7px}
+.world-link-scroll-track{display:block;height:4px;background:#30392d25}
+.world-link-scroll-track i{display:block;width:100%;height:100%;background:currentColor;transform:scaleX(0);transform-origin:left}
+.world-link--dev .world-link-scroll-track i{mask-image:repeating-linear-gradient(90deg,#000 0 4px,transparent 4px 6px)}
+.world-link--art .world-link-scroll-track i{background:var(--accent)}
+.world-link-descent{bottom:60px}
+@media(max-width:1000px){.panel--next{--rail-width:30vw}.world-link{padding:18px 14px 56px}.world-link-paper{padding:18px 12px}.world-link-intro h2{font-size:6.8vw}}
 @media(max-width:700px){
  .panel--next,.vertical-mode .panel--next{--rail-width:43%;min-height:100svh;padding:calc(var(--header) + 72px) calc(var(--rail-width) + 18px) 42px 20px;justify-content:center}
  .panel--next .panel-meta{left:20px;right:calc(var(--rail-width) + 12px);font-size:7px}
@@ -65,6 +74,7 @@
  .world-link-registration{font-size:7px}.world-link-stamp{font-size:7px;padding:8px}
  .world-link-about{font-size:9px;gap:10px;margin-top:30px;align-items:flex-start}
  .panel--next>.mobile-chapter-progress{width:100%}
+ .world-link{padding-bottom:48px}.world-link-scroll{left:10px;right:10px;bottom:13px;font-size:6px}.world-link-descent{bottom:52px}
 }
 @media(max-height:650px) and (min-width:701px){
  .world-link{padding:12px 18px}.world-link-meta{margin-bottom:10px;padding-bottom:10px}
@@ -72,4 +82,5 @@
  .world-link-footer{padding:8px 0}.world-link-paper{padding:12px;margin-bottom:10px}
  .world-link-specimen{font-size:68px;padding:5px}.world-link-title{margin-top:5px}
  .world-link-intro h2{font-size:52px;margin-top:18px}.world-link-route{margin-top:24px}.world-link-about{margin-top:22px}
+ .world-link{padding-bottom:48px}.world-link-scroll{bottom:12px}
 }

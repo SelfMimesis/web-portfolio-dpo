@@ -154,6 +154,7 @@ export function initCursor() {
     const start = () => { if (!running) { gsap.ticker.add(tick); running = true; } };
     const update = element => {
       if (cueActive) return;
+      if (state.activeWorld) { hide(); return; }
       if (element?.closest('.wordmark')) {
         stop(); visible = seeded = false;
         gsap.killTweensOf(cursor); gsap.set(cursor, { opacity: 0 });
