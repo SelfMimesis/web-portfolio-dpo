@@ -13,9 +13,11 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
   let frameTimeline;
   let coverTimeline;
   let services;
+  let universeTimeline;
+  let universeProgress = 0;
   const story = panels[0].querySelector('.cover-story');
   let lastChapter = -1;
-  const titles = ['WORLD / 01', 'PLAYBACK / 02', 'ORBIT / 03'];
+  const titles = ['WORLD / 01', 'PLAYBACK / 02', 'INTERFACES / 03'];
   const context = gsap.context(() => {
     if (story) {
       coverTimeline = gsap.timeline({paused:true})
@@ -61,6 +63,10 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
       entries.push({ timeline, progress: -1 });
     });
     if (!mobile) {
+      // Separate opacity layer so the photo's existing entrance remains intact.
+      universeTimeline = gsap.timeline({paused:true})
+        .to(panels[1].querySelectorAll('.playback-photo > *'),{opacity:0,duration:.6,ease:'power1.inOut'},.1)
+        .to({p:0},{p:1,duration:1},0);
       frame = document.createElement('div');
       frame.className = 'scene-registration';
       frame.setAttribute('aria-hidden', 'true');
@@ -91,6 +97,12 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
   return {
     updateCover,
     updateServices(progress){services?.update(progress);},
+    updateUniverse(progress){
+      const next=clamp(progress);
+      if(next===universeProgress)return;
+      universeProgress=next;
+      universeTimeline?.progress(next);
+    },
     updatePanel,
     update(progress) {
       const position = progress * (panelCount - 1);

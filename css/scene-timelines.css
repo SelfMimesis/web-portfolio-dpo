@@ -126,7 +126,7 @@
 
 /* All five windows share a centre regardless of their individual height. */
 @media(min-width:701px){
- body:not(.vertical-mode) .playback-services{inset:var(--header) 32.76% 40px 37.96%;display:grid;align-items:center}
+ body:not(.vertical-mode) .playback-services{inset:var(--header) 35.36% 40px;display:grid;align-items:center}
  body:not(.vertical-mode) .playback-service{position:relative;inset:auto;grid-area:1 / 1;margin:0;width:100%}
 }
 @media(prefers-reduced-motion:reduce){.panel--playback .playback-copy,.panel--playback .playback-photo,.panel--playback .panel-meta{filter:none!important}}

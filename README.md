@@ -692,3 +692,11 @@ Validación a 1440 px: las cinco ventanas quedan entre el límite derecho del te
 Las cinco ventanas comparten ahora una misma celda de grid centrada vertical y horizontalmente en el hueco central, independientemente de su altura. Durante la secuencia, GSAP aplica a título, foto (incluido el gradiente ASCII) y metadatos un desenfoque de 1,4 px, brillo 1,08 y un halo verde de 5 px al 24 %. Es un efecto visual de bloom, no HDR real. Las ventanas de servicios permanecen nítidas.
 
 El efecto entra y sale con la misma timeline, desaparece al finalizar y se revierte al subir. No se aplica sobre toda la página ni añade un bucle de renderizado. La lectura vertical móvil y el modo reducido conservan los elementos sin filtro. Validación en las cinco ventanas: diferencia respecto al centro inferior a 0,01 px, filtro ausente en las ventanas y valores neutros antes y después de la secuencia.
+
+### Alineación de las ventanas y transición a Interfaces
+
+Las cinco ventanas de servicios comparten ahora el mismo eje horizontal que la barra de progreso inferior. Se conserva su anchura y el centrado vertical; únicamente se igualan los márgenes laterales del contenedor. En móvil siguen apiladas en el flujo vertical.
+
+El siguiente capítulo se titula **Interfaces for every universe**. Su texto explica el desarrollo de apps desde Windows XP y Frutiger Aero hasta sistemas de espionaje de ciencia ficción. En escritorio, el recorrido hace una pausa cuando la foto queda a la izquierda y este texto a la derecha (1,5 anchos de panel). Durante esa pausa, el scroll desvanece la foto, sus etiquetas y el gráfico ASCII. Al retroceder, vuelven a aparecer.
+
+La pausa se integra en la distancia del ScrollTrigger existente: no añade otro pin. Dura 1,2 alturas de pantalla, con un mínimo de 800 píxeles de scroll. La pausa anterior de servicios y la pausa final mantienen sus propias distancias. En móvil y con movimiento reducido no se añade esta detención horizontal.
