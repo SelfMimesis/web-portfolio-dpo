@@ -8,6 +8,7 @@ import { initFilmography } from './filmography.js';
 import { buildWorldLinks, initWorldLinks } from './world-links.js';
 import { initLCDDisplays, lcdDisplayMarkup } from './lcd-display.js';
 import { initAmbientMotion } from './ambient-motion.js';
+import { initGoldenDisplays } from './golden-display.js';
 
 function buildScenes() {
   const art = document.querySelector('.art-composition').outerHTML;
@@ -56,7 +57,7 @@ function buildScenes() {
 }
 export function initApp() {
   if (window.gsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
-  syncPreferences(); buildScenes(); buildWorldLinks(); initLCDDisplays(); initAmbientMotion(); initNavigation(); initWorldLinks(); initHeroSelector(selectWorld); initCursor(); initThreeScene();
+  syncPreferences(); buildScenes(); buildWorldLinks(); initLCDDisplays(); initAmbientMotion(); initGoldenDisplays(); initNavigation(); initWorldLinks(); initHeroSelector(selectWorld); initCursor(); initThreeScene();
   initAboutStory();
   initFilmography();
   const world = location.hash.slice(1);

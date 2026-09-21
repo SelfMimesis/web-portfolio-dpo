@@ -62,3 +62,16 @@
 @media(max-width:1050px){.flight-deck{left:7%;width:86%}}
 @media(max-width:700px){.flight-deck{top:13%;left:7%;width:86%}.flight-instruments{height:42cqw}.flight-header{gap:4px}.flight-signal{letter-spacing:0}.world--dev .world-foot{font-size:6px}.world--dev h2{font-size:clamp(56px,13vw,90px)}.site-header nav{gap:11px}}
 @media(prefers-reduced-motion:reduce){.flight-deck *{animation:none!important}}
+
+/* ORBIT / golden navigation. Keep the original physical placement and glass. */
+.flight-instruments.flight-golden {grid-template-columns:61.8034% 38.1966%;height:30cqw;min-height:0;background:linear-gradient(135deg,#c1d99b0c,transparent 65%)}
+.golden-navigation {min-width:0;padding:7% 6%;display:flex;flex-direction:column;justify-content:space-between;gap:1cqw}
+.golden-caption {display:flex;justify-content:space-between;gap:8px;font:400 clamp(4px,1.05cqw,8px)/1.4 var(--mono);letter-spacing:.05em;color:#a4b298}
+.golden-display {display:block;width:100%;aspect-ratio:1.6;min-height:0;flex:1;overflow:hidden;fill:none}
+.golden-grid {stroke:#b1c69a;stroke-width:.7;opacity:.32}
+.golden-line {stroke:#ef663d;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.flight-golden .flight-systems {padding:10%;gap:3cqw;background:linear-gradient(150deg,#c1d99b08,transparent)}
+.flight-golden .flight-systems strong {font-size:clamp(20px,6cqw,44px);color:#e0e7d2;letter-spacing:-.06em}
+.golden-sequence {display:block;margin-top:6%;font-size:clamp(4px,1.05cqw,8px);color:#a4b298;white-space:nowrap}
+.flight-golden .flight-destination {padding-top:8%}
+@media(max-width:700px){.flight-instruments.flight-golden{height:54cqw}.flight-golden .flight-systems{padding:8%;gap:1cqw}.flight-golden .flight-systems strong{font-size:clamp(12px,5cqw,30px)}.golden-navigation{padding:8% 5%}.golden-line{stroke-width:1.15}}

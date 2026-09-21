@@ -559,3 +559,18 @@ No se ha reemplazado el sistema narrativo ni aplicado una nueva coreografía a t
 | Reduced motion | Preferencia de accesibilidad que reduce movimiento |
 
 Para mantenimiento habitual empieza por HTML, `main.js` y el CSS específico de la zona. Cambia cálculos de pinning solo cuando el problema lo requiera.
+
+## ORBIT: composición áurea y geometría naranja
+
+La terminal de DIGITAL PROPS utiliza ahora dos columnas en proporción **61,8034 % / 38,1966 %**. La zona principal contiene un rectángulo áureo (1,618:1), subdivisiones fijas y una línea naranja. Conserva la posición, perspectiva, color de cristal y scanlines de ORBIT. La copia de la terminal en Selected Work comparte el diseño.
+
+La línea recorre seis composiciones inspiradas en la referencia: arcos Fibonacci, triangulación, espiral logarítmica, rombos, círculos inscritos y arcos contrapuestos. Cada composición permanece 2,3 segundos; la transformación siguiente dura 1,65 segundos y utiliza GSAP. La información lateral cambia por estados, sin interpolar los números.
+
+- `index.html`: estructura de la terminal y SVG estático de respaldo.
+- `css/digital-props.css`: bloque final «ORBIT / golden navigation», reparto áureo, naranja y ajustes móviles.
+- `js/golden-display.js`: genera las seis formas y controla sus transiciones. Para cambiar el ritmo, modifica `delay: 2.3` (pausa) y `duration: 1.65` (transformación).
+- `js/main.js`: inicializa el controlador después de construir las escenas, incluyendo las terminales clonadas.
+
+Las curvas se muestrean una sola vez al iniciar. Durante la transformación se actualiza únicamente el trazado del SVG; no se recalculan tamaños ni posiciones de la página. Las formas separadas, como los círculos, se conectan temporalmente durante la transformación y recuperan sus contornos exactos al terminar. El controlador se pausa fuera del viewport y cuando la pestaña está oculta. Con movimiento reducido o sin GSAP, permanece la primera composición estática. No requiere plugins de morphing, nuevas fuentes ni build.
+
+Validación local mediante HTTP: animación en escritorio y móvil de 390 px, ausencia de desbordamiento horizontal y composición estable con movimiento reducido. El nuevo SVG es decorativo y no añade elementos al recorrido del teclado.
