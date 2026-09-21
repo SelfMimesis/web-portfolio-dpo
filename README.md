@@ -618,3 +618,13 @@ Validación HTTP: canvas único, centrado dentro del radar, visible tras abrir D
 ### Rotación inversa con scroll
 
 La figura del radar también rota en el eje Y al desplazar verticalmente la página: bajar produce giro negativo y subir invierte el giro. `SCROLL_RADIANS_PER_PIXEL = .003` en `js/three-scene.js` regula la intensidad. El ángulo se calcula desde la posición absoluta del scroll, por lo que regresar a la misma posición recupera el mismo giro si el ratón no cambia. Se suma a la rotación del puntero y conserva la amortiguación existente. El listener es pasivo, no mide elementos ni modifica el layout; se elimina al abandonar la página. La figura sigue anclada al radar y se mantienen las pausas fuera de pantalla, en móvil y con movimiento reducido.
+
+### Ventana narrativa: apps interactivas para rodajes
+
+Al empezar a hacer scroll dentro de DIGITAL PROPS aparece una ventana técnica a la derecha de la portada. Su texto está en `index.html`, dentro de `.cover-story`: «I develop interactive apps for film & television productions», «Greenscreens are dead» y los tres beneficios sobre VFX, decorados y actuación.
+
+La timeline local de `js/scene-timelines.js` revela marco, título, señal, declaración y beneficios en secuencia. Una barra inferior indica el avance; toda la secuencia se puede recorrer en sentido inverso. Comparte el reloj de scroll existente y no añade otro pin. `js/scrollytelling.js` reserva al inicio de DIGITAL PROPS un tramo de lectura de `max(600 px, 0,9 × altura de ventana)` antes de mover el track horizontal. ART mantiene su recorrido anterior. El cálculo del final, la pausa del botón de cambio y la navegación entre paneles incluyen este tramo inicial.
+
+El diseño está en `css/scene-timelines.css`: marco técnico, scanlines estáticas, paleta verde, tipografía editorial legible y revelados mediante opacidad, transform y una máscara de apertura. En móvil aparece debajo de la portada dentro del flujo vertical; con movimiento reducido o sin GSAP se muestra el contenido completo sin depender de animaciones. La portada de selección inicial no muestra esta ventana.
+
+Validación local: avance y retroceso de la secuencia, móvil de 390 px, recorrido completo ART/DEV, About Me correctamente situado después del pin y retorno a inicio sin pin-spacers de los recorridos.

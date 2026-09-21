@@ -7,6 +7,7 @@ let observer;
 let animation;
 let mobileCleanup = [];
 let horizontalDistance = 0;
+let openingPause = 0;
 let scenes;
 let progressUI;
 let panels = [];
@@ -76,21 +77,25 @@ function initScrollytelling(world) {
   context = gsap.context(() => {
     if (world === 'dev') scenes = createDevSceneTimelines(section);
     let travelFraction = 1;
+    let openingFraction = 0;
     const distance = () => {
       track.style.setProperty('--panel-width', `${section.clientWidth}px`);
       horizontalDistance = Math.max(0, track.scrollWidth - section.clientWidth);
-      travelFraction = horizontalDistance / (horizontalDistance + endPause());
+      openingPause = world === 'dev' ? Math.max(600, innerHeight * .9) : 0;
+      const total = horizontalDistance + openingPause + endPause();
+      openingFraction = openingPause / total;
+      travelFraction = horizontalDistance / total;
       return horizontalDistance;
     };
     distance();
-    const updatePause = self => setWorldLinkPause(section, (self.progress - travelFraction) / (1 - travelFraction));
+    const updatePause = self => setWorldLinkPause(section, (self.progress - openingFraction - travelFraction) / (1 - openingFraction - travelFraction));
     animation = gsap.fromTo(track, { x: 0 }, {
       x: () => -distance(),
       // Finish the journey before releasing the pin: the remaining scroll is a reading pause.
-      ease: progress => Math.min(1, progress / travelFraction),
+      ease: progress => Math.max(0, Math.min(1, (progress-openingFraction) / travelFraction)),
       // Created after About: measure this upstream pin first, including its spacing.
       scrollTrigger: {
-        trigger: section, start: 'top top', end: () => `+=${distance() + endPause()}`,
+        trigger: section, start: 'top top', end: () => `+=${distance() + openingPause + endPause()}`,
         pin: section.querySelector('.scrolly-sticky'), scrub: .75,
         invalidateOnRefresh: true, refreshPriority: 100,
         onToggle: self => { document.querySelector('.scroll-progress').hidden = !self.isActive; },
@@ -102,7 +107,8 @@ function initScrollytelling(world) {
         }
       },
       onUpdate() {
-        const progress = Math.min(1, this.progress() / travelFraction);
+        const progress = Math.max(0, Math.min(1, (this.progress()-openingFraction) / travelFraction));
+        scenes?.updateCover(openingFraction ? this.progress()/openingFraction : 1);
         updateProgress(progress); scenes?.update(progress);
       }
     });
@@ -132,6 +138,6 @@ export function nextPanel() {
   }
   const next = state.currentPanel >= lastPanel()
     ? document.querySelector('#about').getBoundingClientRect().top + window.scrollY - document.querySelector('.site-header').offsetHeight
-    : trigger.start + horizontalDistance * (state.currentPanel + 1) / lastPanel();
+    : trigger.start + openingPause + horizontalDistance * (state.currentPanel + 1) / lastPanel();
   window.scrollTo({ top: next, behavior: state.reducedMotion ? 'instant' : 'smooth' });
 }

@@ -11,10 +11,21 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
   const panelCount = section.querySelector('.horizontal-track').children.length;
   let frame;
   let frameTimeline;
+  let coverTimeline;
+  const story = panels[0].querySelector('.cover-story');
   let lastChapter = -1;
   let lastLCD = -1;
   const titles = ['WORLD / 01', 'SIGNAL / 02', 'ORBIT / 03'];
   const context = gsap.context(() => {
+    if (story) {
+      coverTimeline = gsap.timeline({paused:true})
+        .fromTo(story,{autoAlpha:0,y:32,scale:.97,clipPath:'inset(0 0 100% 0)'},{autoAlpha:1,y:0,scale:1,clipPath:'inset(0 0 0% 0)',duration:.25,ease:'power2.out'},.025)
+        .fromTo(story.querySelector('h3'),{y:18,opacity:0},{y:0,opacity:1,duration:.25},.12)
+        .fromTo(story.querySelector('.cover-story-signal'),{opacity:.12},{opacity:1,duration:.12,ease:'steps(3)'},.35)
+        .fromTo(story.querySelector('.cover-story-statement'),{y:12,opacity:0},{y:0,opacity:1,duration:.2},.42)
+        .fromTo(story.querySelectorAll('li'),{x:16,opacity:0},{x:0,opacity:1,stagger:.09,duration:.16},.56)
+        .fromTo(story.querySelector('.cover-story-progress i'),{scaleX:0},{scaleX:1,duration:1,ease:'none'},0);
+    }
     panels.forEach((panel, index) => {
       const title = panel.querySelector(index === 0 ? '.world--dev h2' : 'h2');
       const visual = panel.querySelector(index === 1 ? '.signal-instrument' : '.dev-composition');
@@ -45,6 +56,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     if (entry.progress === next) return;
     entry.progress = next;
     entry.timeline.progress(next);
+    if (mobile && index === 0) coverTimeline?.progress(clamp((next-.5)*4));
     if (index === 1) {
       // Quantized physical poses: scroll never interpolates pixels or coordinates.
       const nextFrame = Math.min(17, Math.floor(next * 18));
@@ -55,6 +67,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     }
   }
   return {
+    updateCover(progress) { coverTimeline?.progress(clamp(progress)); },
     updatePanel,
     update(progress) {
       const position = progress * (panelCount - 1);
