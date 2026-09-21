@@ -38,7 +38,8 @@
 .cockpit-route{left:67.376208%;top:85.410197%;width:9.016994%;height:14.589803%}
 .cockpit-grid::before{content:'';position:absolute;left:61.803399%;top:85.410197%;width:5.572809%;height:14.589803%;border:1px solid #a3ba7e66;background:repeating-linear-gradient(0deg,transparent 0 5px,#c1d99b18 5px 6px),repeating-linear-gradient(90deg,transparent 0 5px,#c1d99b18 5px 6px)}
 .cockpit-grid>.golden-display{inset:0;width:100%;height:100%;z-index:5;pointer-events:none;overflow:hidden}
-.cockpit-grid .golden-line{stroke-width:1.5}
+.cockpit-grid .golden-line{stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:1.4 .8;filter:drop-shadow(0 0 1px var(--accent)) drop-shadow(0 0 3px color-mix(in srgb,var(--accent) 45%,transparent))}
+@media(max-width:700px){.cockpit-grid .golden-line{stroke-width:1.5;stroke-dasharray:1 .7;filter:drop-shadow(0 0 1px var(--accent))}}
 /* Static pixel mask: no animated noise, blur or glow. */
 .cockpit-window::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background-image:radial-gradient(ellipse at center,transparent 45%,#070d0799 70%);background-size:3px 3px;opacity:.55}
 .cockpit-window{color:var(--green);background:linear-gradient(125deg,#27332088,#0b130bbb)}

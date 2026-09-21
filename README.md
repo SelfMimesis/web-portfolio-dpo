@@ -700,3 +700,7 @@ Las cinco ventanas de servicios comparten ahora el mismo eje horizontal que la b
 El siguiente capítulo se titula **Interfaces for every universe**. Su texto explica el desarrollo de apps desde Windows XP y Frutiger Aero hasta sistemas de espionaje de ciencia ficción. En escritorio, el recorrido hace una pausa cuando la foto queda a la izquierda y este texto a la derecha (1,5 anchos de panel). Durante esa pausa, el scroll desvanece la foto, sus etiquetas y el gráfico ASCII. Al retroceder, vuelven a aparecer.
 
 La pausa se integra en la distancia del ScrollTrigger existente: no añade otro pin. Dura 1,2 alturas de pantalla, con un mínimo de 800 píxeles de scroll. La pausa anterior de servicios y la pausa final mantienen sus propias distancias. En móvil y con movimiento reducido no se añade esta detención horizontal.
+
+### Línea áurea con acabado LCD luminoso
+
+El trazo naranja de la terminal conserva las seis geometrías y sus transiciones GSAP. Ahora se dibuja como una sucesión de pequeños segmentos con extremos rectos, simulando una superficie LED/LCD. Dos halos estáticos muy contenidos aportan luminosidad al trazo, sin cambiar la paleta del resto de ventanas. En móvil se reduce el grosor y se utiliza un solo halo. No se añaden temporizadores, parpadeos ni animaciones de filtros; se mantienen la pausa fuera de pantalla y el modo de movimiento reducido.
