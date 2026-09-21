@@ -70,3 +70,11 @@ The selected figure now has a visible CSS baseline independent of GSAP context r
 The header marker now follows visible page sections instead of staying tied to `state.activeWorld`. An IntersectionObserver covers the full About container, including filmography; a ResizeObserver adjusts the header exclusion margin. ScrollTrigger refresh and navigation completion synchronize it after pin geometry changes. Updates only write `aria-current` when the marked section changes, without adding a scroll loop or changing the selected universe/history.
 
 About remains selected while any part is visible below the header, including when a short Contact section shares the viewport with its ending. Reverse scroll restores ART/DEV after About leaves the viewport, and home resets the marker. Direct About navigation uses the same behavior.
+
+## Follow-up: full-width mobile destination buttons
+
+At <=700px, final destination buttons now follow the editorial introduction in normal document order, span the complete content width and point downward. The direct About shortcut sits before the destination. The LCD uses a two-column landscape instrument layout; ART uses a printed two-column specimen. Desktop remains a right-hand rail.
+
+The mobile pause pins only the destination button below the header, with explicit pin spacing (required because its parent is flex) and a non-shrinking spacer. This keeps About below the viewport until the meter completes. Under 600px tall, reduced motion or insufficient space, there is no pin/meter; the entire button remains scrollable. Crossing the height threshold rebuilds the journey through its existing cleanup path.
+
+Verified both destinations at 390×844: full viewport content width, downward arrows, 50% reading hold with About still offscreen, 100% release, reverse restoration and clicks into the opposite universe. At 320×568 both remain full width without pinning or horizontal overflow. Returning home removes all journey spacers.

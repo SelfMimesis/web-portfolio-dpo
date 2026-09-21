@@ -57,10 +57,14 @@ function initScrollytelling(world) {
           'h2, p, .intro-tags, .project-meta, .archive-entry, .tool-list details'
         ));
         const finalPanel = track.lastElementChild;
-        const canPin = !state.reducedMotion && finalPanel.offsetHeight <= innerHeight + 1;
+        // On mobile the full-width destination follows the editorial introduction.
+        // Hold only the button, so the introduction remains in normal vertical flow.
+        const pauseTarget = state.isMobile ? finalPanel.querySelector('.world-link') : finalPanel;
+        const headerHeight = () => state.isMobile ? document.querySelector('.site-header').offsetHeight : 0;
+        const canPin = !state.reducedMotion && (!state.isMobile || innerHeight >= 600) && pauseTarget.offsetHeight <= innerHeight - headerHeight() + 1;
         ScrollTrigger.create({
-          trigger: finalPanel, start: 'bottom bottom', end: () => `+=${canPin ? endPause() : 1}`,
-          pin: canPin ? finalPanel : false, refreshPriority: 90, invalidateOnRefresh: true,
+          trigger: pauseTarget, start: canPin && state.isMobile ? () => `top top+=${headerHeight()}` : 'bottom bottom', end: () => `+=${canPin ? endPause() : 1}`,
+          pin: canPin ? pauseTarget : false, pinSpacing: true, refreshPriority: 90, invalidateOnRefresh: true,
           onUpdate: self => { setWorldLinkPause(section, self.progress, canPin); setWorldLinkDescent(section, self.progress >= 1); },
           onRefresh: self => { setWorldLinkPause(section, self.progress, canPin); setWorldLinkDescent(section, self.progress >= 1, true); }
         });

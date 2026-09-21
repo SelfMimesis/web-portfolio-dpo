@@ -1,6 +1,5 @@
 # DPO — Portfolio de Diego Pérez Obrero
-
-Guía de mantenimiento y funcionamiento para trabajar con la web sin dominar programación. Incluye los cambios anteriores, la evolución actual y las partes que todavía requieren atención.
+ Incluye los cambios anteriores, la evolución actual y las partes que todavía requieren atención.
 
 - **Web:** https://selfmimesis.github.io/web-portfolio-dpo/
 - **Repositorio:** https://github.com/SelfMimesis/web-portfolio-dpo

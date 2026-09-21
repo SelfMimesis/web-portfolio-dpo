@@ -144,7 +144,7 @@ export function initNavigation() {
     const note = document.querySelector('#contact-note'); note.hidden = !note.hidden;
     event.currentTarget.setAttribute('aria-expanded', String(!note.hidden));
   });
-  ['(max-width: 700px)', '(prefers-reduced-motion: reduce)'].forEach(query => matchMedia(query).addEventListener('change', () => {
+  ['(max-width: 700px)', '(min-height: 600px)', '(prefers-reduced-motion: reduce)'].forEach(query => matchMedia(query).addEventListener('change', () => {
     destroyScrollTriggers(); syncPreferences();
     if (!state.activeWorld) resetHero();
     if (state.activeWorld) (state.activeWorld === 'art' ? initArtScrollytelling : initDevScrollytelling)();
