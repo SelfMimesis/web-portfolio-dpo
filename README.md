@@ -704,3 +704,9 @@ La pausa se integra en la distancia del ScrollTrigger existente: no añade otro 
 ### Línea áurea con acabado LCD luminoso
 
 El trazo naranja de la terminal conserva las seis geometrías y sus transiciones GSAP. Ahora se dibuja como una sucesión de pequeños segmentos con extremos rectos, simulando una superficie LED/LCD. Dos halos estáticos muy contenidos aportan luminosidad al trazo, sin cambiar la paleta del resto de ventanas. En móvil se reduce el grosor y se utiliza un solo halo. No se añaden temporizadores, parpadeos ni animaciones de filtros; se mantienen la pausa fuera de pantalla y el modo de movimiento reducido.
+
+### Transiciones áureas sin trazos repentinos
+
+Cada subtrazo SVG se muestrea por separado. Esto evita dibujar conexiones artificiales entre círculos, cuadrados o arcos independientes. Los trazos presentes en ambas composiciones se transforman; los que solo existen en una mantienen su geometría mientras su opacidad cambia gradualmente. El final de la transición conserva exactamente la misma representación muestreada, evitando el salto que antes ocurría al restaurar las curvas originales. El fundido comparte la timeline GSAP existente y sus pausas de visibilidad y movimiento reducido.
+
+Verificación: opacidades intermedias de 0,5 en entradas y salidas; continuidad hasta 0 o 1 al completar la transición, incluido el cierre del ciclo; ninguna coordenada NaN.

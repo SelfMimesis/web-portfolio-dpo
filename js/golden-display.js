@@ -40,15 +40,24 @@ export function initGoldenDisplays() {
   if (!window.gsap) return; // The inline SVG is the accessible, static fallback.
   const paths = compositions();
   const probe = document.createElementNS('http://www.w3.org/2000/svg','path');
-  const samples = paths.map(d => {
-    probe.setAttribute('d',d);
+  // Sample each physical stroke independently: never join separate SVG subpaths.
+  const samples = paths.map(d => d.match(/M[^M]*/g).map(part => {
+    probe.setAttribute('d',part);
     const length=probe.getTotalLength();
     return Array.from({length:180},(_,i)=>probe.getPointAtLength(length*i/179));
-  });
+  }));
+  const draw = points => points.map((p,j)=>`${j?'L':'M'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(' ');
+  const settled = samples.map(strokes=>strokes.map(draw));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const controllers = new Map();
   document.querySelectorAll('.golden-display').forEach(svg => {
     const line=svg.querySelector('.golden-line'), deck=svg.closest('.flight-deck');
+    const strokes=[line];
+    for(let i=1;i<Math.max(...samples.map(shape=>shape.length));i++) {
+      const stroke=line.cloneNode(false);
+      stroke.setAttribute('aria-hidden','true');
+      svg.append(stroke);strokes.push(stroke);
+    }
     const label=deck.querySelector('[data-golden-label]'), readout=deck.querySelector('[data-golden-state]');
     const speed=deck.querySelector('[data-cockpit-speed]');
     const power=deck.querySelector('[data-cockpit-power]');
@@ -76,7 +85,10 @@ export function initGoldenDisplays() {
     };
     const proxy={mix:0};
     const show = i => {
-      line.setAttribute('d',paths[i]);
+      strokes.forEach((stroke,j)=>{
+        stroke.setAttribute('d',settled[i][j] || 'M0 0');
+        stroke.style.opacity=settled[i][j] ? '1' : '0';
+      });
       label.textContent=`0${i+1} / ${names[i]}`;
       readout.textContent=`0${i+1} / 06`;
       svg.dataset.geometry=String(i);
@@ -91,7 +103,17 @@ export function initGoldenDisplays() {
     for(let i=0;i<paths.length;i++) {
       const next=(i+1)%paths.length, from=samples[i], to=samples[next];
       timeline.fromTo(proxy,{mix:0},{mix:1,duration:1.65,delay:2.3,ease:'sine.inOut',immediateRender:false,
-        onUpdate:()=>line.setAttribute('d',from.map((p,j)=>`${j?'L':'M'}${(p.x+(to[j].x-p.x)*proxy.mix).toFixed(2)} ${(p.y+(to[j].y-p.y)*proxy.mix).toFixed(2)}`).join(' ')),
+        onUpdate:()=>strokes.forEach((stroke,j)=>{
+          const a=from[j], b=to[j], mix=proxy.mix;
+          if(a && b) {
+            stroke.setAttribute('d',draw(a.map((p,k)=>({x:p.x+(b[k].x-p.x)*mix,y:p.y+(b[k].y-p.y)*mix}))));
+            stroke.style.opacity='1';
+          } else {
+            // Unmatched strokes keep their geometry and crossfade, including at loop boundaries.
+            stroke.setAttribute('d',a ? settled[i][j] : b ? settled[next][j] : 'M0 0');
+            stroke.style.opacity=String(a ? 1-mix : b ? mix : 0);
+          }
+        }),
         onComplete:()=>{show(next);proxy.mix=0;}
       });
     }
