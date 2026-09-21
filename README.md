@@ -560,17 +560,22 @@ No se ha reemplazado el sistema narrativo ni aplicado una nueva coreografía a t
 
 Para mantenimiento habitual empieza por HTML, `main.js` y el CSS específico de la zona. Cambia cálculos de pinning solo cuando el problema lo requiera.
 
-## ORBIT: composición áurea y geometría naranja
+## ORBIT / NEXUS: cockpit espacial y trayectorias áureas
 
-La terminal de DIGITAL PROPS utiliza ahora dos columnas en proporción **61,8034 % / 38,1966 %**. La zona principal contiene un rectángulo áureo (1,618:1), subdivisiones fijas y una línea naranja. Conserva la posición, perspectiva, color de cristal y scanlines de ORBIT. La copia de la terminal en Selected Work comparte el diseño.
+La terminal se ha reconstruido como una interfaz de nave espacial con cinco ventanas: telemetría (velocidad, altitud y actitud), navegación (radar y trayectorias), reactor (barras y niveles), señal de comunicaciones y aproximación a Kepler. Sustituye el primer diseño de dos columnas dedicado a explicar la proporción áurea; ese intento queda superado por este cockpit.
 
-La línea recorre seis composiciones inspiradas en la referencia: arcos Fibonacci, triangulación, espiral logarítmica, rombos, círculos inscritos y arcos contrapuestos. Cada composición permanece 2,3 segundos; la transformación siguiente dura 1,65 segundos y utiliza GSAP. La información lateral cambia por estados, sin interpolar los números.
+**Paleta:** los fondos oscuros, indicadores, gráficas y mediciones utilizan verdes y tonos de DIGITAL PROPS. Solo la línea de trayectoria Fibonacci utiliza `var(--accent)` (`#d94b2b`), el naranja secundario de ART. Para cambiar estos colores, consulta `css/variables.css`. No hay destellos ni efectos de neón añadidos.
 
-- `index.html`: estructura de la terminal y SVG estático de respaldo.
-- `css/digital-props.css`: bloque final «ORBIT / golden navigation», reparto áureo, naranja y ajustes móviles.
-- `js/golden-display.js`: genera las seis formas y controla sus transiciones. Para cambiar el ritmo, modifica `delay: 2.3` (pausa) y `duration: 1.65` (transformación).
-- `js/main.js`: inicializa el controlador después de construir las escenas, incluyendo las terminales clonadas.
+La trayectoria se transforma entre seis composiciones: arcos Fibonacci, triangulación, espiral logarítmica, rombos, círculos inscritos y arcos contrapuestos. GSAP mantiene cada forma 2,3 segundos y realiza la transformación en 1,65 segundos. Las cifras y las barras del reactor cambian por pasos al asentarse una nueva forma. Son datos ficticios de una interfaz para cine, no mediciones reales.
 
-Las curvas se muestrean una sola vez al iniciar. Durante la transformación se actualiza únicamente el trazado del SVG; no se recalculan tamaños ni posiciones de la página. Las formas separadas, como los círculos, se conectan temporalmente durante la transformación y recuperan sus contornos exactos al terminar. El controlador se pausa fuera del viewport y cuando la pestaña está oculta. Con movimiento reducido o sin GSAP, permanece la primera composición estática. No requiere plugins de morphing, nuevas fuentes ni build.
+Archivos responsables:
 
-Validación local mediante HTTP: animación en escritorio y móvil de 390 px, ausencia de desbordamiento horizontal y composición estable con movimiento reducido. El nuevo SVG es decorativo y no añade elementos al recorrido del teclado.
+- `index.html`: las cinco ventanas y el SVG estático de respaldo.
+- `css/digital-props.css`: diseño nuevo del cockpit y sus instrumentos.
+- `css/journey-cover.css`: encaje en la portada expandida; terminal a la derecha en escritorio y debajo del título, a todo el ancho disponible, en móvil.
+- `js/golden-display.js`: geometrías, morphing y actualización de telemetría. `delay: 2.3` controla la pausa; `duration: 1.65`, la transición.
+- `js/main.js`: inicialización después de crear las escenas. Selected Work hereda la nueva terminal mediante el sistema de copia existente.
+
+Las curvas se muestrean una vez al iniciar. Solo se modifica el trazado SVG durante las transiciones. Las formas con contornos separados pueden unirse temporalmente durante el morphing y recuperan sus contornos exactos al terminar. El controlador se pausa fuera del viewport y con la pestaña oculta. Con movimiento reducido, permanece la primera forma con valores estables; sin GSAP, queda el cockpit estático del HTML. No se añaden librerías, plugins ni un sistema de build. El conjunto es una ilustración decorativa con descripción accesible, no un panel de controles reales.
+
+Validación local mediante HTTP: composición completa en escritorio de 1440 px y móvil de 390 px, transformaciones activas, ausencia de desbordamiento horizontal y modo reducido. Se mantiene la navegación existente entre universos.

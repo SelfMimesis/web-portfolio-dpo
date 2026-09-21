@@ -38,28 +38,40 @@
     <section class="world world--dev" aria-labelledby="dev-title">
       <div class="world-meta"><span>02 / DIGITAL PROPS</span><span>SCREEN — FICTION</span></div>
       <h2 id="dev-title"><span>DIGITAL</span><span>PROPS <i>for</i></span><span>FILM<span class="title-dot">●</span></span></h2>
-      <div class="dev-composition" role="img" aria-label="ORBIT: fictional navigation terminal with six animated golden-ratio geometric compositions">
+      <div class="dev-composition" role="img" aria-label="ORBIT: spacecraft cockpit with navigation radar, animated golden trajectories, telemetry, reactor levels and subspace signals">
         <div class="grid-cross cross-one">+</div><div class="grid-cross cross-two">+</div>
         <div class="system-orbit orbit-one"></div><div class="system-orbit orbit-two"></div>
-        <div class="flight-deck">
-          <div class="flight-header"><span><b>ORBIT</b> / FLIGHT DECK</span><span class="flight-live">● SYSTEMS ONLINE</span><span>VESSEL 07</span></div>
-          <div class="flight-mode"><span>01 / PILOT NAVIGATION</span><span>SECTOR 09 — KEPLER APPROACH</span></div>
-          <div class="flight-instruments flight-golden">
-            <div class="golden-navigation">
-              <div class="golden-caption"><span>GEOMETRY ENGINE</span><span>φ / 1.618034</span></div>
-              <svg class="golden-display" viewBox="-3 -3 329.607 206" aria-hidden="true" focusable="false">
-                <path class="golden-grid" d="M0 0H323.607V200H0Z M200 0V200 M200 123.607H323.607 M247.214 123.607V200 M200 152.786H247.214 M229.18 123.607V152.786"/>
-                <path class="golden-line" d="M0 200 A200 200 0 0 1 200 0 A123.607 123.607 0 0 1 323.607 123.607 A76.393 76.393 0 0 1 247.214 200 A47.214 47.214 0 0 1 200 152.786 A29.18 29.18 0 0 1 229.18 123.607"/>
-              </svg>
-              <div class="golden-caption"><span data-golden-label>01 / FIBONACCI</span><span>VECTOR FIELD</span></div>
+        <div class="flight-deck cockpit" aria-hidden="true">
+          <div class="cockpit-head"><b>ORBIT<span> / NEXUS—07</span></b><span class="cockpit-online">● FLIGHT SYSTEM ONLINE</span><span>SYS / 2086.04</span></div>
+          <div class="cockpit-command"><span>DEEP SPACE / PILOT INTERFACE</span><span>SECTOR 09 <b>↗</b> KEPLER</span></div>
+          <div class="cockpit-grid">
+            <div class="cockpit-window cockpit-vitals">
+              <div class="cockpit-label">01 / FLIGHT TELEMETRY <span>LIVE</span></div>
+              <small>RELATIVE VELOCITY</small><strong data-cockpit-speed>07.82</strong><em>KM / S <span>+0.024 Δ</span></em>
+              <svg viewBox="0 0 150 45"><path class="cockpit-chart-base" d="M0 10H150M0 25H150M0 40H150"/><path class="cockpit-chart" d="M0 36L12 32 21 34 35 18 48 23 61 12 72 17 85 6 101 14 116 9 133 12 150 3"/></svg>
+              <small>ORBITAL ALTITUDE</small><strong class="cockpit-altitude">284.6<sub>KM</sub></strong>
+              <div class="cockpit-data"><span>PITCH <b>+02.4°</b></span><span>YAW <b>−00.8°</b></span><span>ROLL <b>+14.2°</b></span></div>
             </div>
-            <div class="flight-systems">
-              <div><small>PROPORTION / φ</small><strong>1.618</strong><span class="golden-sequence">01 · 01 · 02 · 03 · 05 · 08</span></div>
-              <div class="flight-status"><span>VECTOR <b data-golden-state>01 / 06</b></span><span>GUIDANCE <b>LOCKED</b></span><span>SIGNAL <b>STABLE</b></span></div>
-              <div class="flight-destination"><small>DESTINATION</small><b>KEPLER / 09</b><span>ORBITAL INSERTION</span></div>
+            <div class="cockpit-window cockpit-navigation">
+              <div class="cockpit-label">02 / TRAJECTORY SOLVER <span data-golden-state>01 / 06</span></div>
+              <div class="cockpit-radar">
+                <svg class="cockpit-reticle" viewBox="0 0 340 240"><g fill="none"><circle cx="170" cy="120" r="110"/><circle cx="170" cy="120" r="104" stroke-dasharray="1 7" stroke-width="5"/><circle cx="170" cy="120" r="72" stroke-dasharray="2 5"/><path d="M0 120H340M170 0V240M42 25H58V41M298 199V215H282"/><path class="cockpit-axis" d="M170 10V29M170 211V230M60 120H79M261 120H280"/></g></svg>
+                <svg class="golden-display" viewBox="-18 -18 359.607 236" focusable="false"><path class="golden-line" d="M0 200 A200 200 0 0 1 200 0 A123.607 123.607 0 0 1 323.607 123.607 A76.393 76.393 0 0 1 247.214 200 A47.214 47.214 0 0 1 200 152.786"/></svg>
+                <span class="cockpit-target target-a">⌖<small>TGT—01</small></span><span class="cockpit-target target-b">⌖<small>TGT—02</small></span>
+                <span class="cockpit-coordinates">X +0188.04<br>Y −0605.12</span><span class="cockpit-lock">VECTOR<br><b>LOCKED</b></span>
+              </div>
+              <div class="cockpit-nav-footer"><span data-golden-label>01 / FIBONACCI</span><span>φ 1.618 / NAV</span></div>
             </div>
+            <div class="cockpit-window cockpit-power">
+              <div class="cockpit-label">03 / REACTOR <span>●</span></div><small>CORE OUTPUT</small><strong><span data-cockpit-power>68</span><sub>%</sub></strong>
+              <div class="cockpit-bars"><i style="--level:42%"></i><i style="--level:64%"></i><i style="--level:56%"></i><i style="--level:82%"></i><i style="--level:70%"></i><i style="--level:92%"></i><i style="--level:61%"></i><i style="--level:74%"></i></div>
+              <div class="cockpit-data"><span>HULL <b>100%</b></span><div class="cockpit-meter"><i style="--level:100%"></i></div><span>OXYGEN <b>98.4%</b></span><div class="cockpit-meter"><i style="--level:98%"></i></div><span>FUEL <b>82.6%</b></span><div class="cockpit-meter"><i style="--level:83%"></i></div></div>
+              <div class="cockpit-alert">[ + ] SYSTEM NOMINAL</div>
+            </div>
+            <div class="cockpit-window cockpit-spectrum"><div class="cockpit-label">04 / SUBSPACE SIGNAL <span>128.04 MHz</span></div><svg viewBox="0 0 420 50" preserveAspectRatio="none"><path class="cockpit-chart-base" d="M0 25H420M0 5H420M0 45H420"/><path class="cockpit-chart" d="M0 25H25L30 20 35 30 40 25H60L65 12 70 38 75 25H92L97 3 102 46 107 19 112 31 117 25H145L150 15 155 35 160 25H190L195 5 200 46 205 11 210 39 215 25H250L255 19 260 30 265 25H285L290 9 295 41 300 25H332L337 18 342 32 347 25H375L380 12 385 38 390 25H420"/></svg><div class="cockpit-spectrum-foot"><span>UPLINK ESTABLISHED</span><span data-cockpit-frame>FRAME / 001</span></div></div>
+            <div class="cockpit-window cockpit-route"><div class="cockpit-label">05 / APPROACH <span>AUTO</span></div><div class="cockpit-route-body"><svg viewBox="0 0 100 60"><path d="M5 50L40 12 92 25 5 50M40 12L55 48 92 25"/><circle cx="40" cy="12" r="4"/><circle cx="92" cy="25" r="3"/></svg><div><b>KEPLER—09</b><small>DOCK 04 / ETA</small><strong>00:14:32</strong></div></div></div>
           </div>
-          <div class="flight-footer"><span>COMMS <b>● LINK STABLE</b></span><span class="flight-signal" aria-hidden="true">▂ ▄ ▆ ▄ ▂ ▅ ▇ ▃ ▂ ▄ ▆ ▂</span><span>DOCKING <b>STANDBY</b></span></div>
+          <div class="cockpit-footer"><span>MANUAL OVERRIDE / ARMED</span><span class="cockpit-binary">▌▌▌ ▌▌ ▌ ▌▌▌ ▌▌ ▌▌▌▌ ▌▌ ▌</span><span>CONNECTION SECURE <b>↗</b></span></div>
         </div>
         <span class="code-tag">ORBIT / FLIGHT DECK CONCEPT</span><span class="composition-caption">FIG. 02 — SCREENS THAT TELL STORIES</span>
       </div>

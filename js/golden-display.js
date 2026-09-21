@@ -50,18 +50,26 @@ export function initGoldenDisplays() {
   document.querySelectorAll('.golden-display').forEach(svg => {
     const line=svg.querySelector('.golden-line'), deck=svg.closest('.flight-deck');
     const label=deck.querySelector('[data-golden-label]'), readout=deck.querySelector('[data-golden-state]');
+    const speed=deck.querySelector('[data-cockpit-speed]');
+    const power=deck.querySelector('[data-cockpit-power]');
+    const frame=deck.querySelector('[data-cockpit-frame]');
+    const bars=[...deck.querySelectorAll('.cockpit-bars i')];
     const proxy={mix:0};
     const show = i => {
       line.setAttribute('d',paths[i]);
       label.textContent=`0${i+1} / ${names[i]}`;
       readout.textContent=`0${i+1} / 06`;
       svg.dataset.geometry=String(i);
+      // Electronic readouts switch at settled poses, without a second timer.
+      if(speed) speed.textContent=['07.82','07.86','07.91','07.88','07.84','07.82'][i];
+      if(power) power.textContent=String([68,72,74,71,69,68][i]);
+      if(frame) frame.textContent=`FRAME / 00${i+1}`;
+      bars.forEach((bar,j)=>{bar.style.transform=`scaleY(${.65+((i*3+j*2)%7)*.05})`;});
     };
     const timeline=gsap.timeline({paused:true,repeat:-1});
     for(let i=0;i<paths.length;i++) {
       const next=(i+1)%paths.length, from=samples[i], to=samples[next];
-      timeline.to(proxy,{mix:1,duration:1.65,delay:2.3,ease:'sine.inOut',
-        onStart:()=>{proxy.mix=0;},
+      timeline.fromTo(proxy,{mix:0},{mix:1,duration:1.65,delay:2.3,ease:'sine.inOut',immediateRender:false,
         onUpdate:()=>line.setAttribute('d',from.map((p,j)=>`${j?'L':'M'}${(p.x+(to[j].x-p.x)*proxy.mix).toFixed(2)} ${(p.y+(to[j].y-p.y)*proxy.mix).toFixed(2)}`).join(' ')),
         onComplete:()=>{show(next);proxy.mix=0;}
       });
