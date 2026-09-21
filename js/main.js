@@ -10,6 +10,7 @@ import { initLCDDisplays } from './lcd-display.js';
 import { initAmbientMotion } from './ambient-motion.js';
 import { initAppASCII } from './app-ascii.js';
 import { initGoldenDisplays } from './golden-display.js';
+import { mountPlaybackServices } from './playback-services.js';
 
 function buildScenes() {
   const art = document.querySelector('.art-composition').outerHTML;
@@ -35,6 +36,7 @@ function buildScenes() {
   }
   const intro = document.querySelector('.dev-track .panel:nth-child(2)');
   intro.classList.add('panel--playback');
+  mountPlaybackServices(intro);
   intro.querySelector('.panel-meta span:last-child').textContent = 'ONSET PLAYBACK — FIELD RECORD';
   document.querySelectorAll('.archive-entry').forEach(button => {
     const preview = () => { document.querySelector('.archive-preview').textContent = button.dataset.preview; };

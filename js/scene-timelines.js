@@ -1,4 +1,5 @@
 import { driveAppGlyph } from './app-ascii.js';
+import { createPlaybackServices } from './playback-services.js';
 
 const clamp = value => Math.max(0, Math.min(1, value));
 
@@ -11,6 +12,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
   let frame;
   let frameTimeline;
   let coverTimeline;
+  let services;
   const story = panels[0].querySelector('.cover-story');
   let lastChapter = -1;
   const titles = ['WORLD / 01', 'PLAYBACK / 02', 'ORBIT / 03'];
@@ -27,6 +29,13 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     panels.forEach((panel, index) => {
       if (index === 1) {
         const photo=panel.querySelector('.playback-photo');
+        services=createPlaybackServices(panel,{mobile});
+        if(mobile){
+          gsap.from(panel.querySelectorAll('.playback-letter'),{opacity:.15,y:8,stagger:.02,scrollTrigger:{trigger:panel.querySelector('h2'),start:'top 90%',end:'top 40%',scrub:true}});
+          gsap.from(photo,{opacity:0,y:30,clipPath:'inset(30% 0 30% 0)',scrollTrigger:{trigger:photo,start:'top 95%',end:'top 45%',scrub:true}});
+          entries.push({timeline:gsap.timeline({paused:true}).to({p:0},{p:1,duration:1}),progress:-1});
+          return;
+        }
         const timeline=gsap.timeline({paused:true})
           .fromTo(panel.querySelectorAll('.playback-letter'),{opacity:.12,y:9},{opacity:1,y:0,duration:.11,stagger:.006,ease:'power2.out'},.06)
           .fromTo(panel.querySelector('.playback-copy p'),{opacity:0,y:18},{opacity:1,y:0,duration:.15},.24)
@@ -76,10 +85,12 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     if (entry.progress === next) return;
     entry.progress = next;
     entry.timeline.progress(next);
+    if(index===1)services?.gradient(next);
     if (mobile && index === 0) updateCover((next-.5)*4);
   }
   return {
     updateCover,
+    updateServices(progress){services?.update(progress);},
     updatePanel,
     update(progress) {
       const position = progress * (panelCount - 1);

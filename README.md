@@ -655,3 +655,22 @@ Al abandonar la portada, la ventana narrativa se desvanece. En el capítulo sigu
 La fotografía original está en `assets/onset-playback.jpeg`, copiada sin modificaciones del archivo proporcionado (aproximadamente 319 KB). Incluye texto alternativo y dimensiones reservadas. La estructura y los textos están en `js/main.js`; la secuencia está en `js/scene-timelines.js` y el diseño en `css/scene-timelines.css`. El marcador del recorrido identifica este capítulo como ONSET PLAYBACK. La versión móvil dispone el texto y la foto verticalmente; con movimiento reducido se muestra todo directamente.
 
 Verificado en escritorio y móvil: desaparición progresiva de la ventana anterior, revelado escalonado del título, carga correcta de la foto, retorno a los mismos estados al subir y ausencia de desbordamiento horizontal. La referencia ZRK no fue accesible durante esta revisión; la secuencia es una interpretación propia de la dirección solicitada.
+
+### Pausa central y servicios de stand-by motion graphics
+
+Al llegar al centro del capítulo Onset Playback, el track horizontal queda detenido durante `max(2800 px, 4,4 × altura de ventana)` de scroll. Durante ese tramo aparecen desde abajo cuatro ventanas, con textos en inglés:
+
+1. **Live playback:** lanzamiento de imágenes en Resolume siguiendo los tiempos del director y los actores. El logo oficial acompaña una secuencia de cues y su barra de reproducción.
+2. **Troubleshooting:** diagnóstico y resolución de problemas de pantallas, señales y contenido. Un diagrama activa origen, conexión y salida.
+3. **Equipment setup:** montaje y comprobación de sistemas con múltiples pantallas sincronizadas. Un esquema de seis monitores comparte una señal maestra y muestra la sincronización.
+4. **Technical assistance:** asesoramiento a cámara y dirección y ajuste de la imagen para su correcta captura. Un gráfico vincula una pantalla de calibración con una cámara.
+
+El avance horizontal continúa al terminar las cuatro ventanas. Al subir, la secuencia retrocede. Se utiliza el mismo pin del recorrido, sin pins anidados: `js/scrollytelling.js` descuenta el tramo de servicios del desplazamiento horizontal y lo incluye en los cálculos de navegación y posición final de About Me. ART conserva su duración.
+
+`js/playback-services.js` contiene textos, diagramas y timelines. `js/main.js` monta las ventanas; `js/scene-timelines.js` coordina sus estados con el capítulo. En móvil se presentan en flujo vertical con revelados individuales, sin fijación adicional. Con movimiento reducido o sin GSAP, todas se pueden leer directamente.
+
+La fotografía se **recorta visualmente mediante CSS** para excluir los márgenes oscuros del archivo; el JPEG original permanece intacto. La ventana visible utiliza las coordenadas del área fotográfica. Debajo aparece un gradiente ASCII de 42 × 7 caracteres cuyos estados avanzan con el scroll; no hay bucles ni temporizadores nuevos.
+
+Logo descargado del [kit oficial de prensa de Resolume](https://resolume.com/press), guardado en `assets/resolume-logo.svg`. Se utiliza para identificar la herramienta, sin afirmar afiliación.
+
+Verificación local: durante las cuatro ventanas el panel mantiene `left: 0` y el track permanece inmóvil; cada ventana aparece en orden. Al terminar el recorrido, About Me sigue comenzando después del pin. En móvil las cuatro ventanas quedan en orden, sin recorte horizontal ni pin-spacers internos. El logo se carga desde el propio repositorio.

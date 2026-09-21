@@ -8,6 +8,7 @@ let animation;
 let mobileCleanup = [];
 let horizontalDistance = 0;
 let openingPause = 0;
+let servicePause = 0;
 let scenes;
 let progressUI;
 let panels = [];
@@ -76,26 +77,32 @@ function initScrollytelling(world) {
   }
   context = gsap.context(() => {
     if (world === 'dev') scenes = createDevSceneTimelines(section);
-    let travelFraction = 1;
-    let openingFraction = 0;
+    let totalDistance = 1;
+    let serviceStart = 0;
+    const clamp = value => Math.max(0,Math.min(1,value));
+    const travel = progress => {
+      const offset=progress*totalDistance-openingPause;
+      const held=servicePause ? Math.max(0,Math.min(servicePause,offset-serviceStart)) : 0;
+      return clamp((offset-held)/horizontalDistance);
+    };
     const distance = () => {
       track.style.setProperty('--panel-width', `${section.clientWidth}px`);
       horizontalDistance = Math.max(0, track.scrollWidth - section.clientWidth);
       openingPause = world === 'dev' ? Math.max(600, innerHeight * .9) : 0;
-      const total = horizontalDistance + openingPause + endPause();
-      openingFraction = openingPause / total;
-      travelFraction = horizontalDistance / total;
+      serviceStart = section.clientWidth;
+      servicePause = world === 'dev' ? Math.max(2800,innerHeight*4.4) : 0;
+      totalDistance = horizontalDistance + openingPause + servicePause + endPause();
       return horizontalDistance;
     };
     distance();
-    const updatePause = self => setWorldLinkPause(section, (self.progress - openingFraction - travelFraction) / (1 - openingFraction - travelFraction));
+    const updatePause = self => setWorldLinkPause(section, (self.progress*totalDistance-openingPause-servicePause-horizontalDistance)/endPause());
     animation = gsap.fromTo(track, { x: 0 }, {
       x: () => -distance(),
       // Finish the journey before releasing the pin: the remaining scroll is a reading pause.
-      ease: progress => Math.max(0, Math.min(1, (progress-openingFraction) / travelFraction)),
+      ease: travel,
       // Created after About: measure this upstream pin first, including its spacing.
       scrollTrigger: {
-        trigger: section, start: 'top top', end: () => `+=${distance() + openingPause + endPause()}`,
+        trigger: section, start: 'top top', end: () => `+=${distance() + openingPause + servicePause + endPause()}`,
         pin: section.querySelector('.scrolly-sticky'), scrub: .75,
         invalidateOnRefresh: true, refreshPriority: 100,
         onToggle: self => { document.querySelector('.scroll-progress').hidden = !self.isActive; },
@@ -107,9 +114,10 @@ function initScrollytelling(world) {
         }
       },
       onUpdate() {
-        const progress = Math.max(0, Math.min(1, (this.progress()-openingFraction) / travelFraction));
-        scenes?.updateCover(openingFraction ? this.progress()/openingFraction : 1);
+        const progress = travel(this.progress());
+        scenes?.updateCover(openingPause ? this.progress()*totalDistance/openingPause : 1);
         updateProgress(progress); scenes?.update(progress);
+        scenes?.updateServices(servicePause ? clamp((this.progress()*totalDistance-openingPause-serviceStart)/servicePause) : 0);
       }
     });
     scenes?.update(0);
@@ -138,6 +146,6 @@ export function nextPanel() {
   }
   const next = state.currentPanel >= lastPanel()
     ? document.querySelector('#about').getBoundingClientRect().top + window.scrollY - document.querySelector('.site-header').offsetHeight
-    : trigger.start + openingPause + horizontalDistance * (state.currentPanel + 1) / lastPanel();
+    : trigger.start + openingPause + (state.currentPanel>=1?servicePause:0) + horizontalDistance * (state.currentPanel + 1) / lastPanel();
   window.scrollTo({ top: next, behavior: state.reducedMotion ? 'instant' : 'smooth' });
 }
