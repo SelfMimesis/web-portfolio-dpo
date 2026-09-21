@@ -61,3 +61,7 @@
 .cockpit-spectrum-foot{font-size:.6cqw;line-height:1.3}.cockpit-spectrum-foot>span:first-child{display:none}
 .cockpit-grid>.cockpit-route{padding:.5cqw}.cockpit-route .cockpit-label{font-size:.55cqw;padding:0;margin:0;border:0}.cockpit-route .cockpit-label>span{display:none}
 .cockpit-route-body{height:calc(100% - 1cqw)}.cockpit-route-body>svg{width:100%;height:100%;shape-rendering:crispEdges}.cockpit-route-body>div{display:none}
+
+/* WebGL belongs to the navigation instrument, never to the page viewport. */
+.cockpit-radar #webgl{position:absolute;inset:auto;left:50%;top:50%;width:64%;height:auto;aspect-ratio:1;transform:translate(-50%,-50%);z-index:0;opacity:.3;pointer-events:none;clip-path:circle(49%)}
+.cockpit-radar .cockpit-reticle{z-index:1}.cockpit-radar .cockpit-target,.cockpit-radar .cockpit-coordinates,.cockpit-radar .cockpit-lock{z-index:2}

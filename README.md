@@ -606,3 +606,11 @@ Validación: ART y DIGITAL PROPS a 1440 × 900, móvil 390 × 844 y movimiento r
 ### Corrección del anclaje al abrir un universo
 
 La posición conservada es **relativa a la sección seleccionada**, no a la pantalla completa. Al abrir DIGITAL PROPS, la terminal acompaña al título hacia la izquierda y queda debajo de él, con el mismo tamaño de reposo. ART usa el mismo criterio para sus cartas. Esto sustituye la descripción anterior de compensación para mantener una posición absoluta en pantalla.
+
+### Figura 3D anclada al radar
+
+`js/three-scene.js` monta ahora el único canvas WebGL dentro de `.cockpit-radar`, centrado y recortado al círculo del instrumento. La figura queda detrás de la retícula, los indicadores LED y la línea naranja; ya no flota sobre el fondo general de la página. Su posición no depende del puntero: el ratón modifica únicamente su rotación con amortiguación.
+
+Se reutiliza un solo renderer entre la terminal de portada y la copia de Selected Work, según cuál esté visible. El tamaño de render se ajusta al instrumento, con pixel ratio máximo de 1,5. Solo se solicitan fotogramas mientras la rotación converge; se detiene fuera de pantalla y al ocultar la pestaña. WebGL sigue desactivado en móvil y con movimiento reducido. Si Three.js no carga, la terminal HTML/SVG permanece operativa. Los observers, listeners y recursos GPU se liberan al abandonar la página.
+
+Validación HTTP: canvas único, centrado dentro del radar, visible tras abrir DIGITAL PROPS, oculto en móvil y con movimiento reducido.
