@@ -28,7 +28,7 @@ export function initMobileFilmography({ section, stage, viewport, body, rows, ca
       if (!trigger) { show(index); return; }
       window.scrollTo({
         top: trigger.start + (trigger.end - trigger.start) * index / (rows.length - 1),
-        behavior: 'smooth'
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
       });
     });
     if (pinned) {

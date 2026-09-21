@@ -1,21 +1,28 @@
 import { state } from './state.js';
 import { animateMobileChapter } from './mobile-story.js';
 import { setWorldLinkDescent } from './world-links.js';
+import { createDevSceneTimelines } from './scene-timelines.js';
 let context;
 let observer;
 let animation;
 let mobileCleanup = [];
 let horizontalDistance = 0;
+let scenes;
+let progressUI;
+let panels = [];
+let previousPanel = -1;
 const endPause = () => Math.min(520, Math.max(260, innerHeight * .48));
 const names = { art: ['COVER', 'INTRO', 'SELECTED WORK', 'PROJECT DETAIL', 'PROCESS', 'ARCHIVE', 'NEXT WORLD'], dev: ['COVER', 'INTRO', 'SELECTED WORK', 'INTERACTION', 'PLAYBACK', 'ARCHIVE', 'NEXT WORLD'] };
 const lastPanel = () => names[state.activeWorld].length - 1;
 export function updateProgress(progress) {
   state.scrollProgress = progress;
   state.currentPanel = Math.min(lastPanel(), Math.round(progress * lastPanel()));
-  document.querySelector('.progress-index').textContent = String(state.currentPanel + 1).padStart(2, '0');
-  document.querySelector('.progress-title').textContent = names[state.activeWorld]?.[state.currentPanel] || 'INTRO';
-  document.querySelector('.progress-line i').style.transform = `scaleX(${progress})`;
-  document.querySelectorAll('.scrolly:not([hidden]) .panel').forEach((panel, i) => {
+  progressUI.line.style.transform = `scaleX(${progress})`;
+  if (previousPanel === state.currentPanel) return;
+  previousPanel = state.currentPanel;
+  progressUI.index.textContent = String(state.currentPanel + 1).padStart(2, '0');
+  progressUI.title.textContent = names[state.activeWorld]?.[state.currentPanel] || 'INTRO';
+  panels.forEach((panel, i) => {
     panel.classList.toggle('is-active', i === state.currentPanel);
     // Offscreen controls must not move the pinned track when focused.
     panel.inert = !document.body.classList.contains('vertical-mode') && i !== state.currentPanel;
@@ -24,16 +31,28 @@ export function updateProgress(progress) {
 function initScrollytelling(world) {
   const section = document.querySelector(`.scrolly--${world}`);
   const track = section.querySelector('.horizontal-track');
+  panels = [...track.children]; previousPanel = -1;
+  progressUI = { index: document.querySelector('.progress-index'), title: document.querySelector('.progress-title'), line: document.querySelector('.progress-line i') };
   document.querySelector('.progress-world').textContent = world === 'art' ? 'ART →' : 'DIGITAL PROPS →';
   updateProgress(0);
   if (document.body.classList.contains('vertical-mode')) {
     observer = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (entry.isIntersecting) updateProgress([...track.children].indexOf(entry.target) / lastPanel());
+      // Pinning wraps the last article in a spacer: use the original article list.
+      const index = panels.indexOf(entry.target);
+      if (entry.isIntersecting && index >= 0) updateProgress(index / lastPanel());
     }), { threshold: .45 });
-    [...track.children].forEach(panel => observer.observe(panel));
+    panels.forEach(panel => observer.observe(panel));
     if (window.gsap && window.ScrollTrigger) {
       context = gsap.context(() => {
-        if (!state.reducedMotion) mobileCleanup = [...track.children].filter(panel => !panel.classList.contains('panel--hero')).map(panel => animateMobileChapter(
+        if (!state.reducedMotion && world === 'dev') {
+          scenes = createDevSceneTimelines(section, { mobile: true });
+          panels.slice(0, 3).forEach((panel, index) => ScrollTrigger.create({
+            trigger: panel, start: index === 0 ? 'top top' : 'top bottom', end: 'bottom top',
+            onUpdate: self => scenes?.updatePanel(index, index === 0 ? .5 + self.progress * .5 : self.progress),
+            onRefresh: self => scenes?.updatePanel(index, index === 0 ? .5 + self.progress * .5 : self.progress)
+          }));
+        }
+        if (!state.reducedMotion) mobileCleanup = panels.filter((panel, i) => !panel.classList.contains('panel--hero') && !(world === 'dev' && i < 3)).map(panel => animateMobileChapter(
           panel, '.art-composition, .dev-composition, .process-board, .workflow, .system-diagram',
           'h2, p, .intro-tags, .project-meta, .archive-entry, .tool-list details'
         ));
@@ -51,6 +70,7 @@ function initScrollytelling(world) {
     return;
   }
   context = gsap.context(() => {
+    if (world === 'dev') scenes = createDevSceneTimelines(section);
     let travelFraction = 1;
     const distance = () => {
       track.style.setProperty('--panel-width', `${section.clientWidth}px`);
@@ -75,20 +95,26 @@ function initScrollytelling(world) {
           setWorldLinkDescent(section, self.progress >= 1, true);
         }
       },
-      onUpdate() { updateProgress(Math.min(1, this.progress() / travelFraction)); }
+      onUpdate() {
+        const progress = Math.min(1, this.progress() / travelFraction);
+        updateProgress(progress); scenes?.update(progress);
+      }
     });
+    scenes?.update(0);
   }, section);
   refreshScrollTriggers();
 }
 export function initArtScrollytelling() { initScrollytelling('art'); }
 export function initDevScrollytelling() { initScrollytelling('dev'); }
 export function destroyScrollTriggers() {
+  scenes?.destroy(); scenes = null;
   context?.revert(); context = null; animation = null;
   mobileCleanup.forEach(remove => remove()); mobileCleanup = [];
   observer?.disconnect(); observer = null;
   document.querySelectorAll('.scrolly').forEach(section => setWorldLinkDescent(section, false, true));
   document.querySelectorAll('.panel').forEach(panel => { panel.inert = false; });
   document.querySelectorAll('.horizontal-track').forEach(track => track.style.removeProperty('--panel-width'));
+  panels = []; previousPanel = -1;
 }
 export function refreshScrollTriggers() { window.ScrollTrigger?.refresh(); }
 export function nextPanel() {

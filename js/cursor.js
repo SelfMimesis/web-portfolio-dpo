@@ -12,6 +12,7 @@ export function clearScrollCue() {
   cueActive = cueArmed = false;
   const cursor = document.querySelector('.custom-cursor');
   if (!cursor) return;
+  if (!window.gsap) { cursor.classList.remove('is-scroll-cue'); return; }
   gsap.killTweensOf(cursor);
   cursor.classList.remove('is-scroll-cue');
   gsap.set(cursor, { opacity: 0, scale: .75, clearProps: 'width,height' });
@@ -76,7 +77,7 @@ export function initCursor() {
     const fullShape = 'polygon(50% 0%,100% 0%,100% 42%,100% 100%,61% 100%,61% 100%,39% 100%,39% 100%,0% 100%,0% 42%,0% 0%)';
     const palettes = {
       art: { backgroundColor: color('--accent'), color: '#fff', borderRadius: '50%', borderColor: 'transparent', boxShadow: '0 4px 14px #24251f18' },
-      dev: { backgroundColor: color('--green'), color: color('--dark'), borderRadius: '22%', borderColor: color('--green'), boxShadow: '0 0 24px #c1d99b35' },
+      dev: { backgroundColor: color('--green'), color: color('--dark'), borderRadius: '22%', borderColor: color('--green'), boxShadow: 'none' },
       lcd: { backgroundColor: '#d0d5b8', color: '#30392d', borderRadius: '2px', borderColor: '#30392d', boxShadow: '2px 2px 0 #30392d40' }
     };
     const position = { x: 0, y: 0, vx: 0, vy: 0 };
@@ -186,7 +187,7 @@ export function initCursor() {
       }
       if (!visible) {
         visible = true;
-        gsap.to(cursor, { opacity: 1, scale: 1, duration: theme === 'lcd' ? .1 : .35, ease: theme === 'lcd' ? 'steps(1)' : 'back.out(1.5)', overwrite: true });
+        gsap.to(cursor, { opacity: 1, scale: 1, duration: theme === 'art' ? .35 : .1, ease: theme === 'art' ? 'back.out(1.5)' : 'steps(1)', overwrite: true });
       }
       start();
     };
@@ -196,12 +197,12 @@ export function initCursor() {
       update(event.target);
     };
     const press = event => {
-      if (event.pointerType === 'mouse' && visible) gsap.to(cursor, { scale: theme === 'lcd' ? 1 : .84, opacity: theme === 'lcd' ? .5 : 1, duration: .12, ease: theme === 'lcd' ? 'steps(1)' : 'power2.out', overwrite: 'auto' });
+      if (event.pointerType === 'mouse' && visible) gsap.to(cursor, { scale: theme === 'art' ? .84 : 1, opacity: theme === 'art' ? 1 : .5, duration: .12, ease: theme === 'art' ? 'power2.out' : 'steps(1)', overwrite: 'auto' });
     };
     const release = () => {
-      if (visible) gsap.to(cursor, { scale: 1, opacity: 1, duration: theme === 'lcd' ? .1 : .45, ease: theme === 'lcd' ? 'steps(1)' : 'elastic.out(1, .45)', overwrite: 'auto' });
+      if (visible) gsap.to(cursor, { scale: 1, opacity: 1, duration: theme === 'art' ? .45 : .1, ease: theme === 'art' ? 'elastic.out(1, .45)' : 'steps(1)', overwrite: 'auto' });
     };
-    const scroll = () => { if (visible) update(document.elementFromPoint(pointer.x, pointer.y)); };
+    const scroll = () => { if (visible) hide(); };
     const resize = () => { clearScrollCue(); radius = cursor.offsetWidth / 2; hide(); };
     const visibility = () => { if (document.hidden) hide(); };
     const navigation = () => { if (state.transitionInProgress) hide(); };

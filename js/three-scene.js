@@ -1,8 +1,9 @@
 import { state } from './state.js';
 let renderer, scene, camera, mesh, frame = 0;
+let inViewport = false;
 function stop() { cancelAnimationFrame(frame); frame = 0; }
 function render(time = 0) {
-  if (!renderer || document.hidden || state.activeWorld || state.isMobile || state.reducedMotion || window.scrollY > window.innerHeight) { stop(); return; }
+  if (!renderer || !inViewport || document.hidden || state.activeWorld || state.isMobile || state.reducedMotion || window.scrollY > window.innerHeight) { stop(); return; }
   mesh.rotation.z = time * .000035;
   mesh.rotation.y += ((state.hoveredWorld === 'art' ? -.4 : .4) - mesh.rotation.y) * .025;
   renderer.render(scene, camera);
@@ -27,7 +28,7 @@ export async function initThreeScene() {
     window.addEventListener('resize', resize);
     document.addEventListener('visibilitychange', () => updateThreeScene(state.activeWorld));
     // Only gates optional rendering; ScrollTrigger owns navigation.
-    new IntersectionObserver(([entry]) => { if (entry.isIntersecting) updateThreeScene(state.activeWorld); else stop(); }).observe(document.querySelector('.hero-selector'));
+    new IntersectionObserver(([entry]) => { inViewport = entry.isIntersecting; if (inViewport) updateThreeScene(state.activeWorld); else stop(); }).observe(document.querySelector('.hero-selector'));
     resize();
   } catch { document.querySelector('#webgl').hidden = true; }
 }

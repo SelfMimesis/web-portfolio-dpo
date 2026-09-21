@@ -6,7 +6,8 @@ import { initThreeScene } from './three-scene.js';
 import { initAboutStory } from './about.js';
 import { initFilmography } from './filmography.js';
 import { buildWorldLinks, initWorldLinks } from './world-links.js';
-import { initLCDDisplays } from './lcd-display.js';
+import { initLCDDisplays, initFlightDisplays, lcdDisplayMarkup } from './lcd-display.js';
+import { initAmbientMotion } from './ambient-motion.js';
 
 function buildScenes() {
   const art = document.querySelector('.art-composition').outerHTML;
@@ -30,6 +31,17 @@ function buildScenes() {
   for (const [world, items] of Object.entries(scenes)) {
     document.querySelector(`.${world}-track`).innerHTML = '<article class="panel panel--hero" aria-label="1: Cover"></article>' + items.map(([name, content], i) => `<article class="panel" aria-label="${i + 2}: ${name}"><div class="panel-meta"><span>${world === 'art' ? 'ART DEPARTMENT →' : '→ DIGITAL PROPS'} / 0${i + 2}</span><span>${name} — CONCEPT PORTFOLIO</span></div>${content}</article>`).join('');
   }
+  const intro = document.querySelector('.dev-track .panel:nth-child(2)');
+  intro.classList.add('panel--signal');
+  intro.querySelector('.scene-number').remove();
+  const copy = document.createElement('div');
+  copy.className = 'signal-copy';
+  [...intro.children].filter(node => !node.classList.contains('panel-meta')).forEach(node => copy.append(node));
+  intro.append(copy);
+  const instrument = document.createElement('div');
+  instrument.className = 'signal-instrument';
+  instrument.innerHTML = `<span class="signal-caption">01 / FROM SIGNAL TO STORY</span>${lcdDisplayMarkup('A WORLD<br>IN MOTION', 'scene')}<span class="signal-caption">FIXED SEGMENTS / CHANGING STATES</span>`;
+  intro.append(instrument);
   document.querySelectorAll('.archive-entry').forEach(button => {
     const preview = () => { document.querySelector('.archive-preview').textContent = button.dataset.preview; };
     button.addEventListener('pointerenter', preview); button.addEventListener('focus', preview);
@@ -44,7 +56,7 @@ function buildScenes() {
 }
 export function initApp() {
   if (window.gsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
-  syncPreferences(); buildScenes(); buildWorldLinks(); initLCDDisplays(); initNavigation(); initWorldLinks(); initHeroSelector(selectWorld); initCursor(); initThreeScene();
+  syncPreferences(); buildScenes(); buildWorldLinks(); initLCDDisplays(); initFlightDisplays(); initAmbientMotion(); initNavigation(); initWorldLinks(); initHeroSelector(selectWorld); initCursor(); initThreeScene();
   initAboutStory();
   initFilmography();
   const world = location.hash.slice(1);

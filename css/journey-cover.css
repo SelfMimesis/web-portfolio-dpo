@@ -14,8 +14,12 @@ html{scrollbar-gutter:stable}
 .scroll-progress::before,.scroll-progress::after{content:'';position:absolute;top:50%;height:1px;width:calc(50vw - 50%);background:var(--meter-line);pointer-events:none}
 .scroll-progress::before{right:calc(100% + 4px)}.scroll-progress::after{left:calc(100% + 4px)}
 .scroll-progress[data-world="dev"]{--meter-paper:#c1cfaa;--meter-ink:#30392d;--meter-line:#aabb954d;border-color:#424b3b;box-shadow:inset 2px 2px #70845f66,inset -2px -2px #e2e4ca80}
+.scroll-progress[data-world="art"]{--meter-paper:var(--bg);--meter-ink:var(--fg);background-image:none;border:1px solid var(--line);border-radius:0;box-shadow:none}
+.scroll-progress[data-world="art"]::before{right:calc(100% + 1px)}.scroll-progress[data-world="art"]::after{left:calc(100% + 1px)}
 .scroll-progress .progress-line{height:5px;background:#30392d25}
 .scroll-progress .progress-line i{background:var(--meter-ink);mask-image:repeating-linear-gradient(90deg,#000 0 4px,transparent 4px 6px)}
+.scroll-progress[data-world="art"] .progress-line{height:2px;background:#bcbeb1}
+.scroll-progress[data-world="art"] .progress-line i{background:var(--accent);mask-image:none}
 .scroll-progress .next-panel{color:var(--meter-ink)}
 .hero-selector .world-foot{margin-inline:-3vw;padding-inline:3vw}
 @media(min-width:701px){
@@ -26,4 +30,9 @@ html{scrollbar-gutter:stable}
  .panel--hero .hero-selector .world-bottom p{font-size:10px;line-height:1.4}
  .panel--hero .hero-selector .art-composition,.panel--hero .hero-selector .dev-composition{width:auto;min-width:0;min-height:0;height:auto;margin:0;flex:initial}
  .hero-selector.is-journey-cover .world{grid-template-rows:auto minmax(0,1fr) auto;padding-bottom:24px}
+ .hero-selector.is-journey-cover .world--dev{grid-template-columns:1fr;grid-template-rows:auto auto minmax(0,1fr) auto;gap:12px}
+ .hero-selector.is-journey-cover .world--dev h2{grid-column:1;grid-row:2;font-size:clamp(44px,13vw,64px);margin-top:12px}
+ .hero-selector.is-journey-cover .world--dev .dev-composition{grid-column:1;grid-row:3}
+ .hero-selector.is-journey-cover .world--dev .world-bottom{grid-row:4}
+ .hero-selector.is-journey-cover .world--dev .flight-deck{width:94%;left:3%;transform:translateY(-50%) rotate(-1deg)}
 }

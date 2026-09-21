@@ -1,4 +1,5 @@
 import { state } from './state.js';
+let entrance;
 export function initHeroSelector(onSelect) {
   const worlds = [...document.querySelectorAll('.hero-selector .world')];
   for (const [index, element] of worlds.entries()) {
@@ -11,13 +12,13 @@ export function initHeroSelector(onSelect) {
     });
     element.addEventListener('pointerleave', () => {
       state.hoveredWorld = null;
-      if (!window.gsap || state.activeWorld || state.transitionInProgress) return;
+      if (!window.gsap || state.activeWorld || state.transitionInProgress || state.isMobile || state.reducedMotion) return;
       gsap.to(worlds, { width: '50%', duration: .6, ease: 'power3.out', overwrite: true });
       gsap.to('.center-mark', { left: '50%', duration: .6, overwrite: true });
     });
     element.addEventListener('click', e => { if (!e.target.closest('a,button')) onSelect(world, true, element); });
   }
-  if (window.gsap && !state.reducedMotion) gsap.from('.world h1>span, .world h2>span', { y: 35, opacity: 0, duration: 1, stagger: .07, ease: 'power4.out' });
+  if (window.gsap && !state.reducedMotion) entrance = gsap.from('.world h1>span, .world h2>span', { y: 22, opacity: 0, duration: .65, stagger: .035, ease: 'power3.out' });
 }
 export function resetHero() {
   const hero = document.querySelector('.hero-selector');
@@ -31,6 +32,7 @@ export function resetHero() {
 }
 
 export async function expandHero(world) {
+  entrance?.revert(); entrance = null;
   const hero = document.querySelector('.hero-selector');
   const selected = hero.querySelector(`.world--${world}`);
   const other = hero.querySelector(`.world--${world === 'art' ? 'dev' : 'art'}`);

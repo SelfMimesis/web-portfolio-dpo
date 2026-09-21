@@ -26,10 +26,20 @@ export function createPosterCarousel(rows, onNavigate) {
     slide.className = 'poster-slide';
     slide.setAttribute('aria-hidden', 'true');
     const img = document.createElement('img');
+    if (index === 0) img.fetchPriority = 'high';
     img.src = row.dataset.poster;
     img.alt = `Poster for ${row.querySelector('strong').textContent}`;
     img.decoding = 'async';
     img.loading = index < 2 ? 'eager' : 'lazy';
+    if (index === 0) {
+      // The head preload starts this download before the app initializes.
+      // Decode the exact carousel image early, not on its first scroll frame.
+      img.style.visibility = 'hidden';
+      img.decode().catch(() => {}).finally(() => {
+        img.style.removeProperty('visibility');
+        img.dataset.posterReady = String(img.complete && img.naturalWidth > 0);
+      });
+    }
     slide.append(img);
     stack.append(slide);
     return slide;

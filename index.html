@@ -4,11 +4,13 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Graphic design and digital props for film. Printed objects, fictional apps and screen interfaces made to tell stories.">
   <meta name="theme-color" content="#e9e7df"><title>Diego — Art & Digital Props</title>
+  <link rel="preload" as="image" href="assets/posters/murderbot.webp" fetchpriority="high">
   <link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/responsive.css"><link rel="stylesheet" href="css/digital-props.css">
   <link rel="stylesheet" href="css/world-links.css"><link rel="stylesheet" href="css/about.css"><link rel="stylesheet" href="css/film-posters.css"><link rel="stylesheet" href="css/cursor.css"><link rel="stylesheet" href="css/mobile-story.css"><link rel="stylesheet" href="css/lcd.css"><link rel="stylesheet" href="css/journey-cover.css">
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script type="module" src="js/main.js"></script>
+  <link rel="stylesheet" href="css/scene-timelines.css">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -40,20 +42,20 @@
         <div class="grid-cross cross-one">+</div><div class="grid-cross cross-two">+</div>
         <div class="system-orbit orbit-one"></div><div class="system-orbit orbit-two"></div>
         <div class="flight-deck">
-          <div class="flight-header"><span><b>ORBIT</b> / FLIGHT DECK</span><span class="flight-live">● SYSTEMS ONLINE</span><span>VESSEL 07</span></div>
-          <div class="flight-mode"><span>01 / PILOT NAVIGATION</span><span>SECTOR 09 — KEPLER APPROACH</span></div>
+          <div class="flight-header"><span><b>ORBIT<span class="flight-wordmark-dot">®</span></b><small>NAVIGATION SYSTEM / 07</small></span><span class="flight-live">[●] SYSTEM ONLINE<br><small>FLIGHT DECK — CONCEPT</small></span></div>
+          <div class="flight-mode"><span>01 / FLIGHT INSTRUMENT</span><span>KEPLER APPROACH &nbsp; ↗</span></div>
           <div class="flight-instruments">
             <div class="flight-readouts">
-              <div><small>VELOCITY / KM·S⁻¹</small><strong>07.82</strong><span class="flight-sparkline" aria-hidden="true"></span></div>
+              <div><small>ORBITAL VELOCITY</small><strong>07<span class="flight-decimal">.82</span></strong><span>KM / SECOND</span><span class="flight-sparkline" aria-hidden="true"></span></div>
               <div><small>ALTITUDE / KM</small><strong>284.6</strong><span>ORBITAL INSERTION</span></div>
               <div class="flight-attitude"><small>ATTITUDE</small><span>PITCH <b>+02.4°</b></span><span>ROLL <b>−00.8°</b></span><span>YAW <b>+14.2°</b></span></div>
             </div>
             <div class="flight-navigation">
               <svg class="flight-reticle" viewBox="0 0 300 230" aria-hidden="true" focusable="false">
-                <g class="nav-grid" fill="none" stroke="currentColor" stroke-width=".7"><circle cx="150" cy="113" r="95"/><circle cx="150" cy="113" r="73" stroke-dasharray="2 6"/><path d="M150 8v22m0 166v22M45 113h22m166 0h22M79 42l15 15m112 112 15 15M79 184l15-15M206 57l15-15"/><path d="M90 79h120M76 113h148M90 147h120" opacity=".4"/></g>
+                <g class="nav-grid" fill="none" stroke="currentColor" stroke-width=".7"><circle cx="150" cy="113" r="100" stroke-width="5" stroke-dasharray="1 5.28"/><circle cx="150" cy="113" r="90"/><circle cx="150" cy="113" r="73" stroke-dasharray="1 7"/><circle cx="150" cy="113" r="44" opacity=".25"/><path d="M150 8v22m0 166v22M45 113h22m166 0h22M79 42l15 15m112 112 15 15M79 184l15-15M206 57l15-15"/><path d="M90 79h120M76 113h148M90 147h120" opacity=".22"/></g>
                 <g class="nav-sweep" fill="none" stroke="currentColor"><path d="M150 113V19" opacity=".4"/><path d="M150 19a94 94 0 0 1 81 47" stroke-width="2"/></g>
                 <g class="nav-horizon" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M74 115h39l12 9h50l12-9h39M121 66h58m-48-5v10m38-10v10M130 91h40M130 146h40M121 171h58"/><path d="m150 94-13 29 13-6 13 6Z" fill="#c1d99b22"/></g>
-                <g class="nav-target" fill="none" stroke="#d9ac72" stroke-width="1.4"><path d="M186 70v-8h8m11 0h8v8m0 11v8h-8m-11 0h-8v-8"/><circle cx="200" cy="76" r="3"/></g>
+                <g class="nav-target" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M186 70v-8h8m11 0h8v8m0 11v8h-8m-11 0h-8v-8"/><circle cx="200" cy="76" r="3"/></g>
                 <g fill="currentColor" font-family="monospace" font-size="7" text-anchor="middle"><text x="150" y="11">000</text><text x="275" y="116">090</text><text x="25" y="116">270</text><text x="150" y="226">VECTOR LOCK / 042.8°</text></g>
               </svg>
               <span class="flight-nav-label">AUTO NAV <b>ENGAGED</b></span>
@@ -64,7 +66,7 @@
               <div class="flight-destination"><small>DESTINATION</small><b>KEPLER / 09</b><span>ETA 00:14:32</span></div>
             </div>
           </div>
-          <div class="flight-footer"><span>COMMS <b>● LINK STABLE</b></span><span class="flight-signal" aria-hidden="true">▂ ▄ ▆ ▄ ▂ ▅ ▇ ▃ ▂ ▄ ▆ ▂</span><span>DOCKING <b>STANDBY</b></span></div>
+          <div class="flight-footer"><span>LINK <b>[ ESTABLISHED ]</b></span><span class="flight-signal" aria-hidden="true">▂ ▄ ▆ ▄ ▂ ▅ ▇ ▃ ▂ ▄ ▆ ▂</span><span>DOCK / 09 <b>STANDBY</b></span></div>
         </div>
         <span class="code-tag">ORBIT / FLIGHT DECK CONCEPT</span><span class="composition-caption">FIG. 02 — SCREENS THAT TELL STORIES</span>
       </div>
