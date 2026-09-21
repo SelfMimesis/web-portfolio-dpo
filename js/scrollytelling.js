@@ -90,7 +90,8 @@ function initScrollytelling(world) {
       horizontalDistance = Math.max(0, track.scrollWidth - section.clientWidth);
       openingPause = world === 'dev' ? Math.max(600, innerHeight * .9) : 0;
       serviceStart = section.clientWidth;
-      servicePause = world === 'dev' ? Math.max(2800,innerHeight*4.4) : 0;
+      const serviceCount=section.querySelectorAll('.playback-service').length;
+      servicePause = world === 'dev' ? Math.max(serviceCount*700,innerHeight*(serviceCount+.4)) : 0;
       totalDistance = horizontalDistance + openingPause + servicePause + endPause();
       return horizontalDistance;
     };

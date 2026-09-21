@@ -674,3 +674,15 @@ La fotografía se **recorta visualmente mediante CSS** para excluir los márgene
 Logo descargado del [kit oficial de prensa de Resolume](https://resolume.com/press), guardado en `assets/resolume-logo.svg`. Se utiliza para identificar la herramienta, sin afirmar afiliación.
 
 Verificación local: durante las cuatro ventanas el panel mantiene `left: 0` y el track permanece inmóvil; cada ventana aparece en orden. Al terminar el recorrido, About Me sigue comenzando después del pin. En móvil las cuatro ventanas quedan en orden, sin recorte horizontal ni pin-spacers internos. El logo se carga desde el propio repositorio.
+
+### Ventanas compactas y control de prototipos
+
+El capítulo de playback ahora utiliza tres zonas en escritorio: título a la izquierda, ventanas compactas en el centro y foto a la derecha. Las ventanas ya no cubren ni oscurecen los otros dos elementos. La tipografía del título se ajusta al espacio reservado.
+
+Después de Technical assistance aparece **05. Controlling web prototypes software**, con el texto: «I have experience using prototyping software for film, including Proto.io and ProtoPie, to build and control interactive screen prototypes on set.» La ilustración muestra una secuencia TAP → LOGIC → SCREEN RESPONSE, con nodos que se activan y una barra de progreso dirigida por scroll.
+
+Los logos se almacenan localmente en `assets/protoio-logo.svg` y `assets/protopie-logo.png`. Proceden del [sitio oficial de Proto.io](https://proto.io/en/presskit/) y del [sitio oficial de ProtoPie](https://www.protopie.io/), respectivamente. El símbolo de ProtoPie se acompaña de su nombre para hacerlo reconocible.
+
+La duración de la pausa se calcula según el número de servicios: `max(número × 700 px, altura de ventana × (número + 0,4))`. La timeline también calcula su duración desde el número de ventanas, para conservar el tiempo de lectura al añadir la quinta. En móvil continúan en flujo vertical.
+
+Validación a 1440 px: las cinco ventanas quedan entre el límite derecho del texto y el izquierdo de la foto, con el capítulo inmóvil. Ambos logos cargan correctamente. A 390 px, las cinco ventanas aparecen en orden sin desbordamiento ni pins internos.
