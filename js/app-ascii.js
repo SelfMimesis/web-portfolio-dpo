@@ -1,4 +1,7 @@
-﻿// Fixed physical LED dots: draw pictures, never interpolate their positions.
+let renderProgress = () => {};
+export function driveAppGlyph(progress) { renderProgress(progress); }
+
+// Fixed physical LED dots: draw pictures, never interpolate their positions.
 export function initAppASCII() {
   const display = document.querySelector('.app-glyph');
   if (!display) return;
@@ -44,32 +47,24 @@ export function initAppASCII() {
     }
     return pixels;
   });
-  let tick=0,previous=new Set(),clock,visible=false;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  let lastFrame=-1, progress=0;
   function draw(){
-    const active=frames[tick%frames.length];
+    const index=reduced.matches?24:Math.min(31,Math.floor(progress*32));
+    if(index===lastFrame)return;
+    lastFrame=index;
+    const active=frames[index], previous=frames[Math.max(0,index-1)];
     dots.forEach((dot,key)=>{
       const state=active.has(key)?'on':previous.has(key)?'ghost':'off';
       if(dot.dataset.led!==state)dot.dataset.led=state;
     });
-    previous=active;
+    display.dataset.frame=String(index);
   }
-  function step(){tick++;draw();clock=gsap.delayedCall(.12,step);}
-  function sync(){
-    clock?.kill();clock=null;
-    if(reduced.matches){tick=24;previous=new Set();draw();}
-    else if(visible&&!document.hidden&&window.gsap)clock=gsap.delayedCall(.12,step);
-  }
-  const observer=new IntersectionObserver(([entry])=>{
-    visible=entry.isIntersecting&&entry.intersectionRatio>.1;sync();
-  },{threshold:[0,.1]});
-  observer.observe(display);
-  document.addEventListener('visibilitychange',sync);
-  reduced.addEventListener('change',sync);
+  renderProgress=value=>{progress=Math.max(0,Math.min(1,value));draw();};
+  reduced.addEventListener('change',draw);
   window.addEventListener('pagehide',event=>{
     if(event.persisted)return;
-    clock?.kill();observer.disconnect();
-    document.removeEventListener('visibilitychange',sync);reduced.removeEventListener('change',sync);
+    reduced.removeEventListener('change',draw);renderProgress=()=>{};
   });
-  draw();sync();
+  draw();
 }

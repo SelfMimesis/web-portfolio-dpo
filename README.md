@@ -638,3 +638,10 @@ La cuadrícula de 25 × 25 posiciones contiene 481 puntos visibles dentro del c�
 El dibujo se genera como SVG en `.app-glyph` de `index.html`. Su controlador permanece en `js/app-ascii.js` por continuidad del módulo existente, aunque ya no produce caracteres ASCII. `css/scene-timelines.css` coloca título y matriz en dos columnas dentro del marco. El módulo conserva la pausa fuera de pantalla, al ocultar la pestaña y con movimiento reducido. Sin GSAP se dibuja un fotograma estático. Es decorativo y no modifica el contenido accesible del mensaje.
 
 Validado mediante HTTP en 1440 px y 390 px: dibujo dentro de la ventana, sin desbordamiento, fotogramas activos y estado estático con movimiento reducido.
+### Matriz compacta y control por scroll
+
+La matriz se ha reducido a un máximo de 96 px en escritorio, 64 px en móvil y 58 px en pantallas muy estrechas. El título vuelve a disponer de más ancho y la ventana recupera su altura compacta (aproximadamente 535 px a 1440 px de viewport).
+
+La secuencia de 32 fotogramas ya no avanza con un temporizador: sustituye el bucle automático descrito anteriormente. `driveAppGlyph()` en `js/app-ascii.js` recibe el progreso de la timeline de portada desde `js/scene-timelines.js`. Bajar el scroll avanza desde los iconos al toque, la respuesta y la confirmación; subir lo reproduce a la inversa. Si el scroll se detiene, el dibujo permanece estable. La persistencia se calcula desde el fotograma anterior de la secuencia, de modo que volver a una misma posición recupera exactamente los mismos puntos. No hay nuevos listeners de scroll ni temporizadores. Movimiento reducido mantiene la confirmación estática.
+
+Verificado en escritorio y móvil: reducción de tamaño, progreso en ambos sentidos, igualdad de píxeles al regresar al mismo punto y ausencia de movimiento en reposo.

@@ -1,4 +1,5 @@
 import { driveLCD } from './lcd-display.js';
+import { driveAppGlyph } from './app-ascii.js';
 
 const clamp = value => Math.max(0, Math.min(1, value));
 
@@ -50,13 +51,19 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     }
   }, section);
   const label = frame?.querySelector('.registration-label');
+  function updateCover(progress) {
+    const next=clamp(progress);
+    coverTimeline?.progress(next);
+    // Once the window is visible, scroll advances the phone's fixed LED poses.
+    driveAppGlyph(clamp((next-.15)/.85));
+  }
   function updatePanel(index, progress) {
     const entry = entries[index];
     const next = clamp(progress);
     if (entry.progress === next) return;
     entry.progress = next;
     entry.timeline.progress(next);
-    if (mobile && index === 0) coverTimeline?.progress(clamp((next-.5)*4));
+    if (mobile && index === 0) updateCover((next-.5)*4);
     if (index === 1) {
       // Quantized physical poses: scroll never interpolates pixels or coordinates.
       const nextFrame = Math.min(17, Math.floor(next * 18));
@@ -67,7 +74,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     }
   }
   return {
-    updateCover(progress) { coverTimeline?.progress(clamp(progress)); },
+    updateCover,
     updatePanel,
     update(progress) {
       const position = progress * (panelCount - 1);
@@ -77,7 +84,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
       if (label && chapter !== lastChapter) { lastChapter = chapter; label.textContent = titles[chapter]; }
     },
     destroy() {
-      context.revert(); frame?.remove(); driveLCD(lcd, 0);
+      context.revert(); frame?.remove(); driveLCD(lcd, 0); driveAppGlyph(0);
     }
   };
 }

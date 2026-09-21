@@ -55,7 +55,7 @@
 @media(prefers-reduced-motion:reduce){.cover-story{opacity:1!important;visibility:visible!important;transform:none!important;clip-path:none!important}}
 
 /* Physical dot-matrix drawing, inside the story window beside its heading. */
-.cover-story-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,34%);align-items:center;gap:18px}
+.cover-story-heading{display:grid;grid-template-columns:minmax(0,1fr) clamp(64px,7vw,96px);align-items:center;gap:18px}
 .cover-story-heading h3{font-size:clamp(25px,2.4vw,38px)}
 .app-glyph{min-width:0;color:var(--green);text-align:center;align-self:center;pointer-events:none}
 .app-glyph-matrix{display:block;width:100%;aspect-ratio:1;fill:currentColor}
@@ -63,5 +63,5 @@
 .app-glyph-matrix circle[data-led="on"]{opacity:.94}
 .app-glyph-matrix circle[data-led="ghost"]{opacity:.12}
 .app-glyph>span{display:block;margin-top:8px;font:7px/1.4 var(--mono);letter-spacing:.08em;color:#a8b895}
-@media(max-width:1000px){.cover-story-heading{gap:12px;grid-template-columns:minmax(0,1fr) minmax(90px,32%)}.cover-story-heading h3{font-size:25px}.app-glyph>span{font-size:6px}}
-@media(max-width:370px){.cover-story-heading{grid-template-columns:minmax(0,1fr) 82px;gap:8px}.cover-story-heading h3{font-size:23px}}
+@media(max-width:1000px){.cover-story-heading{gap:12px;grid-template-columns:minmax(0,1fr) 64px}.cover-story-heading h3{font-size:25px}.app-glyph>span{font-size:6px}}
+@media(max-width:370px){.cover-story-heading{grid-template-columns:minmax(0,1fr) 58px;gap:8px}.cover-story-heading h3{font-size:23px}}
