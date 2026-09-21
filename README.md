@@ -628,3 +628,11 @@ La timeline local de `js/scene-timelines.js` revela marco, título, señal, decl
 El diseño está en `css/scene-timelines.css`: marco técnico, scanlines estáticas, paleta verde, tipografía editorial legible y revelados mediante opacidad, transform y una máscara de apertura. En móvil aparece debajo de la portada dentro del flujo vertical; con movimiento reducido o sin GSAP se muestra el contenido completo sin depender de animaciones. La portada de selección inicial no muestra esta ventana.
 
 Validación local: avance y retroceso de la secuencia, móvil de 390 px, recorrido completo ART/DEV, About Me correctamente situado después del pin y retorno a inicio sin pin-spacers de los recorridos.
+
+### Animación ASCII LED de desarrollo de apps
+
+Encima de la ventana narrativa, alineada con su borde derecho, aparece una pequeña pantalla ASCII verde. Representa cuatro fases: `CODE`, `BUILD`, `TEST` y `LIVE`, con un editor de código conectado a una app. Los caracteres cambian por pasos cada 120 ms; cada fase dura ocho pasos. La textura LED es una cuadrícula CSS estática, sin filtros ni ruido animado.
+
+El marcado y el fotograma de respaldo están en `.app-ascii` de `index.html`; `js/app-ascii.js` controla la secuencia y `css/scene-timelines.css` su aspecto y posición. Se inicializa desde `js/main.js`. Solo se muestra dentro de DIGITAL PROPS, no en la portada dividida. Es decorativa (`aria-hidden`) y no añade controles ni anuncios al lector de pantalla. El único temporizador GSAP se detiene cuando sale de pantalla o la pestaña se oculta; con movimiento reducido o sin GSAP queda un fotograma estático. Los listeners y el observer se limpian al abandonar la página.
+
+Verificado por HTTP en escritorio 1440 px y móvil 390 px: encaje por encima de la ventana, alineación derecha, ausencia de recorte horizontal y modo reducido sin cambios de fotograma.

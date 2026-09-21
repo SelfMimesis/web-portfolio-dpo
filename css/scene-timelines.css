@@ -53,3 +53,13 @@
  .cover-story h3{font-size:30px}.cover-story-body{padding:22px}.cover-story-benefits li{font-size:12px}.cover-story-chrome{font-size:7px}.cover-story-footer{font-size:7px}
 }
 @media(prefers-reduced-motion:reduce){.cover-story{opacity:1!important;visibility:visible!important;transform:none!important;clip-path:none!important}}
+
+/* ASCII LED vignette occupies the free space above the story window. */
+.app-ascii{display:none;position:absolute;right:4%;bottom:calc(82% + 14px);width:330px;max-width:43%;z-index:3;color:var(--green);padding:8px 10px;border-left:1px solid #a8bd8645;background:#10180f80;pointer-events:none}
+.is-journey-cover .app-ascii{display:block}
+.app-ascii::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 2px,#09100966 2px 3px),repeating-linear-gradient(90deg,transparent 0 2px,#09100933 2px 3px);pointer-events:none}
+.app-ascii-label{display:flex;justify-content:space-between;gap:8px;font:7px/1.4 'Courier New',monospace;letter-spacing:.05em;color:#a8b895;margin-bottom:7px}
+.app-ascii pre{margin:0;white-space:pre;font:10px/1.25 'Courier New',monospace;letter-spacing:0;height:6.25em;overflow:hidden}
+@media(max-width:1000px) and (min-width:701px){.app-ascii{bottom:calc(85% + 8px);width:290px;padding:5px 8px}.app-ascii pre{font-size:9px}.app-ascii-label{font-size:6px;margin-bottom:4px}}
+@media(max-width:700px){.panel--hero .hero-selector .world--dev .app-ascii{top:calc(100svh - var(--header) - 102px);bottom:auto;right:20px;max-width:calc(100% - 40px);width:330px}.app-ascii pre{font-size:9px}}
+@media(max-height:650px) and (min-width:701px){.app-ascii{padding:3px 8px;bottom:calc(82% + 4px)}.app-ascii pre{font-size:7px}.app-ascii-label{font-size:6px;margin-bottom:2px}}

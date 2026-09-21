@@ -8,6 +8,7 @@ import { initFilmography } from './filmography.js';
 import { buildWorldLinks, initWorldLinks } from './world-links.js';
 import { initLCDDisplays, lcdDisplayMarkup } from './lcd-display.js';
 import { initAmbientMotion } from './ambient-motion.js';
+import { initAppASCII } from './app-ascii.js';
 import { initGoldenDisplays } from './golden-display.js';
 
 function buildScenes() {
@@ -56,6 +57,7 @@ function buildScenes() {
   });
 }
 export function initApp() {
+  initAppASCII();
   if (window.gsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
   syncPreferences(); buildScenes(); buildWorldLinks(); initLCDDisplays(); initAmbientMotion(); initGoldenDisplays(); initNavigation(); initWorldLinks(); initHeroSelector(selectWorld); initCursor(); initThreeScene();
   initAboutStory();
