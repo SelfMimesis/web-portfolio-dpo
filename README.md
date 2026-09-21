@@ -590,3 +590,7 @@ Una máscara estática de puntos de 3 px crea la textura LED sin ruido animado. 
 La terminal está centrada en su mitad de la portada, dentro de la zona de composición equivalente a las cartas de ART. La portada expandida conserva el espacio necesario para visualizar los instrumentos.
 
 Comprobado por HTTP a 1440 y 390 px: cinco ventanas de relación 1:1, SVG global, cambios de señal activos, naranja `rgb(217, 75, 43)`, ausencia de desbordamiento horizontal y electrónica inmóvil con movimiento reducido.
+
+### Tipografía de ORBIT: Automatron
+
+La terminal usa la fuente proporcionada `AUTOMATRON NUMBERSDEC(1).TTF`, guardada en el proyecto como `assets/fonts/Automatron-Numbersdec.ttf` (aproximadamente 12 KB). Se carga mediante `@font-face` en `css/digital-props.css`, con `font-display: swap`. Las variables de fuente se redefinen únicamente dentro de `.flight-deck.cockpit`, por lo que títulos, etiquetas y cifras de ORBIT usan Automatron sin cambiar las tipografías del resto del portfolio. También se aplica a la copia de ORBIT en Selected Work. Los caracteres no incluidos en la fuente utilizan Courier New o Arial como respaldo. No depende de la ruta original del ordenador y funciona en GitHub Pages.

@@ -1,4 +1,6 @@
 /* ORBIT / NEXUS: self-contained spacecraft instrument panel. */
+@font-face{font-family:'Automatron';src:url('../assets/fonts/Automatron-Numbersdec.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+.flight-deck.cockpit{--mono:'Automatron','Courier New',monospace;--sans:'Automatron',Arial,sans-serif;font-synthesis:none}
 .flight-deck.cockpit{--cockpit-line:#858b8438;--cockpit-signal:var(--green);position:absolute;left:5%;top:6%;width:90%;max-width:calc(760px * var(--display-scale,1));container-type:inline-size;padding:2%;color:#dddeda;background:linear-gradient(125deg,#252823eF,#111511 62%,#1d221deF);border:1px solid #777d7059;box-shadow:8px 12px 0 #0b100b55,inset 0 1px #e6ead61a;transform:perspective(1200px) rotateY(-5deg) rotateX(3deg) rotateZ(2deg);font-family:var(--mono)}
 .cockpit::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,#00000012 0 1px,transparent 1px 4px)}
 .cockpit-head,.cockpit-command,.cockpit-footer{display:flex;align-items:center;justify-content:space-between;gap:1cqw;font-size:1.05cqw;letter-spacing:.04em}
