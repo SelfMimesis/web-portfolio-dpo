@@ -3,11 +3,10 @@ let entrance;
 let releaseComposition = () => {};
 
 // Keep the original DOM (and its running display), rather than crossfading a clone.
-function lockComposition(selected, hero, header) {
+function lockComposition(selected) {
   const composition = selected.querySelector('.art-composition, .dev-composition');
   const rect = composition.getBoundingClientRect();
   const parent = selected.getBoundingClientRect();
-  const bounds = hero.getBoundingClientRect();
   const saved = new Map();
   const remember = element => saved.set(element, element.getAttribute('style'));
   remember(composition);
@@ -31,7 +30,9 @@ function lockComposition(selected, hero, header) {
     saved.forEach((style,element) => style === null ? element.removeAttribute('style') : element.setAttribute('style',style));
     releaseComposition = () => {};
   };
-  return { composition, left: rect.left-bounds.left, top: rect.top-bounds.top-header };
+  // Preserve the resting position within the selected world, so the artwork
+  // follows its heading to the left as that world opens to full width.
+  return { composition, left: rect.left-parent.left, top: rect.top-parent.top };
 }
 export function initHeroSelector(onSelect) {
   const worlds = [...document.querySelectorAll('.hero-selector .world')];
@@ -77,7 +78,7 @@ export async function expandHero(world) {
     await gsap.to([selected,other], {width:'50%',duration:.22,ease:'power2.out',overwrite:true});
   }
   const header = document.querySelector('.site-header').offsetHeight;
-  const locked = lockComposition(selected, hero, header);
+  const locked = lockComposition(selected);
   if (window.gsap && !state.reducedMotion) {
     gsap.killTweensOf([selected, other, marker]);
     const bounds = hero.getBoundingClientRect();

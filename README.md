@@ -602,3 +602,7 @@ Al seleccionar un universo, las cartas y ORBIT conservan la posición y el tama�
 Se reutilizan los mismos nodos DOM: no se ocultan, duplican ni sustituyen las cartas o la terminal. Esto evita el salto de tamaño al mover la portada al primer capítulo y mantiene la animación electrónica. `resetHero()` restaura los estilos originales al volver a inicio. La clase `.is-composition-locked` en `css/journey-cover.css` impide que los estilos de la portada expandida cambien la geometría capturada. La flotación ambiental original de las cartas se conserva.
 
 Validación: ART y DIGITAL PROPS a 1440 × 900, móvil 390 × 844 y movimiento reducido. Las medidas de posición, anchura y altura de las composiciones antes y después de abrir coinciden; la terminal mantiene sus dimensiones con diferencias inferiores a 0,02 px por redondeo.
+
+### Corrección del anclaje al abrir un universo
+
+La posición conservada es **relativa a la sección seleccionada**, no a la pantalla completa. Al abrir DIGITAL PROPS, la terminal acompaña al título hacia la izquierda y queda debajo de él, con el mismo tamaño de reposo. ART usa el mismo criterio para sus cartas. Esto sustituye la descripción anterior de compensación para mantener una posición absoluta en pantalla.
