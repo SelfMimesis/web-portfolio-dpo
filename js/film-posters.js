@@ -34,9 +34,7 @@ export function createPosterCarousel(rows, onNavigate) {
     if (index === 0) {
       // The head preload starts this download before the app initializes.
       // Decode the exact carousel image early, not on its first scroll frame.
-      img.style.visibility = 'hidden';
       img.decode().catch(() => {}).finally(() => {
-        img.style.removeProperty('visibility');
         img.dataset.posterReady = String(img.complete && img.naturalWidth > 0);
       });
     }
@@ -80,7 +78,7 @@ export function createPosterCarousel(rows, onNavigate) {
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) gsap.fromTo(img, { opacity: .4, scale: .98 }, { opacity: 1, scale: 1, duration: .45, overwrite: true });
   });
   function show(index, immediate = false) {
-    if (index === active) return;
+    if (index === active && !immediate) return;
     const oldIndex = active;
     const direction = index > active ? 1 : -1;
     transition?.kill();

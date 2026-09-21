@@ -58,3 +58,9 @@ VIEW is suppressed while a universe is active; the initial SCROLL cue remains. E
 At the user's request, restored the original ORBIT composition from commit `f666c64aa789570fa146183a812e645756bac2ed`, before the day's redesign. Its HTML matches that historical block exactly; the entire `digital-props.css` file matches the historical hash. Removed the later desktop/mobile positioning overrides and discrete flight-pose controller. Original perspective, panel proportions, texture, shadows, orbital outlines and CSS instrument motion are restored. Visibility/reduced-motion gates remain.
 
 This is a targeted restoration, not a repository rollback: the extended final pause, progress meter, hidden VIEW/EXPLORE prompts, scene narratives, Murderbot preload and other improvements remain. Desktop and mobile visual inspection passed; the intro's reversible LCD behavior still passes, with no JavaScript errors in the instrumented check. README updated to distinguish the withdrawn terminal redesign from the retained work.
+
+## Follow-up: first poster visibility
+
+Reproduced the reported empty desktop gallery at 2539×1249: Murderbot was downloaded (`complete=true`, natural width 2000) and selected (`aria-hidden=false`), but its figure had no inline styles and inherited the default opacity 0 / visibility hidden. Preloading alone did not fix this presentation bug.
+
+The selected figure now has a visible CSS baseline independent of GSAP context restoration. Inline GSAP styles still control transitions between posters. Explicit immediate selection can reapply the selected state, and decode no longer temporarily hides the image. Verified visibility before pin entry and after refresh, desktop/mobile layout changes, return to the first poster, world switches and home reset; subsequent poster transitions still settle to one visible figure.

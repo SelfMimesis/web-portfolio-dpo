@@ -298,6 +298,8 @@ La filmografía parte de `.credits-table`, también en `index.html`. Actualmente
 
 El cartel inicial de **Murderbot** se precarga desde el `<head>` con prioridad alta. Al construir la galería se decodifica anticipadamente la imagen exacta que se mostrará. Así la descarga no espera a llegar a filmografía. Los posters vecinos también se preparan al cambiar de crédito; no se da prioridad alta a toda la colección.
 
+Además, el cartel seleccionado (`aria-hidden="false"`) es visible por CSS aunque GSAP restaure sus estilos al recalcular o cambiar de tamaño. Esta regla corrige un fallo distinto a la descarga: la imagen de Murderbot ya estaba cargada, pero su contenedor podía quedarse con opacidad 0 antes de comenzar el scroll de créditos. La decodificación anticipada no bloquea su visibilidad.
+
 En escritorio se combinan listado y cartel. En móvil el poster es protagonista, con información debajo y tabla completa desplegable. Hay botones, flechas de teclado, gestos laterales y cartel alternativo para Operación Barrio Inglés.
 
 Al salir el título «Selected credits», una superficie interior se expande con respuesta amortiguada. Se transforma el interior, no el elemento cuya geometría controla el pin, para mantener estable la distancia de scroll.
