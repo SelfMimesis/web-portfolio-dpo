@@ -37,7 +37,7 @@
 .cockpit-spectrum{left:61.803399%;top:61.803399%;width:14.589803%;height:23.606798%}
 .cockpit-route{left:67.376208%;top:85.410197%;width:9.016994%;height:14.589803%}
 .cockpit-grid::before{content:'';position:absolute;left:61.803399%;top:85.410197%;width:5.572809%;height:14.589803%;border:1px solid #a3ba7e66;background:repeating-linear-gradient(0deg,transparent 0 5px,#c1d99b18 5px 6px),repeating-linear-gradient(90deg,transparent 0 5px,#c1d99b18 5px 6px)}
-.cockpit-grid>.golden-display{inset:-3%;width:106%;height:106%;z-index:10;pointer-events:none;overflow:visible}
+.cockpit-grid>.golden-display{inset:0;width:100%;height:100%;z-index:10;pointer-events:none;overflow:visible}
 /* Let the luminous geometry overlap the terminal chrome as well as its windows. */
 .flight-deck.cockpit{isolation:isolate;overflow:visible}
 .cockpit-grid{isolation:auto;overflow:visible}

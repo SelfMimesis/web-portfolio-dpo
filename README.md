@@ -713,4 +713,4 @@ Verificación: opacidades intermedias de 0,5 en entradas y salidas; continuidad 
 
 ### Geometría áurea por encima de la terminal
 
-La capa naranja ya no queda recortada por el rectángulo del gráfico. Se amplía un 6 %, centrada sobre su posición original, y se coloca por encima de ventanas, indicadores y textura frontal. El glow puede sobresalir de los bordes. Se mantienen las proporciones áureas, los fundidos y las transiciones existentes; la capa no intercepta el ratón.
+La capa naranja ya no queda recortada por el rectángulo del gráfico. Conserva exactamente el tamaño y origen del rectángulo áureo de las ventanas, y se coloca por encima de ventanas, indicadores y textura frontal. El glow puede sobresalir de los bordes. Se mantienen las proporciones áureas, los fundidos y las transiciones existentes; la capa no intercepta el ratón.
