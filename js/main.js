@@ -6,7 +6,7 @@ import { initThreeScene } from './three-scene.js';
 import { initAboutStory } from './about.js';
 import { initFilmography } from './filmography.js';
 import { buildWorldLinks, initWorldLinks } from './world-links.js';
-import { initLCDDisplays, lcdDisplayMarkup } from './lcd-display.js';
+import { initLCDDisplays } from './lcd-display.js';
 import { initAmbientMotion } from './ambient-motion.js';
 import { initAppASCII } from './app-ascii.js';
 import { initGoldenDisplays } from './golden-display.js';
@@ -23,7 +23,7 @@ function buildScenes() {
       ['ARCHIVE', '<h2>Other <i>stories.</i></h2><div class="archive-list">' + ['The Grand', 'Department of Fiction', 'Night Service', 'Ordinary Objects'].map((name, i) => `<button class="archive-entry" data-preview="${name}" aria-expanded="false" aria-controls="archive-detail">00${i + 1} — ${name.toUpperCase()}<span>CONCEPT / 2026 ↗</span></button>`).join('') + '</div><div class="archive-preview" aria-hidden="true">The Grand</div><div id="archive-detail" class="archive-detail" hidden></div>']
     ],
     dev: [
-      ['INTRO', '<h2>Imagined worlds.<br><i>Working</i> screens.</h2><p>Digital props for film. The apps, terminals and interfaces that belong inside the story.</p><div class="intro-tags">FICTIONAL APPS / SCREEN GRAPHICS / COCKPIT DISPLAYS<br>DESIGNED TO BE PART OF THE PICTURE.</div><span class="scene-number">→</span>'],
+      ['ONSET PLAYBACK', `<div class="playback-copy"><span class="playback-eyebrow">ON SET / IN THE MOMENT</span><h2 class="playback-title" aria-label="Onset playback. Ready for action.">${['Onset playback.', 'Ready for', 'action.'].map(line => `<span class="playback-line" aria-hidden="true">${line.split(' ').map(word => `<span class="playback-word">${[...word].map(char => `<span class="playback-letter">${char}</span>`).join('')}</span>`).join(' ')}</span>`).join('')}</h2><p>Alongside developing apps, I also have experience in stand-by motion graphics.</p><span class="playback-cue">STAND-BY → PLAYBACK → ACTION</span></div><figure class="playback-photo"><div class="playback-photo-frame"><img src="assets/onset-playback.jpeg" width="1152" height="2048" alt="On-set playback workstation with an operator, monitors and control equipment" loading="eager" decoding="async"><span class="playback-scan" aria-hidden="true"></span></div><figcaption><span>FIELD RECORD / 001</span><span>ONSET PLAYBACK — READY</span></figcaption></figure>`],
       ['SELECTED WORK', `<div class="feature-layout"><div><h2>ORBIT.<br>The flight<br><i>deck.</i></h2><p>A spacecraft cockpit concept. Navigation, telemetry and a pilot’s view into an imagined universe.</p><div class="project-meta"><span>PROJECT — ORBIT / FLIGHT DECK</span><span>PRODUCTION — CONCEPT STUDY</span><span>YEAR — 2026 / ROLE — DIGITAL PROP DESIGN</span></div></div>${dev}</div>`],
       ['INTERACTION', '<h2>Every touch.<br>Part of the <i>story.</i></h2><p>A message arrives. A pilot changes course. A terminal reveals a clue. The interface follows the action and gives each moment its visual rhythm.</p><div class="workflow"><div>01 / STORY<strong>A reason to look</strong></div><span>→</span><div>02 / ACTION<strong>A gesture on screen</strong></div><span>→</span><div>03 / RESPONSE<strong>The next story beat</strong></div></div>'],
       ['PLAYBACK', '<h2>Made for the <i>frame.</i></h2><p>From the first screen to the final cue: a study in readable graphics, deliberate timing and repeatable screen states.</p><div class="system-diagram"><div>01 / CONTEXT<b>World & character ↓</b></div><div>02 / DESIGN<b>Screen language →</b></div><div>03 / ACTION<b>Touch & response ↓</b></div><div>06 / FRAME<b>The screen in the story ✓</b></div><div>05 / RESET<b>Back to the first cue ←</b></div><div>04 / CUE<b>Motion & timing ↓</b></div></div>'],
@@ -34,16 +34,8 @@ function buildScenes() {
     document.querySelector(`.${world}-track`).innerHTML = '<article class="panel panel--hero" aria-label="1: Cover"></article>' + items.map(([name, content], i) => `<article class="panel" aria-label="${i + 2}: ${name}"><div class="panel-meta"><span>${world === 'art' ? 'ART DEPARTMENT →' : '→ DIGITAL PROPS'} / 0${i + 2}</span><span>${name} — CONCEPT PORTFOLIO</span></div>${content}</article>`).join('');
   }
   const intro = document.querySelector('.dev-track .panel:nth-child(2)');
-  intro.classList.add('panel--signal');
-  intro.querySelector('.scene-number').remove();
-  const copy = document.createElement('div');
-  copy.className = 'signal-copy';
-  [...intro.children].filter(node => !node.classList.contains('panel-meta')).forEach(node => copy.append(node));
-  intro.append(copy);
-  const instrument = document.createElement('div');
-  instrument.className = 'signal-instrument';
-  instrument.innerHTML = `<span class="signal-caption">01 / FROM SIGNAL TO STORY</span>${lcdDisplayMarkup('A WORLD<br>IN MOTION', 'scene')}<span class="signal-caption">FIXED SEGMENTS / CHANGING STATES</span>`;
-  intro.append(instrument);
+  intro.classList.add('panel--playback');
+  intro.querySelector('.panel-meta span:last-child').textContent = 'ONSET PLAYBACK — FIELD RECORD';
   document.querySelectorAll('.archive-entry').forEach(button => {
     const preview = () => { document.querySelector('.archive-preview').textContent = button.dataset.preview; };
     button.addEventListener('pointerenter', preview); button.addEventListener('focus', preview);

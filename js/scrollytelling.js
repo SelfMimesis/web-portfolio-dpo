@@ -13,7 +13,7 @@ let progressUI;
 let panels = [];
 let previousPanel = -1;
 const endPause = () => Math.min(1100, Math.max(600, innerHeight * .95));
-const names = { art: ['COVER', 'INTRO', 'SELECTED WORK', 'PROJECT DETAIL', 'PROCESS', 'ARCHIVE', 'NEXT WORLD'], dev: ['COVER', 'INTRO', 'SELECTED WORK', 'INTERACTION', 'PLAYBACK', 'ARCHIVE', 'NEXT WORLD'] };
+const names = { art: ['COVER', 'INTRO', 'SELECTED WORK', 'PROJECT DETAIL', 'PROCESS', 'ARCHIVE', 'NEXT WORLD'], dev: ['COVER', 'ONSET PLAYBACK', 'SELECTED WORK', 'INTERACTION', 'PLAYBACK', 'ARCHIVE', 'NEXT WORLD'] };
 const lastPanel = () => names[state.activeWorld].length - 1;
 export function updateProgress(progress) {
   state.scrollProgress = progress;

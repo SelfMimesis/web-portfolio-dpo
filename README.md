@@ -645,3 +645,13 @@ La matriz se ha reducido a un máximo de 96 px en escritorio, 64 px en móvil y 
 La secuencia de 32 fotogramas ya no avanza con un temporizador: sustituye el bucle automático descrito anteriormente. `driveAppGlyph()` en `js/app-ascii.js` recibe el progreso de la timeline de portada desde `js/scene-timelines.js`. Bajar el scroll avanza desde los iconos al toque, la respuesta y la confirmación; subir lo reproduce a la inversa. Si el scroll se detiene, el dibujo permanece estable. La persistencia se calcula desde el fotograma anterior de la secuencia, de modo que volver a una misma posición recupera exactamente los mismos puntos. No hay nuevos listeners de scroll ni temporizadores. Movimiento reducido mantiene la confirmación estática.
 
 Verificado en escritorio y móvil: reducción de tamaño, progreso en ambos sentidos, igualdad de píxeles al regresar al mismo punto y ausencia de movimiento en reposo.
+
+### Capítulo 02: Onset playback
+
+El capítulo que seguía a la portada de DIGITAL PROPS ahora presenta «Onset playback. Ready for action.» y «Alongside developing apps, I also have experience in stand-by motion graphics.» Sustituye la antigua introducción «Imagined worlds / Working screens»; los demás capítulos conservan su contenido.
+
+Al abandonar la portada, la ventana narrativa se desvanece. En el capítulo siguiente, el título pasa de tenue a visible letra a letra; después aparecen la explicación y la fotografía del rodaje. Un marco se abre desde una franja central, la imagen ajusta ligeramente su escala y una línea recorre la superficie como un escáner. Todo utiliza la timeline local existente, con transformaciones, opacidad y clip-path, sin temporizadores nuevos ni otro pin. La animación es reversible.
+
+La fotografía original está en `assets/onset-playback.jpeg`, copiada sin modificaciones del archivo proporcionado (aproximadamente 319 KB). Incluye texto alternativo y dimensiones reservadas. La estructura y los textos están en `js/main.js`; la secuencia está en `js/scene-timelines.js` y el diseño en `css/scene-timelines.css`. El marcador del recorrido identifica este capítulo como ONSET PLAYBACK. La versión móvil dispone el texto y la foto verticalmente; con movimiento reducido se muestra todo directamente.
+
+Verificado en escritorio y móvil: desaparición progresiva de la ventana anterior, revelado escalonado del título, carga correcta de la foto, retorno a los mismos estados al subir y ausencia de desbordamiento horizontal. La referencia ZRK no fue accesible durante esta revisión; la secuencia es una interpretación propia de la dirección solicitada.

@@ -1,4 +1,3 @@
-import { driveLCD } from './lcd-display.js';
 import { driveAppGlyph } from './app-ascii.js';
 
 const clamp = value => Math.max(0, Math.min(1, value));
@@ -7,7 +6,6 @@ const clamp = value => Math.max(0, Math.min(1, value));
 // departure .68–1. The parent owns pinning, distance and the scroll clock.
 export function createDevSceneTimelines(section, { mobile = false } = {}) {
   const panels = [...section.querySelector('.horizontal-track').children].slice(0, 3);
-  const lcd = panels[1].querySelector('[data-lcd-mode="scene"]');
   const entries = [];
   const panelCount = section.querySelector('.horizontal-track').children.length;
   let frame;
@@ -15,8 +13,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
   let coverTimeline;
   const story = panels[0].querySelector('.cover-story');
   let lastChapter = -1;
-  let lastLCD = -1;
-  const titles = ['WORLD / 01', 'SIGNAL / 02', 'ORBIT / 03'];
+  const titles = ['WORLD / 01', 'PLAYBACK / 02', 'ORBIT / 03'];
   const context = gsap.context(() => {
     if (story) {
       coverTimeline = gsap.timeline({paused:true})
@@ -28,6 +25,21 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
         .fromTo(story.querySelector('.cover-story-progress i'),{scaleX:0},{scaleX:1,duration:1,ease:'none'},0);
     }
     panels.forEach((panel, index) => {
+      if (index === 1) {
+        const photo=panel.querySelector('.playback-photo');
+        const timeline=gsap.timeline({paused:true})
+          .fromTo(panel.querySelectorAll('.playback-letter'),{opacity:.12,y:9},{opacity:1,y:0,duration:.11,stagger:.006,ease:'power2.out'},.06)
+          .fromTo(panel.querySelector('.playback-copy p'),{opacity:0,y:18},{opacity:1,y:0,duration:.15},.24)
+          .fromTo(panel.querySelector('.playback-cue'),{opacity:.1},{opacity:1,duration:.12,ease:'steps(3)'},.34)
+          .fromTo(photo,{autoAlpha:0,y:35,rotateY:-9,scale:.94,clipPath:'inset(49% 0 49% 0)'},{autoAlpha:1,y:0,rotateY:0,scale:1,clipPath:'inset(0% 0 0% 0)',duration:.16,ease:'power2.inOut'},.32)
+          .fromTo(photo.querySelector('img'),{scale:1.08},{scale:1,duration:.18,ease:'power2.out'},.32)
+          .fromTo(photo.querySelector('.playback-scan'),{yPercent:-100,opacity:0},{yPercent:0,opacity:.7,duration:.16,ease:'none'},.32)
+          .to(photo.querySelector('.playback-scan'),{opacity:0,duration:.02},.48)
+          .to(panel.querySelector('.playback-copy'),{opacity:.2,y:-18,duration:.16},.84)
+          .to(photo,{opacity:.25,y:-20,duration:.16},.84);
+        entries.push({timeline,progress:-1});
+        return;
+      }
       const title = panel.querySelector(index === 0 ? '.world--dev h2' : 'h2');
       const visual = panel.querySelector(index === 1 ? '.signal-instrument' : '.dev-composition');
       const timeline = gsap.timeline({ paused: true });
@@ -36,6 +48,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
       timeline.fromTo(visual, { y: index === 0 ? 0 : 28, scale: index === 0 ? 1 : .92 }, { y: 0, scale: 1, duration: .38, ease: 'power2.out' }, 0);
       timeline.to(title, { x: distance * .5, opacity: .25, duration: .32, ease: 'power1.in' }, .68);
       timeline.to(visual, { y: -24, scale: mobile ? .98 : .94, duration: .32, ease: 'none' }, .68);
+      if(index===0 && story) timeline.fromTo(story,{autoAlpha:1},{autoAlpha:0,duration:mobile?.15:.2,ease:'power1.in',immediateRender:false},mobile?.85:.5);
       entries.push({ timeline, progress: -1 });
     });
     if (!mobile) {
@@ -64,14 +77,6 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
     entry.progress = next;
     entry.timeline.progress(next);
     if (mobile && index === 0) updateCover((next-.5)*4);
-    if (index === 1) {
-      // Quantized physical poses: scroll never interpolates pixels or coordinates.
-      const nextFrame = Math.min(17, Math.floor(next * 18));
-      if (nextFrame !== lastLCD) {
-        lastLCD = nextFrame;
-        driveLCD(lcd, nextFrame, nextFrame < 2 || nextFrame > 16 ? 'off' : nextFrame < 4 ? 'boot' : 'ready');
-      }
-    }
   }
   return {
     updateCover,
@@ -84,7 +89,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
       if (label && chapter !== lastChapter) { lastChapter = chapter; label.textContent = titles[chapter]; }
     },
     destroy() {
-      context.revert(); frame?.remove(); driveLCD(lcd, 0); driveAppGlyph(0);
+      context.revert(); frame?.remove(); driveAppGlyph(0);
     }
   };
 }
