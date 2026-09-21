@@ -2,16 +2,20 @@
 let renderer, scene, camera, mesh, frame = 0, canvas;
 let visible = false;
 const rotation = { x: .15, y: .35 };
+// Scroll is additive to pointer input: moving the mouse cannot erase its angle.
+const SCROLL_RADIANS_PER_PIXEL = .003;
+let scrollRotation = 0;
 let sync = () => {};
 function stop() { cancelAnimationFrame(frame); frame = 0; }
 function render() {
   frame = 0;
   if (!renderer || !visible || document.hidden || state.isMobile || state.reducedMotion) return;
   mesh.rotation.x += (rotation.x - mesh.rotation.x) * .12;
-  mesh.rotation.y += (rotation.y - mesh.rotation.y) * .12;
+  const targetY = rotation.y + scrollRotation;
+  mesh.rotation.y += (targetY - mesh.rotation.y) * .12;
   renderer.render(scene, camera);
-  // Draw only while the pointer-driven rotation is settling.
-  if (Math.abs(rotation.x-mesh.rotation.x)+Math.abs(rotation.y-mesh.rotation.y) > .0005) frame = requestAnimationFrame(render);
+  // Draw only while pointer/scroll rotation is settling.
+  if (Math.abs(rotation.x-mesh.rotation.x)+Math.abs(targetY-mesh.rotation.y) > .0005) frame = requestAnimationFrame(render);
 }
 function wake() { if (!frame) frame = requestAnimationFrame(render); }
 export function updateThreeScene() { sync(); }
@@ -51,6 +55,12 @@ export async function initThreeScene() {
       rotation.y = (event.clientX / innerWidth - .5) * 1.2;
       if (visible) wake();
     };
+    const scroll = () => {
+      // Absolute scroll makes the motion reversible, including keyboard/touch
+      // scrolling and the vertical input that drives the horizontal chapters.
+      scrollRotation = -Math.max(0, window.scrollY) * SCROLL_RADIANS_PER_PIXEL;
+      if (visible) wake();
+    };
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => ratios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0));
       sync();
@@ -59,14 +69,16 @@ export async function initThreeScene() {
     const sizing = new ResizeObserver(resize);
     sizing.observe(canvas);
     window.addEventListener('pointermove',pointer,{passive:true});
+    window.addEventListener('scroll',scroll,{passive:true});
     document.addEventListener('visibilitychange',sync);
     window.addEventListener('pagehide',event => {
       if(event.persisted)return;
       stop(); observer.disconnect(); sizing.disconnect();
       window.removeEventListener('pointermove',pointer);
+      window.removeEventListener('scroll',scroll);
       document.removeEventListener('visibilitychange',sync);
       mesh.geometry.dispose(); mesh.material.dispose(); renderer.dispose();
     });
-    sync();
+    scroll(); sync();
   } catch { canvas.hidden = true; }
 }

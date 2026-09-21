@@ -614,3 +614,7 @@ La posición conservada es **relativa a la sección seleccionada**, no a la pant
 Se reutiliza un solo renderer entre la terminal de portada y la copia de Selected Work, según cuál esté visible. El tamaño de render se ajusta al instrumento, con pixel ratio máximo de 1,5. Solo se solicitan fotogramas mientras la rotación converge; se detiene fuera de pantalla y al ocultar la pestaña. WebGL sigue desactivado en móvil y con movimiento reducido. Si Three.js no carga, la terminal HTML/SVG permanece operativa. Los observers, listeners y recursos GPU se liberan al abandonar la página.
 
 Validación HTTP: canvas único, centrado dentro del radar, visible tras abrir DIGITAL PROPS, oculto en móvil y con movimiento reducido.
+
+### Rotación inversa con scroll
+
+La figura del radar también rota en el eje Y al desplazar verticalmente la página: bajar produce giro negativo y subir invierte el giro. `SCROLL_RADIANS_PER_PIXEL = .003` en `js/three-scene.js` regula la intensidad. El ángulo se calcula desde la posición absoluta del scroll, por lo que regresar a la misma posición recupera el mismo giro si el ratón no cambia. Se suma a la rotación del puntero y conserva la amortiguación existente. El listener es pasivo, no mide elementos ni modifica el layout; se elimina al abandonar la página. La figura sigue anclada al radar y se mantienen las pausas fuera de pantalla, en móvil y con movimiento reducido.
