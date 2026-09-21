@@ -1,0 +1,23 @@
+:root{--lcd-paper:#d0d5b8;--lcd-ink:#30392d;--lcd-shell:#353a32}
+.lcd-display{position:relative;display:flex;flex-direction:column;gap:14px;background:var(--lcd-paper);color:var(--lcd-ink);border:9px solid var(--lcd-shell);outline:1px solid #7d8370;box-shadow:inset 2px 2px #80896c,inset -2px -2px #e2e4ca;font-family:var(--mono);overflow:hidden}
+.lcd-display::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(0deg,transparent 0 3px,#30392d06 3px 4px),repeating-linear-gradient(90deg,transparent 0 3px,#30392d04 3px 4px)}
+.lcd-topline,.lcd-bottomline{display:flex;justify-content:space-between;gap:6px;font:8px/1.4 var(--mono);border-bottom:1px solid #30392d50;padding-bottom:8px}
+.lcd-heading{font:clamp(22px,2.4vw,38px)/.95 var(--sans);letter-spacing:-.06em;display:block}
+.lcd-instruments{display:flex;gap:10px;flex:1;min-height:0}
+.lcd-matrix{display:block;width:75%;min-height:0;flex:1;border:1px solid #30392d55;padding:4px;shape-rendering:crispEdges}
+.lcd-readout{display:flex;flex-direction:column;justify-content:space-between;width:26%;max-width:50px;font:7px/1.5 var(--mono);text-align:center;padding-block:6px}
+.lcd-number{width:100%;max-height:42px;overflow:visible}
+.lcd-axis{font:15px/1.5 var(--mono);opacity:.45}
+.lcd-bus{display:flex;gap:4px;height:8px;flex-shrink:0}
+.lcd-enter{display:block;flex-shrink:0;width:100%;height:auto;max-height:48px;shape-rendering:crispEdges;margin:6px 0}
+.lcd-bus i{flex:1;background:currentColor}
+.lcd-bottomline{border:0;border-top:1px solid #30392d50;padding:8px 0 0;font-size:7px}
+[data-lcd-state]{fill:currentColor;transition:none!important}
+[data-lcd-state=off]{opacity:.065}[data-lcd-state=on]{opacity:.94}[data-lcd-state=ghost]{opacity:.12}[data-lcd-state=dim]{opacity:.35}
+.custom-cursor[data-theme=lcd] .cursor-detail{border-radius:0}
+@media(max-width:700px){
+ .world-link .lcd-display{gap:10px}.world-link .lcd-heading{font-size:clamp(16px,4.5vw,26px)}
+ .world-link .lcd-topline,.world-link .lcd-bottomline{font-size:5px;gap:2px;padding-block:4px}
+ .world-link .lcd-instruments{gap:5px}.world-link .lcd-readout{font-size:5px;width:22%}.world-link .lcd-axis{font-size:10px}
+ .world-link .lcd-matrix{padding:2px}.world-link .lcd-bus{gap:2px;height:6px}
+}

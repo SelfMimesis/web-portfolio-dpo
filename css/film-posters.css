@@ -1,0 +1,43 @@
+.credit-inline-poster{width:92px;height:138px;object-fit:contain;float:right;margin:0 0 12px 18px}
+.credits-posters{display:none}.credits-body{min-width:0}
+.is-pinned-credits .credits-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,34%);gap:26px;flex:1;min-height:0}
+.is-pinned-credits .credit-inline-poster{display:none}
+.is-pinned-credits .credits-window{width:100%;min-width:0}
+.is-pinned-credits .credits-posters{display:flex;flex-direction:column;min-width:0;min-height:0;padding:0 8px 0 0;position:relative}
+.poster-eyebrow{display:flex;justify-content:space-between;gap:8px;font:8px/1.5 var(--mono);letter-spacing:.08em;padding:0 0 14px;color:#6b6458}
+.poster-stack{position:relative;flex:1;min-height:0;perspective:1100px;isolation:isolate;overflow:hidden}
+.poster-slide{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transform-origin:50% 65%;backface-visibility:hidden}
+.poster-slide img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 9px 9px #302d2525)}
+.poster-caption{padding-top:15px;min-height:52px;font-size:14px;line-height:1.3;letter-spacing:-.015em}
+.poster-title{display:block}.poster-edition{display:block;font:8px/1.5 var(--mono);letter-spacing:.06em;margin-top:5px;color:#706959}
+.poster-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #68604d30;margin-top:8px;padding-top:5px}
+.poster-controls button{background:none;min-width:44px;min-height:44px;font:22px/1 var(--sans);padding:8px;color:#302f29}
+.poster-controls button:hover{color:var(--accent)}.poster-controls button:disabled{opacity:.25;cursor:default}
+.poster-controls .poster-alternate{font:8px/1.4 var(--mono);letter-spacing:.05em;min-width:0}
+.is-pinned-credits .credits-table,.is-pinned-credits .credits-table tbody{display:block}
+.is-pinned-credits .credits-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.is-pinned-credits .credits-table tbody tr{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px 16px;padding:26px 20px;border-bottom:1px solid var(--paper-rule)}
+.is-pinned-credits .credits-table th,.is-pinned-credits .credits-table td{display:block;padding:0;border:0}
+.is-pinned-credits .credits-table tbody td:first-child{grid-column:1;grid-row:1/3;font-size:10px;padding-top:4px}
+.is-pinned-credits .credits-table tbody th{grid-column:2}
+.is-pinned-credits .credits-table tbody td:last-child{grid-column:2;font-size:12px}
+.is-pinned-credits .credits-table tbody td:last-child::before{content:'DIRECTED BY';display:block;font:8px/1.5 var(--mono);letter-spacing:.06em;margin-bottom:4px;color:#706959}
+.is-pinned-credits .credits-table strong{font-size:clamp(21px,2vw,28px);line-height:1.15}
+.is-pinned-credits .credits-table tbody th span{font-size:12px;line-height:1.5}
+@media(max-width:1050px){
+ .is-pinned-credits .credits-body{grid-template-columns:minmax(0,1fr) minmax(150px,32%);gap:18px}
+ .is-pinned-credits .credits-table tbody tr{grid-template-columns:minmax(0,1fr);gap:10px;padding:22px 18px}
+ .is-pinned-credits .credits-table tbody td:first-child,.is-pinned-credits .credits-table tbody td:last-child,.is-pinned-credits .credits-table tbody th{grid-column:1;grid-row:auto}
+}
+@media(max-width:700px){
+ .is-pinned-credits .credits-body{grid-template-columns:minmax(0,1fr) minmax(85px,32%);gap:12px}
+ .is-pinned-credits .credits-posters{padding:0}
+ .poster-eyebrow{font-size:7px;padding-bottom:8px}.poster-eyebrow>span:first-child{display:none}
+ .poster-caption{font-size:10px;min-height:50px;padding-top:10px}.poster-edition{font-size:6px}
+ .poster-controls{flex-wrap:wrap;gap:0}.poster-controls button{padding:5px;min-width:36px;min-height:44px;font-size:18px}.poster-controls .poster-alternate{order:3;width:100%;font-size:7px}
+ .is-pinned-credits .credits-table tbody tr{padding:20px 12px;gap:12px}
+ .is-pinned-credits .credits-table strong{font-size:19px}.is-pinned-credits .credits-table tbody th span{font-size:11px}.is-pinned-credits .credits-table tbody td:last-child{font-size:11px}
+ .is-pinned-credits .credits-table tbody td:first-child{font-size:9px}
+ .credit-inline-poster{width:76px;height:114px;margin-left:12px}
+}
+@media(max-height:600px){.poster-eyebrow,.poster-edition{display:none}.poster-caption{min-height:0;padding-top:8px;font-size:10px}.poster-controls{margin-top:5px}.poster-controls button{min-height:36px}.poster-controls .poster-alternate{min-height:30px}}

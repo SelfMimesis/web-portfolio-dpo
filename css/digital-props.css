@@ -1,0 +1,64 @@
+/* A fictional flight display, drawn in HTML and SVG so it stays sharp at any size. */
+.flight-deck {
+  --flight-line: #a4be8c40;
+  position: absolute;
+  left: 10%;
+  top: 12%;
+  width: 80%;
+  max-width: calc(640px * var(--display-scale, 1));
+  container-type: inline-size;
+  color: #c1d99b;
+  background: #171e19;
+  border: 1px solid #829575;
+  padding: 2%;
+  box-shadow: 10px 18px 0 #10171055, inset 0 0 35px #879e6310;
+  transform: perspective(1100px) rotateY(-9deg) rotateX(4deg) rotateZ(4deg);
+  font-family: var(--mono);
+}
+.flight-deck::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, #00000012 0 1px, transparent 1px 4px);
+}
+.flight-header, .flight-mode, .flight-footer {display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:clamp(5px,1.35cqw,10px);letter-spacing:.07em}
+.flight-header {padding-bottom:2.5%;border-bottom:1px solid var(--flight-line)}
+.flight-header b {font-size:clamp(11px,2.7cqw,20px);letter-spacing:.15em;margin-right:5px}
+.flight-live {color:#d6e9bd}
+.flight-mode {padding:2% 0;color:#95a88b;font-size:clamp(4px,1.15cqw,9px)}
+.flight-instruments {display:grid;grid-template-columns:22% 54% 24%;height:30cqw;align-items:stretch;border:1px solid var(--flight-line);background:radial-gradient(ellipse at 50% 50%,#91b66314,transparent 65%)}
+.flight-readouts,.flight-systems {display:flex;flex-direction:column;justify-content:space-between;padding:10% 10% 8%;min-width:0}
+.flight-readouts {border-right:1px solid var(--flight-line)}
+.flight-systems {border-left:1px solid var(--flight-line)}
+.flight-deck small {display:block;font-size:clamp(4px,1.12cqw,9px);letter-spacing:.06em;color:#94a98a;line-height:1.5}
+.flight-readouts strong,.flight-systems strong {display:block;font:400 clamp(16px,5cqw,36px)/1.2 var(--sans);letter-spacing:-.04em}
+.flight-systems strong span {font-size:.45em;margin-left:2px}
+.flight-readouts>div>span,.flight-attitude>span,.flight-status>span,.flight-destination>span {display:block;font-size:clamp(4px,1.12cqw,9px);line-height:1.8}
+.flight-readouts .flight-attitude>span,.flight-status>span {display:flex;justify-content:space-between;gap:4px}
+.flight-attitude b,.flight-status b {font-weight:400;color:#dce8ce}
+.flight-readouts .flight-sparkline {height:12px;margin-top:4%;background:#aac991;clip-path:polygon(0 85%,15% 60%,27% 76%,42% 30%,54% 52%,69% 25%,80% 40%,100% 0,100% 12%,80% 51%,69% 36%,54% 63%,42% 41%,27% 87%,15% 71%,0 96%)}
+.flight-navigation {position:relative;display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0;padding:3% 0}
+.flight-reticle {width:100%;height:100%;min-height:0;overflow:visible}
+.nav-grid {opacity:.65}
+.nav-sweep {transform-origin:150px 113px;animation:nav-sweep 18s linear infinite}
+.nav-horizon {transform-origin:150px 113px;animation:nav-drift 9s ease-in-out infinite}
+.nav-target {animation:nav-lock 4s ease-in-out infinite}
+.flight-nav-label {justify-self:center;margin:1% 0 3%;font-size:clamp(4px,1.1cqw,8px);letter-spacing:.08em}
+.flight-nav-label b {font-weight:400;border:1px solid #829575;padding:2px 4px;margin-left:4px}
+.thrust-bars {display:flex;gap:3px;height:10px;margin-top:5%}
+.thrust-bars i {flex:1;background:#aec78e}
+.thrust-bars i:nth-last-child(-n+2) {background:#aec78e22}
+.thrust-bars i:nth-child(6) {animation:nav-lock 5s ease-in-out infinite}
+.flight-destination {padding-top:10%;border-top:1px solid var(--flight-line);color:#d9ac72}
+.flight-destination>b {display:block;font-size:clamp(5px,1.4cqw,11px);font-weight:400;margin:3% 0}
+.flight-footer {padding-top:2.5%;font-size:clamp(4px,1.1cqw,8px);color:#95a88b}
+.flight-footer b {font-weight:400;color:#c1d99b}
+.flight-signal {color:#d9ac72;letter-spacing:.15em}
+.dev-composition .code-tag {right:10%;top:4%;bottom:auto;font-size:calc(6px * var(--display-scale, 1));letter-spacing:.07em}
+@keyframes nav-sweep {to{transform:rotate(360deg)}}
+@keyframes nav-drift {0%,100%{transform:rotate(-5deg) translateY(1px)}50%{transform:rotate(5deg) translateY(-3px)}}
+@keyframes nav-lock {0%,100%{opacity:1}50%{opacity:.4}}
+@media(max-width:1050px){.flight-deck{left:7%;width:86%}}
+@media(max-width:700px){.flight-deck{top:13%;left:7%;width:86%}.flight-instruments{height:42cqw}.flight-header{gap:4px}.flight-signal{letter-spacing:0}.world--dev .world-foot{font-size:6px}.world--dev h2{font-size:clamp(56px,13vw,90px)}.site-header nav{gap:11px}}
+@media(prefers-reduced-motion:reduce){.flight-deck *{animation:none!important}}

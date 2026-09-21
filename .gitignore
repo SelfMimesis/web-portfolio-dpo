@@ -1,0 +1,10 @@
+.preview-browser/
+.preview-browser-review/
+preview.png
+preview-desktop.png
+preview-mobile.png
+.preview-browser-about/
+.preview-*.ps1
+.preview-*.js
+web-portfolio-dpo.zip
+.publish-tools/

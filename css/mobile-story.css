@@ -1,0 +1,42 @@
+.has-mobile-story{overflow-x:clip}
+.poster-details,.poster-gesture-hint{display:none}
+.poster-stack{touch-action:pan-y pinch-zoom}
+.poster-stack:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+@media(max-width:700px){
+  .scrolly--dev .mobile-chapter-progress i{background:var(--green)}
+  .has-mobile-story .mobile-chapter-progress{position:relative;margin-bottom:26px}
+  .has-mobile-story .mobile-chapter-progress::after{content:'↔';position:absolute;right:0;top:5px;font:13px var(--mono);opacity:.55}
+  /* One large poster above its complete credit; no competing text column. */
+  .is-mobile-credits{margin-inline:-3vw}
+  .is-mobile-credits .credits-stage{height:auto;max-height:none;width:100%;background:#dedbd1;scroll-margin-top:calc(var(--header) + 12px)}
+  .is-mobile-credits.is-mobile-pinned .credits-stage{height:calc(100svh - var(--header) - 28px);min-height:0;display:flex;flex-direction:column}
+  .is-mobile-credits .credits-paper{padding:12px;border:1px solid #68604d30;box-shadow:none;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+  .is-mobile-credits .credits-paper-meta,.is-mobile-credits .credits-paper-footer,.is-mobile-credits .credits-index{display:none}
+  .is-mobile-credits .credits-body{display:flex;flex-direction:column;flex:1;min-height:0}
+  .is-mobile-credits .credits-posters{display:flex;flex-direction:column;padding:0;flex:1;min-height:0;width:100%}
+  .is-mobile-credits .poster-eyebrow{display:flex;flex-shrink:0;align-items:center;padding:0 2px 10px;font:9px/1.5 var(--mono)}
+  .is-mobile-credits .poster-eyebrow>span:not(.poster-number):not(.poster-gesture-hint){display:none}
+  .is-mobile-credits .poster-eyebrow>.poster-gesture-hint{display:block;font-size:8px}
+  .is-mobile-credits .poster-stack{flex:none;height:clamp(320px,60svh,540px);width:100%;background:#c9c5b9}
+  .is-mobile-pinned .poster-stack{flex:1;min-height:160px;height:auto}
+  .is-mobile-credits .poster-slide img{object-fit:contain;filter:none}
+  .is-mobile-credits .poster-caption{flex-shrink:0;min-height:0;padding:12px 10px 10px;margin-top:8px;background:#e5e2d9}
+  .is-mobile-credits .poster-title{font:500 clamp(19px,5.3vw,26px)/1.08 var(--sans);letter-spacing:-.04em}
+  .is-mobile-credits .poster-details{display:grid;gap:4px;margin-top:8px;line-height:1.4}
+  .poster-dates{font:10px/1.4 var(--mono);color:#605b4e}
+  .poster-company{font-size:13px;color:#4e4b42}
+  .poster-director{font:11px/1.45 var(--mono);color:#4e4b42}
+  .is-mobile-credits .poster-edition{font-size:8px;margin-top:4px;min-height:0}
+  .is-mobile-credits .poster-edition:empty{display:none}
+  .is-mobile-credits .poster-controls{flex-shrink:0;flex-wrap:nowrap;gap:8px;padding-top:4px;margin-top:0}
+  .is-mobile-credits .poster-controls button{min-width:48px;min-height:44px;font-size:25px}
+  .is-mobile-credits .poster-controls .poster-alternate{order:0;width:auto;min-width:0;font-size:9px}
+  .mobile-credits-list{margin-top:20px;border-block:1px solid var(--line)}
+  .mobile-credits-list>summary{padding:20px 8px;font:11px var(--mono);cursor:pointer}
+  .mobile-credits-list .credits-window{overflow:visible;max-height:none}
+  .mobile-credits-list .credit-inline-poster{display:none}
+  .mobile-credits-list .credits-table tbody tr{padding:22px 16px}
+  .mobile-credits-list .credits-table strong{font-size:23px}
+  /* Static fallback keeps artwork prominent when the CDN is unavailable. */
+  .filmography:not(.is-mobile-credits) .credit-inline-poster{float:none;width:100%;height:auto;max-height:65svh;margin:0 0 18px;object-fit:contain}
+}

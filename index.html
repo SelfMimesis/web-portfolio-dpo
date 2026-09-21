@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Graphic design and digital props for film. Printed objects, fictional apps and screen interfaces made to tell stories.">
+  <meta name="theme-color" content="#e9e7df"><title>Diego — Art & Digital Props</title>
+  <link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/responsive.css"><link rel="stylesheet" href="css/digital-props.css">
+  <link rel="stylesheet" href="css/world-links.css"><link rel="stylesheet" href="css/about.css"><link rel="stylesheet" href="css/film-posters.css"><link rel="stylesheet" href="css/cursor.css"><link rel="stylesheet" href="css/mobile-story.css"><link rel="stylesheet" href="css/lcd.css"><link rel="stylesheet" href="css/journey-cover.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<canvas id="webgl" aria-hidden="true"></canvas>
+<header class="site-header">
+  <a class="wordmark" href="#home" aria-label="Diego, return to home"><img class="header-logo" src="assets/logo-web.gif" alt="Diego" width="959" height="591"><span class="logo-symbol">↗</span><span class="wordmark-caption"><strong class="wordmark-name">DIEGO PEREZ OBRERO</strong>INDEPENDENT DESIGNER<br>& CREATIVE DEVELOPER</span></a>
+  <nav aria-label="Main navigation"><a href="#art" data-world="art">ART</a><a href="#dev" data-world="dev">DIGITAL PROPS</a><a href="#about">ABOUT ME</a><a href="#contact">CONTACT <span>↗</span></a></nav>
+  <span class="world-indicator" aria-live="polite">ART / PROPS →</span>
+</header>
+<main id="main">
+  <section class="hero-selector" id="home" aria-label="Choose a creative universe">
+    <section class="world world--art" aria-labelledby="art-title">
+      <div class="world-meta"><span>01 / ART DEPARTMENT</span><span>PHYSICAL — FICTION</span></div>
+      <h1 id="art-title"><span>GRAPHIC</span><span>DESIGN <i>for</i></span><span>FILM<span class="title-star">✳</span></span></h1>
+      <div class="art-composition" role="img" aria-label="Fictional film graphics: a vermilion cinema ticket, an archive envelope and a typographic specimen and a portrait playing card">
+        <div class="archive-paper"><span>DEPARTMENT OF<br>FICTIONAL AFFAIRS</span><div class="paper-rule"></div><b>Nothing here.<br>Everything<br>is real.</b><small>DOCUMENT No. 084 — ART DEPARTMENT<br>OBJECTS / STORIES / WORLDS</small><span class="paper-stamp">APPROVED<br>FOR PICTURE</span></div>
+        <div class="type-sheet"><span>TYPOGRAPHIC STUDY / 024</span><strong>Aa</strong><small>THE SHAPE OF A STORY.</small></div>
+        <img class="portrait-card" src="assets/portfolio-card.png?v=2" alt="" width="1582" height="2317">
+        <div class="cinema-ticket"><div><span>THE GRAND</span><small>ADMIT ONE / CINEMA</small></div><strong>07</strong><span class="ticket-code">|||| ||| |||| | ||||| ||</span></div>
+        <span class="composition-caption">FIG. 01 — MAKING FICTION TANGIBLE</span>
+      </div>
+      <div class="world-bottom"><p>Graphics, props, identities and visual<br>systems for fictional worlds.</p><a href="#art" class="explore" data-world="art">EXPLORE <span>↗</span></a></div>
+      <div class="world-foot"><span>VISUAL / NARRATIVE / MATERIAL</span><span>SCROLL ↓ &nbsp; CONTENT →</span></div>
+    </section>
+    <section class="world world--dev" aria-labelledby="dev-title">
+      <div class="world-meta"><span>02 / DIGITAL PROPS</span><span>SCREEN — FICTION</span></div>
+      <h2 id="dev-title"><span>DIGITAL</span><span>PROPS <i>for</i></span><span>FILM<span class="title-dot">●</span></span></h2>
+      <div class="dev-composition" role="img" aria-label="ORBIT: fictional spacecraft cockpit with an animated navigation display, flight telemetry and engine status">
+        <div class="grid-cross cross-one">+</div><div class="grid-cross cross-two">+</div>
+        <div class="system-orbit orbit-one"></div><div class="system-orbit orbit-two"></div>
+        <div class="flight-deck">
+          <div class="flight-header"><span><b>ORBIT</b> / FLIGHT DECK</span><span class="flight-live">● SYSTEMS ONLINE</span><span>VESSEL 07</span></div>
+          <div class="flight-mode"><span>01 / PILOT NAVIGATION</span><span>SECTOR 09 — KEPLER APPROACH</span></div>
+          <div class="flight-instruments">
+            <div class="flight-readouts">
+              <div><small>VELOCITY / KM·S⁻¹</small><strong>07.82</strong><span class="flight-sparkline" aria-hidden="true"></span></div>
+              <div><small>ALTITUDE / KM</small><strong>284.6</strong><span>ORBITAL INSERTION</span></div>
+              <div class="flight-attitude"><small>ATTITUDE</small><span>PITCH <b>+02.4°</b></span><span>ROLL <b>−00.8°</b></span><span>YAW <b>+14.2°</b></span></div>
+            </div>
+            <div class="flight-navigation">
+              <svg class="flight-reticle" viewBox="0 0 300 230" aria-hidden="true" focusable="false">
+                <g class="nav-grid" fill="none" stroke="currentColor" stroke-width=".7"><circle cx="150" cy="113" r="95"/><circle cx="150" cy="113" r="73" stroke-dasharray="2 6"/><path d="M150 8v22m0 166v22M45 113h22m166 0h22M79 42l15 15m112 112 15 15M79 184l15-15M206 57l15-15"/><path d="M90 79h120M76 113h148M90 147h120" opacity=".4"/></g>
+                <g class="nav-sweep" fill="none" stroke="currentColor"><path d="M150 113V19" opacity=".4"/><path d="M150 19a94 94 0 0 1 81 47" stroke-width="2"/></g>
+                <g class="nav-horizon" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M74 115h39l12 9h50l12-9h39M121 66h58m-48-5v10m38-10v10M130 91h40M130 146h40M121 171h58"/><path d="m150 94-13 29 13-6 13 6Z" fill="#c1d99b22"/></g>
+                <g class="nav-target" fill="none" stroke="#d9ac72" stroke-width="1.4"><path d="M186 70v-8h8m11 0h8v8m0 11v8h-8m-11 0h-8v-8"/><circle cx="200" cy="76" r="3"/></g>
+                <g fill="currentColor" font-family="monospace" font-size="7" text-anchor="middle"><text x="150" y="11">000</text><text x="275" y="116">090</text><text x="25" y="116">270</text><text x="150" y="226">VECTOR LOCK / 042.8°</text></g>
+              </svg>
+              <span class="flight-nav-label">AUTO NAV <b>ENGAGED</b></span>
+            </div>
+            <div class="flight-systems">
+              <div><small>THRUST</small><strong>68<span>%</span></strong><div class="thrust-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+              <div class="flight-status"><span>HULL <b>100%</b></span><span>O₂ <b>98.4%</b></span><span>FUEL <b>82.6%</b></span></div>
+              <div class="flight-destination"><small>DESTINATION</small><b>KEPLER / 09</b><span>ETA 00:14:32</span></div>
+            </div>
+          </div>
+          <div class="flight-footer"><span>COMMS <b>● LINK STABLE</b></span><span class="flight-signal" aria-hidden="true">▂ ▄ ▆ ▄ ▂ ▅ ▇ ▃ ▂ ▄ ▆ ▂</span><span>DOCKING <b>STANDBY</b></span></div>
+        </div>
+        <span class="code-tag">ORBIT / FLIGHT DECK CONCEPT</span><span class="composition-caption">FIG. 02 — SCREENS THAT TELL STORIES</span>
+      </div>
+      <div class="world-bottom"><p>Fictional apps and screen interfaces.<br>Digital props made for the camera.</p><a href="#dev" class="explore" data-world="dev">EXPLORE <span>↗</span></a></div>
+      <div class="world-foot"><span>INTERFACE / INTERACTION / FICTION</span><span>SCROLL ↓ &nbsp; CONTENT →</span></div>
+    </section>
+    <span class="center-mark" aria-hidden="true">&</span>
+  </section>
+  <section class="scrolly scrolly--art" id="art" aria-label="Art department projects" hidden><div class="scrolly-sticky"><div class="horizontal-track art-track"></div></div></section>
+  <section class="scrolly scrolly--dev" id="dev" aria-label="Digital prop projects" hidden><div class="scrolly-sticky"><div class="horizontal-track dev-track"></div></div></section>
+  <section class="about about-story" id="about" lang="en" aria-labelledby="about-title">
+    <header class="about-opening">
+      <div class="section-label">03 / ABOUT ME — BEHIND THE OBJECTS</div>
+      <h2 id="about-title">An artistic eye.<br>A thousand ways to <i>tell a story.</i></h2>
+      <div class="about-opening-foot"><p>From paper to screen. A journey through my creative practice.</p><span class="mono">5 CHAPTERS / SCROLL TO EXPLORE ↓</span></div>
+    </header>
+    <div class="about-journey">
+      <aside class="about-stage" aria-label="Illustrations of the creative process">
+        <div class="about-stage-top"><span>DPO / WORKBOOK</span><span class="about-counter">01 / 05</span></div>
+        <div class="about-visuals" aria-hidden="true">
+          <div class="about-visual about-visual--portrait"><span class="about-big-type">DPO.</span><img src="assets/portfolio-card.png?v=2" alt="" width="1582" height="2317"><span class="about-stamp">FINE ARTS<br>↓<br>VISUAL STORYTELLING</span></div>
+          <div class="about-visual about-visual--paper"><div class="about-sheet"><small>COMPOSITION STUDY / 01</small><strong>Details<br>matter.</strong><hr><span>A sign. A letter.<br>A world to discover.</span><b>Aa / 012345</b></div><div class="about-label">ART / GRAPHIC PROPS<br><strong>READY FOR THE SCENE ↗</strong></div></div>
+          <div class="about-visual about-visual--craft"><span class="about-craft-grid"></span><span class="about-letter">Aa</span><span class="about-brush"></span><span class="about-craft-note">EVERY STROKE<br>HAS CHARACTER.</span><div class="about-swatches"><i></i><i></i><i></i><i></i></div></div>
+          <div class="about-visual about-visual--screen"><div class="about-terminal"><div class="about-terminal-bar"><span>● ● ●</span><span>SCREEN / ON SET</span></div><small>INTERFACE STUDY_</small><strong>One screen.<br>Another story<span>_</span></strong><div class="about-scan"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="about-code">&lt;scene&gt;<br>&nbsp; design + interaction<br>&lt;/scene&gt;</div><div class="about-terminal-foot">HTML / CSS / JAVASCRIPT / REACT</div></div></div>
+          <div class="about-visual about-visual--network"><div class="about-map-ring"></div><div class="about-map-ring about-map-ring--outer"></div><span class="about-map-center">SEVILLE<span>37° N / 05° W</span></span><span class="about-node about-node--one">DESIGN</span><span class="about-node about-node--two">FABRICATION</span><span class="about-node about-node--three">PRINT</span><span class="about-node about-node--four">ON SET</span><span class="about-map-caption">CONNECTIONS THAT BRING AN IDEA TO LIFE.</span></div>
+        </div>
+        <nav class="about-chapters" aria-label="About me chapters">
+          <a href="#about-profile" aria-label="Chapter 1: My perspective" aria-current="step">01</a><a href="#about-design" aria-label="Chapter 2: Graphic design">02</a><a href="#about-craft" aria-label="Chapter 3: Craft">03</a><a href="#about-digital" aria-label="Chapter 4: Screens and code">04</a><a href="#about-production" aria-label="Chapter 5: Production">05</a>
+        </nav>
+        <div class="about-progress" aria-hidden="true"><i></i></div>
+      </aside>
+      <div class="about-narrative">
+        <article class="about-chapter" id="about-profile"><span class="section-label">01 / MY PERSPECTIVE</span><h3>Diego<br>Pérez Obrero<span>.</span></h3><p class="about-lead">Graphic designer for film and TV.<br>An artist’s way of seeing.</p><p>I combine creativity, technical skill and attention to detail to bring a production’s visual elements to life. My background in Fine Arts is the starting point: an artistic foundation that connects aesthetics and concept.</p><div class="about-tags"><span>FINE ARTS</span><span>VISUAL STORYTELLING</span><span>SEVILLE</span></div></article>
+        <article class="about-chapter" id="about-design"><span class="section-label">02 / FROM SKETCH TO OBJECT</span><h3>Fiction you<br>can <i>touch.</i></h3><p class="about-lead">Small objects.<br>A whole world behind them.</p><p>I design props, posters and documents that belong within a story. My command of the Adobe suite lets me move from digital illustration to print design with precision.</p><p>I also create set sketches and pitch decks that help define the look and communicate the essence of each production.</p><div class="about-tags"><span>ADOBE</span><span>ILLUSTRATION</span><span>PRINT</span></div></article>
+        <article class="about-chapter" id="about-craft"><span class="section-label">03 / CRAFT AND MATERIAL</span><h3>The mark<br>of the <i>hand.</i></h3><p class="about-lead">The character of a letter.<br>The texture of a surface.</p><p>Hand lettering and scenic painting are part of my toolkit. I use them to create signs, paintings, documents and bespoke graphic elements.</p><p>A way to give identity to the pieces that inhabit each set.</p><div class="about-tags"><span>HAND LETTERING</span><span>SCENIC PAINTING</span></div></article>
+        <article class="about-chapter" id="about-digital"><span class="section-label">04 / SCREENS AND CODE</span><h3>Stories<br>become <i>interactive.</i></h3><p class="about-lead">From graphic design<br>to digital tools.</p><p>Through an intensive six-month bootcamp funded by a Facebook scholarship, I trained in HTML, CSS, JavaScript and React.</p><p>I bring these skills into my practice to tackle the challenges of screens and new technologies on set, combining design and programming.</p><div class="about-tags"><span>HTML / CSS</span><span>JAVASCRIPT / REACT</span><span>SCREEN MANAGER</span></div></article>
+        <article class="about-chapter" id="about-production"><span class="section-label">05 / MAKING IT HAPPEN</span><h3>From Seville.<br>As a <i>team.</i></h3><p class="about-lead">An idea needs<br>the right connections.</p><p>I work with an extensive network of prop fabrication and print suppliers, maintaining quality and making the most of production time.</p><p>My C1 English qualification helps me communicate with international teams. My aim is to create graphic solutions that enrich the visual storytelling of every project.</p><div class="about-tags"><span>SUPPLIER NETWORK</span><span>C1 ENGLISH</span></div><a class="about-link" href="mailto:diegoperezobrero@gmail.com">diegoperezobrero@gmail.com <span aria-hidden="true">↗</span></a></article>
+      </div>
+    </div>
+    <section class="filmography" aria-labelledby="filmography-title">
+      <header class="filmography-heading"><div><span class="section-label">THE CREDITS / FILM &amp; TELEVISION</span><h3 id="filmography-title">Selected<br>credits<span>.</span></h3></div><div class="filmography-summary"><strong>13 productions</strong><span>Film &amp; television / 2017–2026</span></div></header>
+      <div class="credits-frame"><div class="credits-stage"><div class="credits-reading" hidden aria-hidden="true"><span>PRODUCTION ARCHIVE</span><span class="credits-reading-date">2026</span><span class="credits-reading-count">01 / 13</span><div class="credits-reading-line"><i></i></div></div><div class="credits-paper">
+        <div class="credits-paper-meta"><span>DPO / PRODUCTION RECORD</span><span>ARCHIVE No. 01</span></div>
+        <div class="credits-window"><table class="credits-table" role="table">
+          <caption>Selected film and television credits — working dates, productions and directors.</caption>
+          <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Dates</th><th scope="col" role="columnheader">Title / Production company</th><th scope="col" role="columnheader">Director(s)</th></tr></thead>
+          <tbody role="rowgroup">
+            <tr role="row" data-poster="assets/posters/murderbot.webp"><td role="cell" data-label="Dates">Apr–Aug 2026</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/murderbot.webp" alt="Poster for Murderbot — Season Two" width="600" height="900" loading="lazy" decoding="async"><strong>Murderbot — Season Two</strong><span>Paramount Pictures</span></th><td role="cell" data-label="Director(s)">Chris Weitz</td></tr>
+            <tr role="row" data-poster="assets/posters/marta.jpg"><td role="cell" data-label="Dates">Mar–Apr 2026</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/marta.jpg" alt="Poster for En el Nombre de Marta" width="600" height="900" loading="lazy" decoding="async"><strong>En el Nombre de Marta</strong><span>Bambú Producciones, La Claqueta PC</span></th><td role="cell" data-label="Director(s)">Carlos Sedes, Laura Alvea &amp; José F. Ortuño</td></tr>
+            <tr role="row" data-poster="assets/posters/cabeza-pared.jpg"><td role="cell" data-label="Dates">Aug–Sep 2025</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/cabeza-pared.jpg" alt="Poster for Una Cabeza en la Pared" width="600" height="900" loading="lazy" decoding="async"><strong>Una Cabeza en la Pared</strong><span>Kabiria Films, Inaudita, La Federal Films</span></th><td role="cell" data-label="Director(s)">Manuel Manrique</td></tr>
+            <tr role="row" data-poster="assets/posters/ventana-abierta.webp"><td role="cell" data-label="Dates">Feb–Apr 2025</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/ventana-abierta.webp" alt="Poster for La Ventana Abierta" width="600" height="900" loading="lazy" decoding="async"><strong>La Ventana Abierta</strong><span>La Claqueta</span></th><td role="cell" data-label="Director(s)">Ana Graciani</td></tr>
+            <tr role="row" data-poster="assets/posters/virgenes.jpg"><td role="cell" data-label="Dates">Aug–Dec 2024</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/virgenes.jpg" alt="Poster for Vírgenes" width="600" height="900" loading="lazy" decoding="async"><strong>Vírgenes</strong><span>SPAL Films, Vaca Films</span></th><td role="cell" data-label="Director(s)">Álvaro Díaz Lorenzo</td></tr>
+            <tr role="row" data-poster="assets/posters/barrio-ingles.jpg" data-poster-alt="assets/posters/barrio-ingles-international.jpg"><td role="cell" data-label="Dates">Feb–Aug 2023</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/barrio-ingles.jpg" alt="Poster for Operación Barrio Inglés" width="600" height="900" loading="lazy" decoding="async"><strong>Operación Barrio Inglés</strong><span>RTVE, Onza, Emociona</span></th><td role="cell" data-label="Director(s)">Chiqui Carabante &amp; José Ramón Ayerra</td></tr>
+            <tr role="row" data-poster="assets/posters/solos-noche.jpg"><td role="cell" data-label="Dates">Jan–Feb 2023</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/solos-noche.jpg" alt="Poster for Solos en la noche" width="600" height="900" loading="lazy" decoding="async"><strong>Solos en la noche</strong><span>La Claqueta, Summer Films</span></th><td role="cell" data-label="Director(s)">Guillermo Rojas</td></tr>
+            <tr role="row" data-poster="assets/posters/kaos.webp"><td role="cell" data-label="Dates">Oct–Dec 2022</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/kaos.webp" alt="Poster for KAOS" width="600" height="900" loading="lazy" decoding="async"><strong>KAOS</strong><span>Netflix</span></th><td role="cell" data-label="Director(s)">Charlie Covell</td></tr>
+            <tr role="row" data-poster="assets/posters/la-espera.jpg"><td role="cell" data-label="Dates">Jul–Sep 2022</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/la-espera.jpg" alt="Poster for La Espera" width="600" height="900" loading="lazy" decoding="async"><strong>La Espera</strong><span>SPAL Films</span></th><td role="cell" data-label="Director(s)">Javier Gutiérrez</td></tr>
+            <tr role="row" data-poster="assets/posters/heroes-barrio.jpg"><td role="cell" data-label="Dates">Jan–Apr 2021</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/heroes-barrio.jpg" alt="Poster for Héroes de Barrio" width="600" height="900" loading="lazy" decoding="async"><strong>Héroes de Barrio</strong><span>SPAL Films</span></th><td role="cell" data-label="Director(s)">Ángeles Reiné</td></tr>
+            <tr role="row" data-poster="assets/posters/sevillanas.jpg"><td role="cell" data-label="Dates">May–Aug 2020</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/sevillanas.jpg" alt="Poster for Sevillanas de Brooklyn" width="600" height="900" loading="lazy" decoding="async"><strong>Sevillanas de Brooklyn</strong><span>Capitán Araña, Pecado Films, 700 Pavos</span></th><td role="cell" data-label="Director(s)">Vicente Villanueva</td></tr>
+            <tr role="row" data-poster="assets/posters/lista-deseos.jpg"><td role="cell" data-label="Dates">Mar–Jul 2019</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/lista-deseos.jpg" alt="Poster for La Lista de los Deseos" width="600" height="900" loading="lazy" decoding="async"><strong>La Lista de los Deseos</strong><span>Suroeste Films, A Contracorriente Films</span></th><td role="cell" data-label="Director(s)">Álvaro Díaz Lorenzo</td></tr>
+            <tr role="row" data-poster="assets/posters/jaulas.webp"><td role="cell" data-label="Dates">Mar–Apr 2017</td><th scope="row" role="rowheader"><img class="credit-inline-poster" src="assets/posters/jaulas.webp" alt="Poster for Jaulas" width="600" height="900" loading="lazy" decoding="async"><strong>Jaulas</strong><span>Suroeste Films</span></th><td role="cell" data-label="Director(s)">Nicolás Pacheco</td></tr>
+          </tbody>
+        </table></div>
+        <div class="credits-paper-footer"><span>GRAPHIC DESIGN / ART DEPARTMENT</span><span>DIEGO PÉREZ OBRERO</span></div>
+      </div></div></div>
+    </section>
+    <div class="about-closing"><span class="mono">PAPER / MATERIAL / SCREEN — ONE CREATIVE VISION</span><a class="about-link" href="https://indd.adobe.com/view/7b6adcc7-1af6-4abe-a4ec-55e076a2d7e3" target="_blank" rel="noopener noreferrer">VIEW PORTFOLIO 2025 <span aria-hidden="true">↗</span></a></div>
+  </section>
+  <section class="contact" id="contact"><div class="section-label">04 / NEXT SCENE</div><h2>Have a world<br>in mind? <span>↗</span></h2><p>Let’s make something that belongs in it.</p><button class="contact-button" type="button">CONTACT DETAILS <span>↗</span></button><p id="contact-note" hidden>This is a prototype. Add your email address here before publishing.</p></section>
+  <footer><span>© 2026 DIEGO — ART & DIGITAL PROPS</span><span>INDEPENDENT PRACTICE. CONNECTED DISCIPLINES.</span><span>PORTFOLIO PROTOTYPE / V.01</span></footer>
+</main>
+<div class="scroll-progress" hidden><span class="progress-world">ART ←</span><span class="progress-index">01</span><span class="progress-line"><i></i></span><span class="progress-total">07</span><span class="progress-title">COVER</span><button class="next-panel" aria-label="Next scene">→</button></div>
+<div class="custom-cursor" aria-hidden="true"><span class="cursor-shape"><span class="cursor-detail"></span></span><span class="cursor-label">VIEW ↗</span><span class="cursor-scroll-icon">↓</span></div>
+<noscript><p class="noscript">JavaScript is required to open the project journeys. The introduction and contact remain available below.</p></noscript>
+</body>
+</html>
