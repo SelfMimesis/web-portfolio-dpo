@@ -594,3 +594,11 @@ Comprobado por HTTP a 1440 y 390 px: cinco ventanas de relación 1:1, SVG global
 ### Tipografía de ORBIT: Automatron
 
 La terminal usa la fuente proporcionada `AUTOMATRON NUMBERSDEC(1).TTF`, guardada en el proyecto como `assets/fonts/Automatron-Numbersdec.ttf` (aproximadamente 12 KB). Se carga mediante `@font-face` en `css/digital-props.css`, con `font-display: swap`. Las variables de fuente se redefinen únicamente dentro de `.flight-deck.cockpit`, por lo que títulos, etiquetas y cifras de ORBIT usan Automatron sin cambiar las tipografías del resto del portfolio. También se aplica a la copia de ORBIT en Selected Work. Los caracteres no incluidos en la fuente utilizan Courier New o Arial como respaldo. No depende de la ruta original del ordenador y funciona en GitHub Pages.
+
+### Apertura de ART y DIGITAL PROPS sin ampliar los objetos
+
+Al seleccionar un universo, las cartas y ORBIT conservan la posición y el tamaño que tenían en la portada sin hover. `expandHero()` en `js/animations.js` devuelve primero la división al 50/50 durante 220 ms si había hover en escritorio. Después mide la composición y fija su geometría mientras se expande el fondo de la sección. La posición local compensa el desplazamiento de su columna, de modo que el objeto mantiene su posición en pantalla.
+
+Se reutilizan los mismos nodos DOM: no se ocultan, duplican ni sustituyen las cartas o la terminal. Esto evita el salto de tamaño al mover la portada al primer capítulo y mantiene la animación electrónica. `resetHero()` restaura los estilos originales al volver a inicio. La clase `.is-composition-locked` en `css/journey-cover.css` impide que los estilos de la portada expandida cambien la geometría capturada. La flotación ambiental original de las cartas se conserva.
+
+Validación: ART y DIGITAL PROPS a 1440 × 900, móvil 390 × 844 y movimiento reducido. Las medidas de posición, anchura y altura de las composiciones antes y después de abrir coinciden; la terminal mantiene sus dimensiones con diferencias inferiores a 0,02 px por redondeo.

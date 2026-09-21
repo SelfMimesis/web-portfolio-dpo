@@ -52,3 +52,6 @@ html{scrollbar-gutter:stable}
 /* Centre the cockpit in its cover composition, mirroring the ART objects. */
 .hero-selector:not(.is-journey-cover) .flight-deck.cockpit{left:50%;top:48%;width:82%;max-width:min(500px,52svh);transform:translate(-50%,-50%) perspective(1200px) rotateY(-5deg) rotateZ(2deg)}
 @media(max-width:700px){.hero-selector:not(.is-journey-cover) .flight-deck.cockpit{left:50%;top:50%;width:100%;transform:translate(-50%,-50%) rotate(-3deg)}}
+
+/* A selected cover keeps the resting composition geometry through reparenting. */
+.hero-selector .world .is-composition-locked{position:absolute!important;left:var(--cover-left)!important;top:var(--cover-top)!important;right:auto!important;bottom:auto!important;width:var(--cover-width)!important;height:var(--cover-height)!important;min-width:0!important;min-height:0!important;max-width:none!important;margin:0!important;flex:none!important;grid-area:auto!important}
