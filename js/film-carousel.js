@@ -50,7 +50,8 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
     const page = carousel.closest('.film-page'), layout = carousel.parentElement;
     const heading = page.querySelector('.film-frames-heading');
     const headingSpace = heading.offsetHeight + parseFloat(getComputedStyle(heading).marginBottom);
-    const controlSpace = controls.offsetHeight + 14;
+    const controlStyle = getComputedStyle(controls);
+    const controlSpace = controls.offsetHeight + parseFloat(controlStyle.marginTop) + parseFloat(controlStyle.marginBottom);
     const available = root.classList.contains('has-film-stage')
       ? Math.max(180, layout.clientHeight - headingSpace - controlSpace)
       : innerHeight * .65;
