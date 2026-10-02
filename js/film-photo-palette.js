@@ -1,5 +1,9 @@
 // Small, cached pixel samples of the original photographs; no image alteration.
 const samples = new WeakMap();
+const folds = new WeakMap();
+export function foldFilmPhotoPalette(element, folded) {
+  folds.get(element)?.(folded);
+}
 const distance = (a, b) => a.reduce((sum, channel, i) => sum + (channel - b[i]) ** 2, 0);
 function sample(image) {
   image.loading = 'eager';
@@ -71,7 +75,27 @@ export function createFilmPhotoPalette(board, { reducedMotion = false } = {}) {
   board.append(element);
   const swatches = [...element.children], cache = new Map();
   const orange = bikiniOrange(board.querySelector('img[src*="pool-portrait"]')).catch(() => null);
-  let current = '', request = 0, disposed = false;
+  let current = '', request = 0, disposed = false, folded = false;
+  // Each hinged swatch closes toward its right-hand neighbour. The final one
+  // compresses to its right edge; reversing scroll opens the same sequence.
+  const fold = !reducedMotion && window.gsap ? gsap.timeline({
+    paused: true,
+    onComplete: () => { if (folded && !disposed) gsap.set(element, { autoAlpha: 0 }); }
+  }) : null;
+  if (fold) {
+    swatches.slice(0, -1).forEach((swatch, i) => {
+      fold.to(swatch, { rotationY: -90, duration: .2, ease: 'power2.inOut' }, i * .18);
+    });
+    fold.to(swatches.at(-1), { scaleX: 0, duration: .32, ease: 'power3.inOut' }, (swatches.length - 1) * .18);
+  }
+  folds.set(element, value => {
+    if (disposed || folded === value) return;
+    folded = value;
+    element.setAttribute('aria-hidden', String(folded));
+    if (!fold) { element.style.visibility = folded ? 'hidden' : 'visible'; return; }
+    gsap.set(element, { autoAlpha: 1 });
+    if (folded) fold.play(); else fold.reverse();
+  });
   return {
     update(images) {
       const key = images.map(image => image.src).join('|');
@@ -81,7 +105,7 @@ export function createFilmPhotoPalette(board, { reducedMotion = false } = {}) {
       if (!cache.has(key)) cache.set(key, Promise.all([Promise.all(images.map(sample)), orange]).then(([groups, accent]) => {
         const colors = dominantColors(groups.flat());
         colors.splice(4, 0, accent || colors[3]);
-        return colors;
+        return colors.reverse();
       }));
       cache.get(key).then(colors => {
         if (disposed || id !== request) return;
@@ -90,12 +114,13 @@ export function createFilmPhotoPalette(board, { reducedMotion = false } = {}) {
         element.setAttribute('aria-label', `Paleta de las fotografías: ${colors.join(', ')}`);
         swatches.forEach((swatch, i) => {
           if (reducedMotion || !window.gsap) { swatch.style.backgroundColor = colors[i]; swatch.style.opacity = '1'; return; }
-          gsap.killTweensOf(swatch);
+          // Colour sampling can finish during a fold: preserve its hinge tween.
+          gsap.killTweensOf(swatch, 'backgroundColor,opacity,y,scaleY');
           gsap.to(swatch, { backgroundColor: colors[i], opacity: 1, duration: .8, delay: i * .045, ease: 'power2.inOut' });
           gsap.fromTo(swatch, { y: 7, scaleY: .6 }, { y: 0, scaleY: 1, duration: .75, delay: i * .045, ease: 'back.out(1.4)' });
         });
       }).catch(() => { if (!disposed && id === request) element.hidden = true; });
     },
-    destroy() { disposed = true; swatches.forEach(swatch => window.gsap?.killTweensOf(swatch)); element.remove(); }
+    destroy() { disposed = true; fold?.kill(); folds.delete(element); swatches.forEach(swatch => window.gsap?.killTweensOf(swatch)); window.gsap?.killTweensOf(element); element.remove(); }
   };
 }

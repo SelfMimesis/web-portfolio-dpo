@@ -1,5 +1,5 @@
 import { createFilmScrollDots } from './film-scroll-dots.js';
-import { createFilmPhotoPalette } from './film-photo-palette.js';
+import { createFilmPhotoPalette, foldFilmPhotoPalette } from './film-photo-palette.js';
 // Portrait and landscape photographs retain independent, uncropped frames.
 export function createFilmPhotoDecks(root, { reducedMotion, seek } = {}) {
   const board = root.querySelector('.film-research-board');
@@ -54,11 +54,19 @@ export function composeResearchPhotos(board, expansion) {
   const mainHeight = (mainWidth - 16) * 2 / 3 + 16;
   const insetHeight = (insetWidth - 16) * 1.5 + 16;
   const mainTop = Math.max(0, (height - mainHeight) / 2 - 24);
+  const palette = board.querySelector('.film-photo-palette');
+  const paletteHeight = palette?.offsetHeight || 18;
+  const paletteGap = 8;
+  const portraitTop = Math.max(0, mainTop + mainHeight - insetHeight - 8 - paletteHeight - 2 * paletteGap);
   const galleryHeight = Math.min(height, (width - gap) * 6 / 13);
   const galleryLeft = (width - galleryHeight * 13 / 6 - gap) / 2;
   const galleryTop = (height - galleryHeight) / 2;
   gsap.set(landscape, { width: lerp(mainWidth, galleryHeight * 1.5), x: lerp(mainLeft, galleryLeft), y: lerp(mainTop, galleryTop), borderWidth: border });
-  gsap.set(portrait, { width: lerp(insetWidth, galleryHeight * 2 / 3), x: lerp(0, galleryLeft + galleryHeight * 1.5 + gap), y: lerp(Math.max(0, mainTop + mainHeight - insetHeight - 32), galleryTop), borderWidth: border });
-  const palette = board.querySelector('.film-photo-palette');
-  if (palette) gsap.set(palette, { width: insetWidth - 16, x: 8, y: mainTop + mainHeight - 8 - palette.offsetHeight, autoAlpha: expansion > 0 ? 0 : 1 });
+  gsap.set(portrait, { width: lerp(insetWidth, galleryHeight * 2 / 3), x: lerp(0, galleryLeft + galleryHeight * 1.5 + gap), y: lerp(portraitTop, galleryTop), borderWidth: border });
+  if (palette) {
+    // Centre the palette between the portrait frame and the landscape's image
+    // edge. Freeze its geometry during folding, so the hinges do not drift.
+    if (expansion === 0) gsap.set(palette, { width: insetWidth - 16, x: 8, y: (portraitTop + insetHeight + mainTop + mainHeight - 8 - paletteHeight) / 2 });
+    foldFilmPhotoPalette(palette, expansion > 0);
+  }
 }
