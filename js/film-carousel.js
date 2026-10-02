@@ -12,11 +12,11 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
   root.classList.add('has-manual-carousel');
   const zones = document.createElement('div');
   zones.className = 'film-reel-zones';
-  zones.innerHTML = '<button type="button" data-step="1" aria-label="Ver la siguiente fotografía"><span>SIGUIENTE →</span></button>';
+  zones.innerHTML = '<button type="button" data-step="1" aria-label="View the next film still"><span>NEXT →</span></button>';
   viewport.append(zones);
   const cursor = document.createElement('div');
   cursor.className = 'film-reel-cursor'; cursor.setAttribute('aria-hidden', 'true');
-  cursor.innerHTML = '<div class="film-reel-cursor-face"><span>SIGUIENTE</span><svg viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12h34M25 2l11 10-11 10"/></svg></div>';
+  cursor.innerHTML = '<div class="film-reel-cursor-face"><span>NEXT</span><svg viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12h34M25 2l11 10-11 10"/></svg></div>';
   // Fixed to the window, outside transformed/pinned film ancestors.
   document.body.append(cursor);
   const face = cursor.firstElementChild, arrow = cursor.querySelector('svg');
@@ -24,19 +24,20 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
   const buttons = frames.map((_, i) => {
     const button = document.createElement('button');
     button.type = 'button'; button.dataset.frame = i;
-    button.setAttribute('aria-label', `Ver fotografía ${i + 1}: ${images[i].alt}`);
+    button.setAttribute('aria-label', `View still ${i + 1}: ${images[i].alt}`);
     button.textContent = String(i + 1).padStart(2, '0'); controls.append(button);
     return button;
   });
   const status = document.createElement('output');
   status.className = 'film-reel-status'; status.setAttribute('aria-live', 'polite'); status.setAttribute('aria-atomic', 'true'); controls.append(status);
   controls.hidden = false;
+  controls.style.setProperty('--frame-count', frames.length);
   let index = 0, requested = 0, requestedDirection = 1, transition, disposed = false, ticking = false;
   const pointer = { x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, visible: false, clientX: 0, clientY: 0 };
   const update = () => {
     carousel.dataset.frame = index;
     buttons.forEach((button, i) => button.setAttribute('aria-current', String(i === index)));
-    status.textContent = `Fotografía ${index + 1} de ${frames.length}`;
+    status.textContent = `Still ${index + 1} of ${frames.length}`;
   };
   const rest = () => frames.forEach((frame, i) => {
     frame.style.visibility = i === index ? 'visible' : 'hidden';
@@ -51,7 +52,7 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
     const available = root.classList.contains('has-film-stage')
       ? Math.max(180, layout.clientHeight - headingSpace - controlSpace)
       : innerHeight * .65;
-    // Choose one width for the collection, including its 4:3 final photograph.
+    // The collection shares its original panoramic format and the editorial rails.
     // The outer space stays reserved, so selecting a frame cannot shift page scroll.
     const width = Math.min(carousel.clientWidth, available * minRatio);
     const tallest = width / minRatio, height = width / ratio(images[index]);
@@ -111,7 +112,7 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
   };
   const leave = () => {
     pointer.visible = false; pointer.vx = pointer.vy = 0;
-    cursor.classList.remove('is-visible'); document.body.classList.remove('film-carousel-pointer');
+    cursor.classList.remove('is-visible');
     gsap?.killTweensOf([face, arrow]);
     if (ticking) { gsap.ticker.remove(tick); ticking = false; }
   };
@@ -139,13 +140,14 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
     if (event.pointerType !== 'mouse' || !matchMedia('(any-hover: hover) and (any-pointer: fine)').matches) { leave(); return; }
     pointer.clientX = event.clientX; pointer.clientY = event.clientY;
     if (!hit()) { leave(); return; }
-    pointer.tx = Math.max(76, Math.min(innerWidth - 76, event.clientX));
-    pointer.ty = Math.max(28, Math.min(innerHeight - 28, event.clientY));
+    // Follow beside the native pointer; flip the offset near the viewport edges.
+    pointer.tx = event.clientX + (event.clientX + 132 > innerWidth ? -76 : 76);
+    pointer.ty = event.clientY + (event.clientY + 66 > innerHeight ? -36 : 36);
     if (!pointer.visible) {
       pointer.x = pointer.tx; pointer.y = pointer.ty; pointer.vx = pointer.vy = 0;
       if (motion) gsap.fromTo(face, { scale: .84 }, { scale: 1, duration: .5, ease: 'back.out(1.7)', overwrite: true });
     }
-    pointer.visible = true; cursor.classList.add('is-visible'); document.body.classList.add('film-carousel-pointer');
+    pointer.visible = true; cursor.classList.add('is-visible');
     if (motion) { if (!ticking) { gsap.ticker.add(tick); ticking = true; } }
     else { pointer.x = pointer.tx; pointer.y = pointer.ty; cursor.style.transform = `translate(${pointer.x}px, ${pointer.y}px)`; }
   };
@@ -172,14 +174,19 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
   // Intrinsic dimensions are declared in the markup; late loads must not reset motion.
   images.forEach(image => { image.loading = 'eager'; });
   refresh();
-  return { refresh, destroy() {
+  return { refresh, reveal(progress) {
+    if (!motion || disposed) return;
+    const eased = gsap.parseEase('power2.inOut')(Math.max(0, Math.min(1, progress)));
+    gsap.set(carousel, { scale: .84 + eased * .16, transformOrigin: 'center top' });
+  }, destroy() {
     disposed = true; leave(); transition?.kill(); observer.disconnect();
     gsap?.killTweensOf([viewport, cursor, face, arrow, ...frames]);
     bindings.forEach(([target, event, handler]) => target.removeEventListener(event, handler, event === 'scroll'));
     frames.forEach(frame => { frame.inert = false; frame.removeAttribute('aria-hidden'); frame.style.removeProperty('transform'); frame.style.removeProperty('visibility'); });
     for (const name of ['--viewer-width', '--viewer-height', '--viewer-top']) viewport.style.removeProperty(name);
     carousel.style.removeProperty('min-height'); carousel.style.removeProperty('--viewer-width'); carousel.removeAttribute('aria-busy');
-    controls.replaceChildren(); zones.remove(); cursor.remove();
+    controls.replaceChildren(); controls.style.removeProperty('--frame-count'); zones.remove(); cursor.remove();
+    gsap?.set(carousel, { clearProps: 'transform,transformOrigin' });
     root.classList.remove('has-manual-carousel'); delete carousel.dataset.frame;
   } };
 }
