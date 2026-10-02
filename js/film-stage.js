@@ -83,8 +83,8 @@ export function createFilmStage(root) {
     const opening = chapters[0];
     const expand = ease(clamp((time - opening.start) / (opening.hold * .65)));
     const departure = ease(clamp((time - opening.start - opening.hold) / transition));
-    // The temporary aperture reveals the bottle, then opens to the full original.
-    set(pool, { clipPath: `inset(${(1 - expand) * 32}% ${(1 - expand) * 33}% ${(1 - expand) * 7}% ${(1 - expand) * 33}%)`, scale: .86 + expand * .14, y: (1 - expand) * 45 });
+    // Keep headroom above the bottle's mouth, including the initial -5% parallax.
+    set(pool, { clipPath: `inset(${(1 - expand) * 26}% ${(1 - expand) * 33}% ${(1 - expand) * 7}% ${(1 - expand) * 33}%)`, scale: .86 + expand * .14, y: (1 - expand) * 45 });
     set(poolImage, { yPercent: (1 - expand) * -5 });
     set(title, { x: departure * innerWidth, scale: .82 + expand * .18, transformOrigin: 'left center' });
     set(layers[0][0], { y: 0, opacity: 1 });
