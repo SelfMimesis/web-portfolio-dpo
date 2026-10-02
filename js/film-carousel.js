@@ -55,10 +55,11 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
     const available = root.classList.contains('has-film-stage')
       ? Math.max(180, layout.clientHeight - headingSpace - controlSpace)
       : innerHeight * .65;
-    // The collection shares its original panoramic format and the editorial rails.
+    // Keep the previous height while extending the crop to both editorial rails.
     // The outer space stays reserved, so selecting a frame cannot shift page scroll.
-    const width = Math.min(carousel.clientWidth, available * minRatio);
-    const tallest = width / minRatio, height = width / ratio(images[index]);
+    const width = carousel.clientWidth;
+    const fittedWidth = Math.min(width, available * minRatio);
+    const tallest = fittedWidth / minRatio, height = fittedWidth / ratio(images[index]);
     carousel.style.minHeight = `${tallest + controlSpace}px`;
     carousel.style.setProperty('--viewer-width', `${width}px`);
     viewport.style.setProperty('--viewer-width', `${width}px`);
