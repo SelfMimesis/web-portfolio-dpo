@@ -1,0 +1,35 @@
+.about-clients{margin:24px calc(-100% * 6 / 88) 0;position:relative;width:auto}
+.production-copy{display:flow-root}
+.about-journey>.about-narrative{min-width:0}
+.has-scroll-clients{flex-shrink:0}
+.clients-stage{position:relative;color:var(--fg)}
+.has-scroll-clients .clients-stage{position:sticky;top:var(--clients-top)}
+.clients-panel{background:var(--bg);border-block:1px solid var(--line);transform-origin:50% 50%}
+.clients-heading{display:flex;align-items:center;justify-content:space-between;min-height:64px;border-bottom:1px solid var(--line);padding-left:clamp(24px,3.75vw,64px)}
+.clients-heading h3{margin:0;font:400 clamp(28px,3.1vw,44px)/1 var(--sans);letter-spacing:-.035em}
+.clients-controls{display:flex;align-self:stretch}
+.clients-controls button{display:grid;place-items:center;width:66px;min-height:64px;padding:0;border:0;border-left:1px solid var(--line);background:transparent;color:var(--fg);font:30px/1 var(--sans);cursor:pointer}
+.clients-controls button:hover{background:var(--fg);color:var(--bg)}
+.clients-controls button[aria-disabled="true"]{color:#9b9c93;cursor:default;background:transparent}
+.clients-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:-5px}
+.clients-viewport{min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.clients-viewport:focus-visible{outline:1px solid var(--accent);outline-offset:-5px}
+.has-scroll-clients .clients-viewport{overflow:clip;scroll-snap-type:none}
+.clients-grid{list-style:none;display:flex;padding:0;margin:0}
+.client-mark{position:relative;flex:0 0 20%;min-width:0;height:clamp(150px,14vw,200px);display:grid;place-items:center;padding:30px clamp(24px,2.5vw,44px);scroll-snap-align:start;background:var(--bg)}
+.client-mark:not(:last-child)::after{content:'';position:absolute;right:0;top:12px;bottom:12px;width:1px;background:repeating-linear-gradient(to bottom,var(--line) 0 16px,transparent 16px 24px)}
+.client-mark>span{display:none}
+.client-logo-frame{position:relative;width:100%;max-width:240px;height:94px;display:grid;place-items:center;overflow:hidden}
+.client-mark img{position:absolute;inset:0;display:block;width:100%;height:100%;min-width:0;min-height:0;max-width:none;object-fit:contain;filter:brightness(0);opacity:.84}
+.client-mark--netflix img{height:190%;top:-45%}
+.client-mark--apple img{height:235%;top:-67.5%;filter:grayscale(1) invert(1)}
+.client-mark--apple .client-logo-frame,.client-mark--tve .client-logo-frame{mix-blend-mode:multiply}
+.client-mark--tve img{height:165%;top:-32.5%;filter:grayscale(1) invert(1) brightness(2.5) contrast(2) invert(1)}
+.clients-footer{display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:48px;padding:12px clamp(24px,3.75vw,64px);color:#68695e}
+.about-story .clients-footer p{margin:0;max-width:none;font:16px/1.7 var(--sans);letter-spacing:normal}
+.clients-footer strong{font:11px/1.5 var(--mono);letter-spacing:.04em;font-variant-numeric:tabular-nums;color:var(--fg);white-space:nowrap}
+.clients-progress{height:1px;background:var(--line);overflow:hidden}
+.clients-progress i{display:block;width:100%;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(1)}
+@media(min-width:601px) and (max-width:1100px){.client-mark{flex-basis:33.3333%}}
+@media(max-width:600px){.clients-heading{min-height:54px;padding-left:24px}.clients-controls button{width:54px;min-height:54px;font-size:26px}.client-mark{flex-basis:66.6667%;height:158px;padding:28px 24px}.client-logo-frame{height:90px}.clients-footer{padding:14px 24px;gap:18px}.clients-footer strong{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.about-clients{padding-block:clamp(40px,10vh,100px)}}

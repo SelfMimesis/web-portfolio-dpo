@@ -5,24 +5,26 @@ export function buildWorldLinks() {
   for (const world of ['art', 'dev']) {
     const target = world === 'art' ? 'dev' : 'art';
     const digital = target === 'dev';
+    const panelCount = document.querySelector(`.${world}-track`).children.length + 1;
+    const chapter = String(panelCount).padStart(2, '0');
     const panel = document.createElement('article');
     panel.className = 'panel panel--next';
-    panel.setAttribute('aria-label', '7: Next world');
+    panel.setAttribute('aria-label', `${panelCount}: Next world`);
     panel.innerHTML = `
-      <div class="panel-meta"><span>${digital ? 'ART DEPARTMENT' : 'DIGITAL PROPS'} / 07</span></div>
-      <div class="world-link-intro"><span class="mono">END OF TRANSMISSION / 01—07</span><h2>${digital ? 'Paper ends.<br>The screen<br><i>begins.</i>' : 'Beyond<br>the screen.<br><i>On paper.</i>'}</h2><p>${digital ? 'Another medium.<br>The same instinct for a story.' : 'Objects, identities and printed matter.<br>A world you can hold.'}</p><span class="world-link-route" aria-hidden="true">${digital ? '[ PRINT ] ───── [ SCREEN ]' : '[ SCREEN ] ───── [ PRINT ]'} <span class="world-link-route-direction">→</span></span></div>
+      <div class="panel-meta"><span>${digital ? 'ART DEPARTMENT' : 'DIGITAL PROPS'} / ${chapter}</span></div>
+      <div class="world-link-intro"><span class="mono">END OF TRANSMISSION / 01—${chapter}</span><h2>${digital ? 'Paper ends.<br>The screen<br><i>begins.</i>' : 'Beyond<br>the screen.<br><i>On paper.</i>'}</h2><p>${digital ? 'Another medium.<br>The same instinct for a story.' : 'Objects, identities and printed matter.<br>A world you can hold.'}</p><span class="world-link-route" aria-hidden="true">${digital ? '[ PRINT ] ───── [ SCREEN ]' : '[ SCREEN ] ───── [ PRINT ]'} <span class="world-link-route-direction">→</span></span></div>
       <a class="world-link-about" href="#about" data-about>Continue to About Me <span aria-hidden="true">↓</span></a>
       <a class="world-link world-link--${target}" href="#${target}" data-world="${target}" aria-label="${digital ? 'Explore Digital Props' : 'Explore Graphic Design'}">
         <span class="world-link-meta">${digital ? 'DPO / HANDHELD 02' : 'DPO / PRINTED MATTER'}</span>
         ${digital ? `<span class="world-link-hardware"><span class="world-link-device-label">SCREEN SYSTEM / 198X</span>${lcdDisplayMarkup('DIGITAL<br>PROPS')}<span class="world-link-device-label">MONOCHROME / WIDE FIELD</span></span><span class="world-link-keys" aria-hidden="true"><span><i></i>MODE</span><span><i></i>SELECT</span><span><i></i>START</span></span>` : '<span class="world-link-paper"><span class="world-link-registration" aria-hidden="true">+ ───────── +</span><span class="world-link-title">GRAPHIC<br><i>DESIGN</i></span><span class="world-link-specimen" aria-hidden="true">Aa<span>09 / TYPE & MATTER</span></span><span class="world-link-stamp">APPROVED<br>FOR PICTURE</span></span>'}
         <span class="world-link-footer"><span class="world-link-action">${digital ? '[ ENTER SYSTEM ]' : '[ OPEN COLLECTION ]'}</span><span class="world-link-arrow" aria-hidden="true">→</span></span>
         <span class="world-link-code">${digital ? 'FICTIONAL SCREENS / REAL STORIES' : 'PROPS / IDENTITIES / STORIES'}</span>
-        <span class="world-link-descent" aria-hidden="true"><span class="mono">NEXT CHAPTER / 08</span><strong>About<br><i>Me.</i></strong><span class="world-link-descent-arrow">↓</span><span class="mono">SCROLL DOWN<br>THE PERSON BEHIND THE WORK</span></span>
+        <span class="world-link-descent" aria-hidden="true"><span class="mono">NEXT CHAPTER / ${String(panelCount + 1).padStart(2, '0')}</span><strong>About<br><i>Me.</i></strong><span class="world-link-descent-arrow">↓</span><span class="mono">SCROLL DOWN<br>THE PERSON BEHIND THE WORK</span></span>
         <span class="world-link-scroll" aria-hidden="true" hidden><span class="world-link-scroll-caption"><span>SCROLL TO ABOUT ↓</span><span class="world-link-scroll-value">00%</span></span><span class="world-link-scroll-track"><i></i></span></span>
       </a>`;
     document.querySelector(`.${world}-track`).append(panel);
   }
-  document.querySelector('.progress-total').textContent = '07';
+  document.querySelector('.progress-total').textContent = String(document.querySelector('.art-track').children.length).padStart(2, '0');
 }
 
 // Driven by actual pin distance, so 100% coincides with vertical release.

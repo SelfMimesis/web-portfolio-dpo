@@ -1,9 +1,9 @@
 // Call inside a GSAP context so navigation and media changes revert every tween.
-export function animateMobileChapter(chapter, visualSelector, textSelector) {
+export function animateMobileChapter(chapter, visualSelector, textSelector, { animateVisual = true } = {}) {
   const gsap = window.gsap;
   chapter.classList.add('has-mobile-story');
   const visual = chapter.querySelector(visualSelector);
-  if (visual) {
+  if (visual && animateVisual) {
     // One reversible timeline: enter from the left, hold, then leave to the right.
     gsap.timeline({
       scrollTrigger: { trigger: visual, start: 'top 98%', end: 'bottom top', scrub: .35, invalidateOnRefresh: true }
@@ -18,18 +18,10 @@ export function animateMobileChapter(chapter, visualSelector, textSelector) {
       scrollTrigger: { trigger: visual, start: 'top bottom', end: 'bottom top', scrub: .5 }
     });
   }
-  [...chapter.querySelectorAll(textSelector)].filter(element => !visual?.contains(element)).forEach((element, index) => {
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: element, start: 'top 96%',
-        end: () => `bottom top+=${document.querySelector('.site-header').offsetHeight}`,
-        scrub: .2, invalidateOnRefresh: true
-      }
-    }).fromTo(element, { x: -28 - (index % 3) * 10, opacity: .2 },
-      { x: 0, opacity: 1, duration: 1, ease: 'power2.out' })
-      .to(element, { x: 0, opacity: 1, duration: 3 })
-      .to(element, { x: 28, opacity: .2, duration: .7, ease: 'power1.in' });
-  });
+  // Keep reading copy still and fully opaque. The artwork and progress meter
+  // carry the scroll animation; text never fades while a visitor is reading.
+  const text = [...chapter.querySelectorAll(textSelector)].filter(element => !visual?.contains(element));
+  gsap.set(text, { opacity: 1, x: 0, y: 0 });
   const meter = document.createElement('div');
   meter.className = 'mobile-chapter-progress';
   meter.setAttribute('aria-hidden', 'true');

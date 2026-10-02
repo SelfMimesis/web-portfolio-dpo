@@ -15,7 +15,7 @@
 [data-lcd-state]{fill:currentColor;transition:none!important}
 [data-lcd-state=off]{opacity:.065}[data-lcd-state=on]{opacity:.94}[data-lcd-state=ghost]{opacity:.12}[data-lcd-state=dim]{opacity:.35}
 .custom-cursor[data-theme=lcd] .cursor-detail{border-radius:0}
-@media(max-width:700px){
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){
  .world-link .lcd-display{gap:10px}.world-link .lcd-heading{font-size:clamp(16px,4.5vw,26px)}
  .world-link .lcd-topline,.world-link .lcd-bottomline{font-size:5px;gap:2px;padding-block:4px}
  .world-link .lcd-instruments{gap:5px}.world-link .lcd-readout{font-size:5px;width:22%}.world-link .lcd-axis{font-size:10px}

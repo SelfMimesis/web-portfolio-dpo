@@ -1,5 +1,7 @@
 import { createPosterCarousel } from './film-posters.js';
 import { initMobileFilmography } from './mobile-filmography.js';
+import { createPosterScrollTiming } from './poster-scroll-timing.js';
+import { WIDE_QUERY } from './state.js';
 
 export function initFilmography() {
   const section = document.querySelector('.filmography');
@@ -24,12 +26,13 @@ export function initFilmography() {
   viewport.before(body);
   body.append(viewport);
   let scrollTween;
+  let posterTiming;
   let mobileNavigate;
   const carousel = createPosterCarousel(rows, index => {
     if (mobileNavigate) { mobileNavigate(index); return; }
     const trigger = scrollTween?.scrollTrigger;
     if (!trigger) return;
-    const progress = index / (rows.length - 1);
+    const progress = posterTiming.atIndex(index);
     window.scrollTo({ top: trigger.start + (trigger.end - trigger.start) * progress, behavior: 'smooth' });
   });
   body.append(carousel.element);
@@ -46,7 +49,7 @@ export function initFilmography() {
     return content;
   }));
   const media = gsap.matchMedia();
-  media.add('(min-width: 701px) and (prefers-reduced-motion: no-preference)', () => {
+  media.add(WIDE_QUERY.split(',').map(query => `${query} and (prefers-reduced-motion: no-preference)`).join(','), () => {
     reading.hidden = false;
     section.classList.add('is-pinned-credits');
     let active = -1;
@@ -67,6 +70,7 @@ export function initFilmography() {
       return header + Math.max(16, (window.innerHeight - header - stage.offsetHeight) / 2);
     };
     const distance = () => Math.max(0, table.offsetHeight - viewport.clientHeight);
+    posterTiming = createPosterScrollTiming(rows.length, () => Math.max((rows.length - 1) * 180, distance() * 1.3));
     const measure = () => {
       // Offset geometry is independent of the paper's entrance scale.
       rowCenters = rows.map(row => row.offsetTop + row.offsetHeight / 2);
@@ -76,7 +80,7 @@ export function initFilmography() {
     };
     const update = progress => {
       fill.style.transform = `scaleX(${progress})`;
-      const position = progress * (rows.length - 1);
+      const position = posterTiming.progress(progress) * (rows.length - 1);
       const lower = Math.min(rows.length - 1, Math.floor(position));
       const upper = Math.min(rows.length - 1, lower + 1);
       const phase = position - lower;
@@ -118,9 +122,10 @@ export function initFilmography() {
     scrollTween = gsap.to(playhead, {
       progress: 1, ease: 'none',
       scrollTrigger: {
+        id: 'filmography-posters',
         trigger: stage,
         start: () => `top top+=${pinOffset()}`,
-        end: () => `+=${Math.max((rows.length - 1) * 180, distance() * 1.3)}`,
+        end: () => `+=${posterTiming.measure()}`,
         pin: stage, scrub: .5, invalidateOnRefresh: true,
         onRefresh: self => { measure(); update(self.animation?.progress() || 0); }
       },
@@ -131,6 +136,7 @@ export function initFilmography() {
       reading.hidden = true;
       carousel.reset();
       scrollTween = null;
+      posterTiming = null;
       labelTween?.kill();
       gsap.set(table, { clearProps: 'transform' });
       gsap.set(cells.flat(), { clearProps: 'transform,opacity' });

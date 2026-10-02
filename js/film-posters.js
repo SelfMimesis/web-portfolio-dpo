@@ -1,3 +1,7 @@
+import { whenNear } from './scene-loading.js';
+import { setResponsiveImage } from './responsive-images.js';
+import { COMPACT_QUERY } from './state.js';
+
 export function createPosterCarousel(rows, onNavigate) {
   const gsap = window.gsap;
   const gallery = document.createElement('aside');
@@ -26,18 +30,10 @@ export function createPosterCarousel(rows, onNavigate) {
     slide.className = 'poster-slide';
     slide.setAttribute('aria-hidden', 'true');
     const img = document.createElement('img');
-    if (index === 0) img.fetchPriority = 'high';
-    img.src = row.dataset.poster;
     img.alt = `Poster for ${row.querySelector('strong').textContent}`;
     img.decoding = 'async';
-    img.loading = index < 2 ? 'eager' : 'lazy';
-    if (index === 0) {
-      // The head preload starts this download before the app initializes.
-      // Decode the exact carousel image early, not on its first scroll frame.
-      img.decode().catch(() => {}).finally(() => {
-        img.dataset.posterReady = String(img.complete && img.naturalWidth > 0);
-      });
-    }
+    img.loading = 'lazy';
+    img.width = 600; img.height = 900;
     slide.append(img);
     stack.append(slide);
     return slide;
@@ -45,6 +41,14 @@ export function createPosterCarousel(rows, onNavigate) {
   let active = -1;
   let variant = false;
   let transition;
+  let near = false;
+  const prepare = index => {
+    if (!near) return;
+    [index - 1, index, index + 1].forEach(i => {
+      if (slides[i]) setResponsiveImage(slides[i].querySelector('img'), rows[i].dataset.poster);
+    });
+  };
+  whenNear(rows[0].closest('.filmography'), () => { near = true; prepare(Math.max(0, active)); }, 1100);
   const navigate = index => onNavigate(Math.max(0, Math.min(rows.length - 1, index)));
   let gesture;
   stack.addEventListener('pointerdown', event => {
@@ -71,7 +75,7 @@ export function createPosterCarousel(rows, onNavigate) {
   alternate.addEventListener('click', () => {
     variant = !variant;
     const img = slides[active].querySelector('img');
-    img.src = variant ? rows[active].dataset.posterAlt : rows[active].dataset.poster;
+    setResponsiveImage(img, variant ? rows[active].dataset.posterAlt : rows[active].dataset.poster);
     img.alt = `${variant ? 'International poster' : 'Poster'} for ${rows[active].querySelector('strong').textContent}`;
     alternate.setAttribute('aria-pressed', String(variant));
     edition.textContent = variant ? 'INTERNATIONAL ARTWORK' : '';
@@ -89,7 +93,7 @@ export function createPosterCarousel(rows, onNavigate) {
       if (i !== index && i !== oldIndex) gsap.set(slide, { autoAlpha: 0 });
     });
     if (variant && outgoing) {
-      outgoing.querySelector('img').src = rows[oldIndex].dataset.poster;
+      setResponsiveImage(outgoing.querySelector('img'), rows[oldIndex].dataset.poster);
       outgoing.querySelector('img').alt = `Poster for ${rows[oldIndex].querySelector('strong').textContent}`;
     }
     active = index;
@@ -105,9 +109,7 @@ export function createPosterCarousel(rows, onNavigate) {
     previous.disabled = index === 0;
     next.disabled = index === rows.length - 1;
     // Prepare the neighbouring images before the next scroll transition.
-    [index - 1, index, index + 1].forEach(i => {
-      if (slides[i]) slides[i].querySelector('img').loading = 'eager';
-    });
+    prepare(index);
     gsap.set(incoming, { zIndex: 2 });
     if (outgoing) gsap.set(outgoing, { zIndex: 1 });
     if (immediate || matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -118,6 +120,12 @@ export function createPosterCarousel(rows, onNavigate) {
       return;
     }
     transition = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    if (matchMedia(COMPACT_QUERY).matches) {
+      if (outgoing) transition.to(outgoing, { autoAlpha: 0, xPercent: -5 * direction, duration: .2 }, 0);
+      transition.fromTo(incoming, { autoAlpha: 0, xPercent: 6 * direction, yPercent: 0, rotationY: 0, rotationZ: 0, scale: 1 },
+        { autoAlpha: 1, xPercent: 0, duration: .3 }, 0);
+      return;
+    }
     if (outgoing) transition.to(outgoing, {
       xPercent: -12 * direction, yPercent: -3 * direction, rotationY: 9 * direction,
       scale: .94, autoAlpha: 0, duration: .5
@@ -134,7 +142,9 @@ export function createPosterCarousel(rows, onNavigate) {
     gsap.killTweensOf([title, ...slides, ...slides.map(slide => slide.querySelector('img'))]);
     active = -1;
     variant = false;
-    slides.forEach((slide, i) => { slide.querySelector('img').src = rows[i].dataset.poster; });
+    if (near) slides.forEach((slide, i) => {
+      if (slide.querySelector('img').hasAttribute('src')) setResponsiveImage(slide.querySelector('img'), rows[i].dataset.poster);
+    });
   }
   return { element: gallery, show, reset };
 }

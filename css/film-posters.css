@@ -32,7 +32,7 @@
  .is-pinned-credits .credits-table tbody tr{grid-template-columns:minmax(0,1fr);gap:10px;padding:22px 18px}
  .is-pinned-credits .credits-table tbody td:first-child,.is-pinned-credits .credits-table tbody td:last-child,.is-pinned-credits .credits-table tbody th{grid-column:1;grid-row:auto}
 }
-@media(max-width:700px){
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){
  .is-pinned-credits .credits-body{grid-template-columns:minmax(0,1fr) minmax(85px,32%);gap:12px}
  .is-pinned-credits .credits-posters{padding:0}
  .poster-eyebrow{font-size:7px;padding-bottom:8px}.poster-eyebrow>span:first-child{display:none}

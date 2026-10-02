@@ -1,0 +1,42 @@
+/* Shared readable controls. Decorative UI artwork keeps its own typography. */
+:root{--text-meta:11px;--text-control:13px;--text-body:16px;--touch-target:44px;--space-1:8px;--space-2:16px;--space-3:24px;--readable-muted:#626459}
+.site-header nav a{font-size:var(--text-control);min-height:var(--touch-target);display:inline-flex;align-items:center}
+.menu-toggle{display:none}
+button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex="0"]:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.contact-actions{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-2);margin-top:28px}
+.contact-actions .contact-button{margin:0;font:clamp(14px,1.3vw,18px)/1.5 var(--mono);min-height:44px;overflow-wrap:anywhere;max-width:100%;gap:12px}
+.contact-copy{border:1px solid var(--line);background:transparent;color:var(--fg);font:12px/1.4 var(--mono);padding:10px 16px;min-height:44px;cursor:pointer}
+.contact-copy[hidden]{display:none}
+.contact .contact-location{font-size:13px;color:var(--readable-muted);margin-top:20px}
+.contact .contact-feedback{font-size:13px;min-height:1.5em;margin-top:8px}
+.fun-controls p,.poster-gesture-hint{font-size:12px;line-height:1.5}
+.is-mobile-credits .poster-eyebrow>.poster-gesture-hint{font-size:12px}
+.is-mobile-credits .poster-number,.is-mobile-credits .poster-dates,.is-mobile-credits .poster-director{font-size:11px}
+.is-mobile-credits .poster-controls .poster-alternate{font-size:12px;min-height:44px}
+.mobile-credits-list>summary{font-size:13px;min-height:44px}
+.fun-controls button,.poster-controls button,.clients-control{min-height:44px;min-width:44px}
+.detector-scan-start{min-height:44px;font-size:11px;line-height:1.4}
+.detector-tabs button,.detector-controls button{min-height:44px;font-size:11px}
+.detector-controls button{min-width:44px}
+.detector-keyboard-toggle{font:12px/1.4 var(--mono);color:var(--green);border-top:1px solid var(--detector-rule);min-width:0}
+.detector-keyboard-toggle>summary{padding:12px;min-height:44px;cursor:pointer}
+.detector-console{position:relative;z-index:4}
+.detector-keyboard-toggle>summary{display:list-item}
+.detector-keyboard-toggle .detector-keyboard{position:absolute;left:0;right:0;bottom:100%;z-index:4;width:100%;min-width:0;max-height:min(260px,45vh);overflow:auto;background:#273024;border:1px solid #a5b48d}
+.detector-keyboard-toggle .detector-key-row{min-width:530px}
+.detector-keyboard-toggle .detector-key-row button{min-height:44px;min-width:36px;font-size:11px}
+.about-chapter p{color:var(--fg)}
+.clients-count{font-size:var(--text-meta)}
+.about-chapters a,.about-link{min-height:44px}
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){
+  .site-header{justify-content:space-between}
+  .menu-toggle{display:block;margin-left:auto;min-height:44px;min-width:76px;padding:8px 12px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:13px/1.4 var(--mono);cursor:pointer}
+  .site-header.has-menu nav{position:absolute;top:100%;left:0;right:0;display:none;background:var(--bg);border-bottom:1px solid var(--fg);padding:16px 20px;gap:8px;box-shadow:none}
+  .site-header.has-menu.menu-open nav{display:grid;grid-template-columns:1fr 1fr}
+  .site-header.has-menu nav a{padding:8px 12px;font-size:13px}
+  .site-header.has-menu .world-indicator{display:none}
+  .contact-actions{gap:12px}
+  .contact-actions .contact-button{font-size:clamp(14px,4vw,16px);letter-spacing:0}
+  .interaction-window .detector-console{height:auto;min-height:0}
+  .interaction-window .detector-terminal{min-height:118px}
+}

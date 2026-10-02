@@ -27,7 +27,7 @@ export async function initThreeScene() {
   hosts[0].prepend(canvas);
   if (state.isMobile || state.reducedMotion || !matchMedia('(min-width: 1100px)').matches) return;
   try {
-    const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js');
+    const THREE = await import('./vendor/three/three.module.js');
     renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
     scene = new THREE.Scene();
@@ -37,8 +37,7 @@ export async function initThreeScene() {
     scene.add(mesh);
     const ratios = new Map(hosts.map(host => [host,0]));
     let size = 0;
-    const resize = () => {
-      const next = canvas.clientWidth;
+    const resize = (next = size) => {
       if (next > 0 && next !== size) { size=next; renderer.setSize(size,size,false); }
       wake();
     };
@@ -66,7 +65,7 @@ export async function initThreeScene() {
       sync();
     }, { threshold: [0,.1,.5,1] });
     hosts.forEach(host => observer.observe(host));
-    const sizing = new ResizeObserver(resize);
+    const sizing = new ResizeObserver(([entry]) => resize(entry.contentRect.width));
     sizing.observe(canvas);
     window.addEventListener('pointermove',pointer,{passive:true});
     window.addEventListener('scroll',scroll,{passive:true});

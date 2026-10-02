@@ -1,0 +1,113 @@
+/* Keep both columns centred in the registration frame, including short displays. */
+.everyday-story.is-everyday-pinned{--phone-height:calc(100svh - var(--header) - 162px);padding:calc(var(--header) + 70px) 5vw 92px;gap:7vw;grid-template-columns:auto minmax(0,660px);justify-content:center}
+.is-everyday-pinned .has-phone-model{width:calc(var(--phone-height) * .52)}
+.panel .is-everyday-pinned .everyday-copy h2{font-size:clamp(44px,5vw,82px)}
+.panel .is-everyday-pinned .everyday-copy p{font-size:clamp(15px,1.3vw,20px);line-height:1.6;max-width:660px}
+.is-everyday-pinned .everyday-kicker{font-size:11px}
+.is-everyday-pinned .everyday-paragraphs{display:grid}
+.is-everyday-pinned .everyday-paragraphs>p{grid-area:1/1;align-self:start}
+.is-everyday-pinned .everyday-copy{align-self:center}
+.phone-stage{--phone-stage-height:calc(var(--phone-height) * .86);position:relative;height:var(--phone-stage-height);width:100%;isolation:isolate}
+.phone-model{position:absolute;inset:0;width:100%;height:100%;opacity:0}
+.phone-ready .phone-model{opacity:1}
+.phone-fallback{position:absolute;height:95%;aspect-ratio:0.486;left:50%;top:2.5%;margin-left:calc(var(--phone-stage-height) * -.231);border:7px solid #778a7a;border-radius:32px;background:#172019;box-shadow:inset 0 0 0 3px #101612;backface-visibility:visible}
+.phone-ready .phone-fallback{display:none}
+.phone-display{position:absolute;overflow:hidden;border-radius:9% / 4.2%;background:#1e261d;opacity:0;visibility:hidden}
+.phone-content{position:absolute;left:0;top:0;width:300px;transform-origin:0 0;padding:32px 13px 16px;display:flex;flex-direction:column}
+.phone-content::before{content:'';position:absolute;top:0;left:27%;width:46%;height:19px;background:#101712;border-radius:0 0 14px 14px;z-index:5}
+/* Cut the DOM screen around the supplied OBJ notch, exposing its camera and speaker. */
+.phone-ready .phone-display{clip-path:polygon(0 0,23.6% 0,23.6% 1.16%,24.04% 2.17%,25.27% 3.02%,27.1% 3.58%,29.3% 3.9%,70.7% 3.9%,72.9% 3.58%,74.73% 3.02%,75.96% 2.17%,76.4% 1.16%,76.4% 0,100% 0,100% 100%,0 100%)}
+.phone-ready .phone-content::before{display:none}
+.phone-content::after{content:'';position:absolute;bottom:6px;left:34%;width:32%;height:3px;border-radius:3px;background:#b8c5ac80}
+.has-phone-model .phone-content .demo-chrome{padding:4px 0 10px;font-size:6px;gap:6px;flex-shrink:0}
+.has-phone-model .phone-content .demo-morph{height:auto;flex:1;min-height:0}
+.has-phone-model .phone-content .app-view{margin:14px 0 0;inset:0}
+.has-phone-model .phone-content .demo-footer{font-size:5px;padding:9px 0 3px;margin-top:6px;gap:6px;flex-shrink:0}
+.phone-content .chat-heading{gap:9px}.phone-content .crew-avatar{width:30px;height:30px}
+.phone-content .chat-heading small{font-size:7px}.phone-content .chat-date{margin:16px 0}
+.phone-content .chat-message{width:90%;padding:9px 10px;margin:10px 0}
+.panel .phone-content .chat-message p{font-size:11px;line-height:1.45;margin:5px 0 7px}
+.phone-content .chat-attachment{font-size:7px;padding:8px 5px}.phone-content .chat-compose{padding:9px 10px}
+.chat-profile-link{margin:8px 0;color:var(--green)}
+.chat-profile-url{display:block;font:10px/1.4 var(--sans);text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
+.chat-profile-preview{display:flex;align-items:center;gap:9px;margin-top:7px;padding:8px;border-left:2px solid var(--green);background:#c1d99b0d}
+.chat-profile-preview .crew-avatar{width:28px;height:28px;border:0}
+.chat-profile-preview b{display:block;font:500 11px/1.3 var(--sans);color:var(--light)}
+.chat-profile-preview small{display:block;font:8px/1.4 var(--sans);color:#a5b994;margin-top:3px}
+.phone-content .chat-profile-url{font-size:9px}
+.phone-content .social-heading b{font-size:15px}.phone-content .social-heading>span{font-size:6px}
+.has-phone-model .phone-content .social-post .set-landscape{height:165px}
+.phone-content .social-actions{padding:8px 0}.panel .phone-content .social-post p{font-size:11px;line-height:1.5}
+.phone-content .social-comment{font-size:10px;margin-top:12px;padding:10px 0}
+.phone-content .reel-viewport{max-height:none;max-width:none;height:455px;aspect-ratio:auto}
+.phone-content .reel-title{font-size:32px}.phone-content .reel-caption{left:12px;right:55px}
+.has-phone-model .phone-content .search-wordmark{font-size:30px;margin:10px 0 18px}
+.has-phone-model .phone-content .set-search{font-size:10px;gap:7px;padding:8px 10px;min-height:40px}
+.has-phone-model .phone-content .search-tabs{padding:13px 0 10px}
+.has-phone-model .phone-content .set-result{padding:10px 0}
+.has-phone-model .phone-content .set-result h3{font-size:15px;margin:6px 0}
+.panel .phone-content .set-result p{font-size:11px!important;line-height:1.5}
+.has-phone-model .phone-content .set-result>span{margin-top:8px}
+
+/* Original social identity, familiar photo-feed proportions and story rings. */
+.social-heading b,.phone-content .social-heading b{font-family:'Brush Script MT','Segoe Script',cursive;font-size:30px;font-weight:600;letter-spacing:-1.5px;line-height:1.1;text-transform:none}
+.social-heading .social-header-icons{font:22px/1 var(--sans);letter-spacing:0;color:#d9e4c9}
+.social-stories .story-avatar,.social-author .story-avatar{background-size:cover;background-position:center;border-radius:50%;position:relative}
+.story-avatar{background-size:cover;background-position:center;filter:url('../assets/interfaces/green-media.svg#green-media')}
+.story-avatar--elena{background-image:url('../assets/responsive/interfaces-portraits-elena-crt-320.webp')!important;background-size:220%!important;background-position:49% 23%!important}
+.story-avatar--mara{background-image:url('../assets/responsive/interfaces-portraits-mara-crt-320.webp')!important;background-position:center 20%!important}
+.story-avatar--jonah{background-image:url('../assets/responsive/interfaces-portraits-jonah-crt-320.webp')!important;background-size:170%!important;background-position:40% 15%!important}
+.story-avatar--nina{background-image:url('../assets/responsive/interfaces-portraits-nina-crt-320.webp')!important;background-size:180%!important;background-position:43% 8%!important}
+.story-avatar--you{background-image:url('../assets/responsive/interfaces-portraits-you-crt-320.webp')!important;background-position:center 47%!important}
+.story-avatar--leo{background-image:url('../assets/responsive/interfaces-portraits-leo-crt-320.webp')!important;background-position:center 20%!important}
+.story-self{position:relative}.story-self::after{content:'+';position:absolute;right:-3px;top:25px;background:var(--green);color:var(--dark);border:2px solid var(--dark);border-radius:50%;width:15px;height:15px;text-align:center;font:12px/12px var(--sans)}
+.social-stories .story-avatar{width:min(48px,100%);height:auto;aspect-ratio:1;border:2px solid #20291e;outline:2px solid #b8d78f;box-shadow:0 0 0 4px #78966135}
+.social-stories .story-seen .story-avatar{outline-color:#7c8c72;box-shadow:none}
+.social-stories{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
+.social-stories>span{font:clamp(7px,2vw,10px)/1.2 var(--sans);color:#d0dac4;gap:7px;min-width:0}
+.social-photo{position:relative}
+.story-video{display:block;width:100%;object-fit:cover;background:#142019}
+.story-media{filter:url('../assets/interfaces/green-media.svg#green-media')}
+.social-photo .story-image{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;object-position:center}
+.social-photo .story-video{aspect-ratio:1;object-position:54% center}
+.reel-viewport .story-video{position:absolute;inset:0;height:100%;object-position:54% center}
+.social-post .social-photo .set-landscape,.has-phone-model .phone-content .social-post .social-photo .set-landscape{height:auto;aspect-ratio:1;width:100%}
+.social-like-burst{position:absolute;left:50%;top:50%;margin:-55px 0 0 -50px;width:100px;height:110px;text-align:center;font:100px/1.1 Arial,sans-serif;color:var(--accent);text-shadow:0 3px 16px #10220d66;z-index:6;opacity:0;pointer-events:none}
+.social-touch{position:absolute;left:56%;top:59%;width:34px;height:34px;border:2px solid #eff7df;border-radius:50%;background:#e5f0d333;z-index:7;opacity:0;pointer-events:none}
+.social-like-icon{display:inline-block;width:18px}.social-like-icon.is-liked{color:var(--accent)}
+.has-phone-model .phone-content .social-heading{padding:0 0 9px}
+.has-phone-model .phone-content .social-stories{padding:3px 5px 6px;margin-bottom:6px;gap:9px}
+.has-phone-model .phone-content .social-stories .story-avatar{width:36px;height:36px}
+.has-phone-model .phone-content .social-stories>span{font-size:8px;gap:5px}
+.has-phone-model .phone-content .social-author{gap:8px;margin-bottom:8px;font-size:11px}
+.has-phone-model .phone-content .social-author .crew-avatar{width:25px;height:25px;border:0}
+.has-phone-model .phone-content .social-author small{font-size:6px;margin-top:2px}
+.has-phone-model .phone-content .social-actions{padding:5px 0;font-size:21px;line-height:1}
+.panel .phone-content .social-post p{font-size:10px;line-height:1.35}
+.has-phone-model .phone-content .social-meta{margin-top:6px;font-size:6px}
+.has-phone-model .phone-content .social-comment{margin-top:7px;padding:7px 0;font-size:9px;line-height:1.3}
+@media(max-height:750px) and (min-width:701px) and (pointer:fine),(max-height:750px) and (min-width:1025px){.panel .is-everyday-pinned .everyday-copy h2{font-size:clamp(40px,4.4vw,64px)}.panel .is-everyday-pinned .everyday-copy p{font-size:16px}}
+
+/* Use the complete screen as an app viewport; keep controls at its lower edge. */
+.has-phone-model .phone-content{padding-bottom:20px}
+.has-phone-model .phone-content .demo-footer{display:none}
+.has-phone-model .phone-content .app-view{display:flex;flex-direction:column;margin-top:10px}
+.has-phone-model .phone-content .chat-heading{flex-shrink:0}
+.has-phone-model .phone-content .chat-message{flex-shrink:0;margin-block:7px;padding:13px 11px}
+.has-phone-model .phone-content .chat-message--own{margin-left:auto}
+.panel .phone-content .chat-message p{font-size:11.5px}
+.has-phone-model .phone-content .chat-date{margin:18px 0 8px}
+.has-phone-model .phone-content .chat-typing{margin-top:auto;padding-top:8px}
+.has-phone-model .phone-content .chat-compose{flex-shrink:0;margin-top:5px}
+.social-bottom-nav{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #aec19c35;padding:11px 2px 0;font:23px/1 var(--sans);color:#d0dfbf;margin-top:12px}
+.social-bottom-nav .story-avatar{display:block;width:23px;height:23px;background-size:cover;border-radius:50%;border:1px solid #c7d9b5}
+.has-phone-model .phone-content .social-bottom-nav{margin-top:auto;padding-top:10px;flex-shrink:0}
+.has-phone-model .phone-content .social-heading,.has-phone-model .phone-content .social-stories,.has-phone-model .phone-content .social-post{flex-shrink:0}
+.has-phone-model .phone-content .social-comment{margin-bottom:4px}
+.has-phone-model .phone-content .app-reels{margin-top:10px}
+.has-phone-model .phone-content .reel-heading{flex-shrink:0;margin-bottom:10px}
+.has-phone-model .phone-content .reel-viewport{flex:1;min-height:0;height:auto;width:calc(100% + 26px);margin-inline:-13px}
+.has-phone-model .phone-content .reel-next{margin-top:10px;flex-shrink:0}
+.has-phone-model .phone-content .app-search .set-result{flex:1;display:flex;flex-direction:column;justify-content:center}
+.has-phone-model .phone-content .app-search .search-wordmark{margin-top:12px}
+.has-phone-model .phone-content .app-search .set-search,.has-phone-model .phone-content .app-search .search-tabs{flex-shrink:0}

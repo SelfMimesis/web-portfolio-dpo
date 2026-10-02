@@ -1,5 +1,10 @@
 import { driveAppGlyph } from './app-ascii.js';
 import { createPlaybackServices } from './playback-services.js';
+import { createInterfaceUniverse } from './interface-universe.js';
+import { createEverydayApps, createPhotoTelemetry } from './everyday-apps.js';
+import { createFunChapter } from './fun-chapter.js';
+import { createDigitalSkills } from './digital-skills.js';
+import { createSkillsFrame } from './skills-frame.js';
 
 const clamp = value => Math.max(0, Math.min(1, value));
 
@@ -11,14 +16,25 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
   const panelCount = section.querySelector('.horizontal-track').children.length;
   let frame;
   let frameTimeline;
+  let skillsFrame;
   let coverTimeline;
   let services;
   let universeTimeline;
+  let interfaceUniverse;
+  let everydayApps;
+  let funChapter;
+  let digitalSkills;
+  let photoTelemetry;
   let universeProgress = 0;
   const story = panels[0].querySelector('.cover-story');
   let lastChapter = -1;
   const titles = ['WORLD / 01', 'PLAYBACK / 02', 'INTERFACES / 03'];
   const context = gsap.context(() => {
+    interfaceUniverse = createInterfaceUniverse(section, { mobile });
+    everydayApps = createEverydayApps(section, { mobile });
+    funChapter = createFunChapter(section, { mobile });
+    digitalSkills = createDigitalSkills(section, { mobile });
+    if(!mobile) photoTelemetry = createPhotoTelemetry(section);
     if (story) {
       coverTimeline = gsap.timeline({paused:true})
         .fromTo(story,{autoAlpha:0,y:32,scale:.97,clipPath:'inset(0 0 100% 0)'},{autoAlpha:1,y:0,scale:1,clipPath:'inset(0 0 0% 0)',duration:.25,ease:'power2.out'},.025)
@@ -56,26 +72,28 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
       const timeline = gsap.timeline({ paused: true });
       const distance = mobile ? 24 : 65;
       if (index !== 0) timeline.fromTo(title, { x: -distance, opacity: .18 }, { x: 0, opacity: 1, duration: .32, ease: 'power2.out' }, 0);
-      timeline.fromTo(visual, { y: index === 0 ? 0 : 28, scale: index === 0 ? 1 : .92 }, { y: 0, scale: 1, duration: .38, ease: 'power2.out' }, 0);
+      if (visual) timeline.fromTo(visual, { y: index === 0 ? 0 : 28, scale: index === 0 ? 1 : .92 }, { y: 0, scale: 1, duration: .38, ease: 'power2.out' }, 0);
       timeline.to(title, { x: distance * .5, opacity: .25, duration: .32, ease: 'power1.in' }, .68);
-      timeline.to(visual, { y: -24, scale: mobile ? .98 : .94, duration: .32, ease: 'none' }, .68);
+      if (visual) timeline.to(visual, { y: -24, scale: mobile ? .98 : .94, duration: .32, ease: 'none' }, .68);
       if(index===0 && story) timeline.fromTo(story,{autoAlpha:1},{autoAlpha:0,duration:mobile?.15:.2,ease:'power1.in',immediateRender:false},mobile?.85:.5);
       entries.push({ timeline, progress: -1 });
     });
     if (!mobile) {
       // Separate opacity layer so the photo's existing entrance remains intact.
       universeTimeline = gsap.timeline({paused:true})
-        .to(panels[1].querySelectorAll('.playback-photo > *'),{opacity:0,duration:.6,ease:'power1.inOut'},.1)
+        .to(panels[1].querySelectorAll('.playback-photo-frame, .playback-photo > figcaption, .playback-ascii'),{opacity:0,duration:.18,ease:'power1.inOut'},.82)
         .to({p:0},{p:1,duration:1},0);
       frame = document.createElement('div');
       frame.className = 'scene-registration';
       frame.setAttribute('aria-hidden', 'true');
       frame.innerHTML = '<span class="registration-label">WORLD / 01</span><span class="registration-axis">+<br>+<br>+</span><span class="registration-note">DPO — SCREEN STUDIES / 001—003</span>';
       section.querySelector('.scrolly-sticky').append(frame);
+      skillsFrame = createSkillsFrame(frame);
       frameTimeline = gsap.timeline({ paused: true })
         .fromTo(frame, { opacity: 0, scaleX: .86, scaleY: .82 }, { opacity: .65, scaleX: 1, scaleY: 1, duration: .7, ease: 'power1.inOut' }, .12)
-        .to(frame, { opacity: .65, duration: 1.3 }, .82)
-        .to(frame, { opacity: 0, scale: 1.035, duration: .6, ease: 'power1.in' }, 2.12);
+        .to(frame, { opacity: .65, duration: 2.3 }, .82)
+        // Finish before the closing panel arrives at 3.5 panel widths.
+        .to(frame, { opacity: 0, scale: 1.035, duration: .38, ease: 'power1.in' }, 3.12);
     }
   }, section);
   const label = frame?.querySelector('.registration-label');
@@ -97,11 +115,21 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
   return {
     updateCover,
     updateServices(progress){services?.update(progress);},
+    updateFun(progress,skills=0){funChapter?.update(progress);digitalSkills?.update(skills);skillsFrame?.update(skills);},
     updateUniverse(progress){
       const next=clamp(progress);
       if(next===universeProgress)return;
       universeProgress=next;
-      universeTimeline?.progress(next);
+      const orbit=clamp(next/.4);
+      universeTimeline?.progress(orbit);
+      interfaceUniverse?.update(orbit);
+      services?.gradient(1+orbit*16);
+      photoTelemetry?.update(orbit);
+      const apps=clamp((next-.4)/.6);
+      everydayApps?.update(apps);
+      if(label)label.textContent=apps>.09?'EVERYDAY / 04':titles[2];
+      const progressTitle=document.querySelector('.progress-title');
+      if(progressTitle && next>0)progressTitle.textContent=apps>.09?'EVERYDAY APPS':'INTERFACES';
     },
     updatePanel,
     update(progress) {
@@ -112,7 +140,7 @@ export function createDevSceneTimelines(section, { mobile = false } = {}) {
       if (label && chapter !== lastChapter) { lastChapter = chapter; label.textContent = titles[chapter]; }
     },
     destroy() {
-      context.revert(); frame?.remove(); driveAppGlyph(0);
+      context.revert(); skillsFrame?.destroy(); digitalSkills?.destroy(); funChapter?.destroy(); everydayApps?.destroy(); photoTelemetry?.destroy(); interfaceUniverse?.destroy(); frame?.remove(); driveAppGlyph(0);
     }
   };
 }

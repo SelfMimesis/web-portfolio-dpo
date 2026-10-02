@@ -1,0 +1,10 @@
+﻿Tool logos
+==========
+Photoshop, Illustrator, InDesign, After Effects, JavaScript, HTML5, CSS3,
+React, GreenSock (GSAP) and Figma: Simple Icons v11 SVG distribution.
+Source: https://cdn.jsdelivr.net/npm/simple-icons@11/icons/
+Project and license: https://github.com/simple-icons/simple-icons/tree/11.0.0
+Simple Icons is distributed under CC0; brands retain their respective trademarks.
+Resolume, Proto.io and ProtoPie reuse the existing portfolio assets.
+
+FontLab: official simplified FontLab 8 app icon, from https://partners.fontlab.com/downloads/ (app-icon-simple/fontlab-8-app-icon-ai-simple.svg).

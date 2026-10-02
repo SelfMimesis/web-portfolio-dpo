@@ -1,0 +1,36 @@
+/* Front-facing glassine envelopes, with fixed open flaps and doubled seams. */
+.graphic-collection.prop-envelope{width:100%;height:auto;align-self:center;min-width:0}
+.envelope-stage{position:relative;width:100%;height:clamp(400px,61svh,640px);isolation:isolate}
+.envelope-shell{position:absolute;left:27%;top:52%;width:34%;height:42%;transform:translateX(-50%)}
+.envelope-shell--1{left:73%}
+.envelope-back-wrap{z-index:1}
+.envelope-back{position:absolute;inset:0;background:linear-gradient(105deg,#e9e6da94,#fdfcf4a6 48%,#e4e0d28c);border:1px solid #c6c0af4d;box-shadow:0 4px 8px #423d301c,0 1px 1px #423d3026}
+.envelope-flap{position:absolute;left:0;bottom:calc(100% - 1px);width:100%;height:25%;border-radius:24% 24% 0 0 / 70% 70% 0 0;background:linear-gradient(170deg,#f3f0e1d1,#e3decd99 93%,#bcb49b66 98%,#fff9);border:1px solid #bdb49d99;border-bottom:1px dashed #afa58c80;box-shadow:inset 0 1px 2px #fff9}
+.envelope-front-wrap{z-index:20;pointer-events:none}
+.envelope-front{position:absolute;inset:0;background:linear-gradient(102deg,#eeeade7d 0%,#f8f5e777 46%,#e4e0d085 49%,#f8f6e591 53%,#e5dfcf80);border:1px solid #d1c9b266;border-top-color:#ffffffe0;backdrop-filter:blur(3px) saturate(.65);-webkit-backdrop-filter:blur(3px) saturate(.65);box-shadow:inset 1px 0 1px #fff9,inset -1px -1px 2px #a39b8366,0 2px 3px #62583b12}
+.envelope-front::before,.envelope-back::before,.envelope-flap::before{content:'';position:absolute;inset:0;background:url('../assets/graphic-props/glassine-fibres.svg') repeat;background-size:145px 145px;opacity:.34;mix-blend-mode:multiply;border-radius:inherit;pointer-events:none}
+.envelope-front::after{content:'';position:absolute;inset:0;background:linear-gradient(174deg,transparent 0 38%,#fff3 39%,transparent 40% 100%),linear-gradient(87deg,transparent 8%,#ffffff24 10%,transparent 13% 86%,#a7a08b0c 90%,transparent 94%);pointer-events:none}
+.envelope-seam{position:absolute;left:46%;top:0;bottom:0;width:14%;background:linear-gradient(90deg,#d9d1b724,#fff4 8%,#f8f3df38 85%,#c3baa33d);border-left:1px solid #fffffe6b;border-right:1px solid #afa68e2b}
+.envelope-bottom-fold{position:absolute;left:1%;bottom:1%;width:98%;height:11%;background:linear-gradient(175deg,#fff7,#e9e1c759);border-top:1px solid #fff9;box-shadow:0 -1px 2px #b9ae9626;clip-path:polygon(4% 0,96% 0,100% 100%,0 100%)}
+.envelope-label{position:absolute;left:var(--label-x);top:var(--label-y);width:23%;margin:0;transform:translate(-50%,-50%) rotate(var(--label-angle));z-index:var(--label-order);transform-origin:50% 65%;pointer-events:none}
+.envelope-label--marino{width:33%}.envelope-label--fluorescencia{width:36%}.envelope-label--pesca{width:25%}.envelope-label--mariquilla{width:21%}.envelope-label--pilar{width:16%}
+.envelope-label--modelo{width:20%}.envelope-label--precio{width:11%}
+.envelope-label-paper{display:block;filter:drop-shadow(0 1px .65px #352f2640) drop-shadow(1px 4px 3px #352f2626)}
+.envelope-label img{display:block;width:100%;height:auto}
+.envelope-label--marino img{clip-path:ellipse(49.4% 49% at 50% 50.2%)}
+.envelope-label--cola img{mask:url('../assets/graphic-props/labels/cola-mask.svg') center / 100% 100% no-repeat}
+.envelope-label--precio img{clip-path:polygon(5% 1.9%,98.5% 3.6%,97% 98.5%,1.7% 96%)}
+.envelope-label figcaption{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.envelope-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:12px;font:9px/1.5 var(--mono);letter-spacing:.05em;color:var(--muted)}
+.envelope-toggle{font:inherit;color:var(--fg);background:none;border:0;border-bottom:1px solid var(--line);padding:8px 0;cursor:pointer;min-height:40px}
+.envelope-toggle:hover{color:var(--accent)}
+.envelope-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+@media(min-width:701px) and (max-height:740px){
+ .graphic-collection.prop-envelope{width:100%;max-width:490px;justify-self:center}
+ .envelope-stage{height:clamp(330px,59svh,435px)}
+}
+.vertical-mode .graphic-collection.prop-envelope{display:block;width:100%;height:auto;padding:0;max-width:580px;align-self:center}
+.vertical-mode .envelope-stage{height:clamp(290px,105vw,570px);max-height:calc(100svh - var(--header) - 110px)}
+.vertical-mode .envelope-front{backdrop-filter:blur(2px) saturate(.65);-webkit-backdrop-filter:blur(2px) saturate(.65)}
+.vertical-mode .envelope-footer{font-size:8px}
+.vertical-mode .envelope-toggle{min-height:44px}

@@ -24,7 +24,7 @@
 .cockpit-spectrum{grid-column:1/3}.cockpit-spectrum>svg{width:100%;height:5cqw}.cockpit-spectrum-foot{display:flex;justify-content:space-between;font-size:.75cqw;margin-top:.6cqw;color:#a3aa96}.cockpit-route-body{display:flex;gap:1cqw;align-items:center}.cockpit-route-body>svg{width:40%;stroke:#a5b197;stroke-width:1}.cockpit-route-body>div{flex:1}.cockpit-route-body b{font-size:1.15cqw;font-weight:400;color:var(--cockpit-signal)}.cockpit-route-body small{font-size:.7cqw;margin-top:.5cqw}.cockpit-route-body strong{font:400 1.9cqw var(--mono)}
 .cockpit-footer{padding-top:1.5cqw;color:#929985;font-size:.85cqw}.cockpit-binary{color:var(--cockpit-signal);letter-spacing:.2cqw}
 .dev-composition .code-tag{right:5%;top:0;bottom:auto;font-size:calc(6px * var(--display-scale,1));letter-spacing:.07em}
-@media(max-width:700px){.hero-selector .flight-deck.cockpit{width:100%;left:0;top:50%;padding:3%;transform:translateY(-50%) rotate(-3deg)}.cockpit-head>b{font-size:4cqw}.cockpit-head>b>span{font-size:1.6cqw}.cockpit-head>span{font-size:1.3cqw}.cockpit-head>span:last-child{display:none}.golden-line{stroke-width:.8}.cockpit-window{padding:1.5cqw}.cockpit-label{font-size:1.2cqw}.cockpit small{font-size:1.2cqw}.cockpit-data{font-size:1.2cqw}.cockpit-nav-footer{font-size:1cqw}}
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){.hero-selector .flight-deck.cockpit{width:100%;left:0;top:50%;padding:3%;transform:translateY(-50%) rotate(-3deg)}.cockpit-head>b{font-size:4cqw}.cockpit-head>b>span{font-size:1.6cqw}.cockpit-head>span{font-size:1.3cqw}.cockpit-head>span:last-child{display:none}.golden-line{stroke-width:.8}.cockpit-window{padding:1.5cqw}.cockpit-label{font-size:1.2cqw}.cockpit small{font-size:1.2cqw}.cockpit-data{font-size:1.2cqw}.cockpit-nav-footer{font-size:1cqw}}
 @media(prefers-reduced-motion:reduce){.cockpit *{animation:none!important}}
 
 /* One physical golden rectangle: successive squares, clockwise subdivision.
@@ -44,7 +44,7 @@
 .cockpit-grid>.cockpit-window{z-index:0}
 .cockpit::after{z-index:1}
 .cockpit-grid .golden-line{stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:1.4 .8;filter:drop-shadow(0 0 1px var(--accent)) drop-shadow(0 0 3px color-mix(in srgb,var(--accent) 45%,transparent))}
-@media(max-width:700px){.cockpit-grid .golden-line{stroke-width:1.5;stroke-dasharray:1 .7;filter:drop-shadow(0 0 1px var(--accent))}}
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){.cockpit-grid .golden-line{stroke-width:1.5;stroke-dasharray:1 .7;filter:drop-shadow(0 0 1px var(--accent))}}
 /* Static pixel mask: no animated noise, blur or glow. */
 .cockpit-window::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background-image:radial-gradient(ellipse at center,transparent 45%,#070d0799 70%);background-size:3px 3px;opacity:.55}
 .cockpit-window{color:var(--green);background:linear-gradient(125deg,#27332088,#0b130bbb)}

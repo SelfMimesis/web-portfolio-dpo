@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://selfmimesis.github.io/web-portfolio-dpo/sitemap.xml

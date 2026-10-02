@@ -1,0 +1,8 @@
+/* Serif italics need their own spacing, independent of the sans-serif titles. */
+:is(h1,h2,h3,h4,.world-link-title,.world-link-descent strong,.muybridge-statement) :is(i,em),
+.art-cover-intro .muybridge-statement em{
+  letter-spacing:.02em;
+  word-spacing:.035em;
+  font-kerning:normal;
+  font-variant-ligatures:none;
+}

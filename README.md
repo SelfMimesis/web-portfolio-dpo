@@ -1,4 +1,8 @@
 # DPO — Portfolio de Diego Pérez Obrero
+
+> Actualización del 1 de octubre de 2026: [mejoras aplicadas y explicaciones visuales](docs/mejoras-explicadas-2026-10-01.html). Incluye rendimiento, navegación, prueba de créditos móvil, SEO y límites de seguridad. El rediseño móvil completo sigue pendiente.
+
+> Portada ART: [Still images. Living worlds. — Muybridge integrado, letras GSAP e inercia de scroll](docs/MUYBRIDGE-INTRO.md). Consulta [Git, copias y recuperación](docs/GIT-Y-REINICIO.md) para guardar cambios o abrir la versión anterior al reinicio.
  Incluye los cambios anteriores, la evolución actual y las partes que todavía requieren atención.
 
 - **Web:** https://selfmimesis.github.io/web-portfolio-dpo/
@@ -36,7 +40,7 @@
 3. Abre la dirección que indique, por ejemplo `http://127.0.0.1:5500/`.
 4. Guarda los cambios y recarga. Si ves una versión antigua, usa `Ctrl + Shift + R`.
 
-No abras el HTML mediante doble clic: una dirección `file:///...` puede bloquear los módulos JavaScript. No necesitas ejecutar `npm install` ni generar una carpeta `dist`.
+No abras el HTML mediante doble clic: una dirección `file:///...` puede bloquear los módulos JavaScript. No necesitas ejecutar `npm install`. Para trabajar en local puedes servir la raíz; para publicar se prepara `dist/` con la lista de archivos permitidos.
 
 Si tienes Python instalado, otra alternativa desde la carpeta del proyecto es:
 
@@ -50,7 +54,7 @@ Abre después `http://localhost:8000/`. `Ctrl + C` detiene ese servidor. Python 
 
 Crea un commit o una copia de seguridad antes de un cambio grande. Modifica una cosa, guarda y comprueba ambos universos. Un error de comillas en `main.js` puede impedir construir todas las escenas, aunque parezca un simple cambio de texto.
 
-La animación completa necesita conexión para cargar GSAP y Three.js desde CDN. Si falla GSAP/ScrollTrigger, los proyectos tienen una alternativa vertical. Si falla Three.js, se omite solo su adorno.
+GSAP, ScrollTrigger y Three.js se sirven desde `js/vendor/`. Si falla GSAP/ScrollTrigger, los proyectos tienen una alternativa vertical. Si falla Three.js, se omite solo su adorno.
 
 ## 2. Experiencia del visitante
 
@@ -136,7 +140,7 @@ docs/
 
 El orden de los `<link>` importa: una regla posterior puede sobrescribir otra. Por ejemplo, el acabado final del progreso está en `journey-cover.css`, aunque su base exista en `styles.css`.
 
-Los archivos `.preview-*`, capturas, perfiles de Chrome y `.publish-tools/` son herramientas locales. No forman parte de la web. Las pruebas con depuración remota no son necesarias para abrir el proyecto normalmente.
+Las capturas, referencias, informes, scripts locales y perfiles de Chrome están agrupados en [`previews/`](previews/README.md). Las comprobaciones reutilizables permanecen en `scripts/checks/`. VS Code oculta las cachés, `.publish-tools/` y `dist/` para mantener despejado el explorador. Estos archivos son herramientas locales. No forman parte de la web. Las pruebas con depuración remota no son necesarias para abrir el proyecto normalmente.
 
 ## 4. Arranque y estado
 
@@ -389,42 +393,37 @@ No borres un asset solo porque no lo veas en HTML: puede utilizarse desde CSS o 
 
 ## 11. Publicación
 
-Pages está configurado para `SelfMimesis/web-portfolio-dpo`, rama `main`, carpeta raíz `/`, sin build. Conserva `.nojekyll`.
+Prepara el paquete revisable sin publicar:
 
-### Con GitHub Desktop
-
-1. Clona el repositorio si todavía no tienes un clon local.
-2. Abre esa carpeta en VS Code. Evita confundir dos copias distintas.
-3. Revisa los cambios en GitHub Desktop.
-4. Crea un commit descriptivo.
-5. Pulsa **Push origin**.
-6. Espera al despliegue en Actions y revisa la URL pública.
-
-Si la carpeta actual no contiene `.git`, tener los archivos no la convierte en un clon. Clona en otra carpeta y lleva allí los archivos del proyecto que quieras actualizar.
-
-### Con Git instalado
-
-Desde un clon del repositorio, después de revisar qué ha cambiado:
-
-```bash
-git status
-git diff
-git add index.html README.md css js assets docs .nojekyll .gitignore
-git commit -m "Actualiza el portfolio"
-git push origin main
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-site.ps1
 ```
 
-No uses `push --force` para una actualización normal. Si hay cambios remotos, sincroniza y revisa antes de continuar.
+Solo se distribuye el contenido de `dist/`. El script conserva recursos y licencias utilizados, y excluye informes, capturas, perfiles de navegador, herramientas locales y originales no usados. `dist/` no se guarda en Git.
 
-La configuración está en Settings → Pages: origen **Deploy from a branch**, `main`, `/ (root)`. No hace falta `dist`. En el trabajo asistido anterior se utilizó una herramienta local de GitHub; no es una dependencia del sitio ni necesitas distribuirla.
+`config/site.json` centraliza el dominio provisional y los metadatos. `scripts/configure-site.ps1 -PublicUrl "https://TU-DOMINIO/"` prepara el cambio cuando se elija el dominio real. Search Console espera un registro DNS o token de propiedad: no está verificada.
 
-Sube HTML, CSS, JS, assets, `.nojekyll`, `.gitignore`, README y docs. No subas credenciales, `.publish-tools/`, perfiles de Chrome, ZIPs o `.preview-*`.
+GitHub Pages sirve la rama `gh-pages`, que contiene exclusivamente el contenido de `dist/`. La rama `main` conserva el código y los scripts de preparación. Para actualizar la web, revisa el paquete generado y publica su contenido en `gh-pages`; no publiques la raíz del proyecto. El workflow de Actions preparado localmente queda inactivo porque la credencial actual no dispone del permiso `workflow`.
+
+Guardar o hacer commit conserva el trabajo; no equivale a autorizar ni realizar una publicación. Revisa la configuración de Pages antes de un push si todavía usa el despliegue automático de una rama. No subas credenciales, `.publish-tools/`, perfiles de Chrome, ZIPs o `.preview-*`.
+
+El archivo `_headers` requiere un alojamiento que admita esa sintaxis; GitHub Pages no lo interpreta. La CSP incorporada al HTML funciona de forma independiente. Tras publicar, verifica HTTPS, las cabeceras efectivas y una URL inexistente que responda con HTTP 404 y el diseño de `404.html`.
 
 ### Verlo en el móvil
 
 Abre la URL pública. No uses `localhost` del ordenador en el teléfono: «localhost» significa ese dispositivo. Pages evita configurar acceso por IP local. Si los cambios no aparecen, comprueba el despliegue y recarga sin caché.
 
 ## 12. Pruebas y solución de problemas
+
+### Regresión de esta fase
+
+Con la vista previa HTTP y Chrome abierto con depuración en el puerto 9237:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/checks/verify-improvements.ps1
+```
+
+Comprueba el paquete `dist/`: historial, rotación, escaneo, carteles, despedida, 320 px y movimiento reducido. Guarda capturas y datos en `docs/improvements-2026-10-01/`. `-PreviewUrl` y `-DebugPort` permiten usar otro servidor o puerto.
 
 ### Comprobación después de cada cambio
 
@@ -711,6 +710,100 @@ Cada subtrazo SVG se muestrea por separado. Esto evita dibujar conexiones artifi
 
 Verificación: opacidades intermedias de 0,5 en entradas y salidas; continuidad hasta 0 o 1 al completar la transición, incluido el cierre del ciclo; ninguna coordenada NaN.
 
+### Interfaces en órbita
+
+La pausa entre Onset Playback e Interfaces dura `max(7000 px, 10.5 × altura de ventana)`: el primer 40 % corresponde a las órbitas y el 60 % restante a Everyday Apps. Las tres interfaces parten ocultas detrás de la foto, en este orden: Sound Study (consola original con acabado Aero), Tierra (terminal CRT con ataques ficticios) y Winamp con la skin Necromech de `60.wsz`. Salen en 0, 0.18 y 0.36 del progreso, cambiando su escala y opacidad según la profundidad. La última queda estable en primer plano desde 0.68, incluida su instrumentación. La foto permanece opaca hasta 0.82 y se desvanece hasta 1. Sound Study usa una cabecera, navegación y gráficos propios, sin nombres de Windows o iTunes ni controles de ventana que los imiten. GSAP dirige la secuencia desde el mismo progreso horizontal, sin otro pin ni bucles independientes.
+
+`js/interface-universe.js` construye las ventanas, dibuja el globo y controla la órbita; `css/interface-universe.css` contiene sus estilos aislados. Al terminar la órbita se mantiene la última pose de Winamp, sin cambiar de contenedor ni reiniciar sus estilos. Después se funden las interfaces y el texto anterior para dar paso a Everyday Apps, todavía con el recorrido horizontal detenido. Al retroceder se reconstruye la órbita; al cambiar de universo se restaura el DOM. En móvil las tres interfaces mantienen el mismo orden en vertical, con instrumentación animada por scroll; con movimiento reducido permanecen estáticas.
+
+Los recursos están en `assets/interfaces/`: sprites PNG convertidos sin pérdida desde el archivo WSZ y límites geográficos públicos de Natural Earth. Sus créditos se conservan en los archivos `CREDITS.txt`. Verificación mediante HTTP y Chrome: pausa horizontal estable, tres primeros planos, retroceso, continuación, cambio ART/DEV sin duplicados, About después del recorrido, 390/320 px y movimiento reducido sin desbordamiento.
+
+### Everyday Apps for Film Sets
+
+`js/everyday-apps.js` y `css/everyday-apps.css` añaden una segunda narración dentro de la pausa de Interfaces. El texto definitivo proporcionado por el usuario se revela en cuatro párrafos, sincronizados con un chat entre personajes, una red social, un reproductor de reels y un buscador dentro de una historia ficticia. En escritorio, las cuatro interfaces aparecen dentro del OBJ de iPhone suministrado por el usuario, que entra girando antes de mostrar el chat. El conjunto de teléfono y texto se centra dentro del recuadro y cada párrafo ocupa el mismo lugar durante su etapa. En móvil y con movimiento reducido se conserva la narración vertical legible. Las demostraciones mantienen la paleta verde del portfolio, utilizan identidades y gráficos originales, y sus transiciones, mensajes, escritura, cámara, coordenadas y progreso se controlan con GSAP mediante el scroll existente.
+
+Durante las órbitas se actualiza el ASCII original y se añaden cuatro campos alrededor de la foto: coordenadas, columnas de señal, valores hexadecimales y un vector con onda. No se añaden temporizadores ni pins. Al terminar las órbitas se funden la interfaz restante y el texto anterior; Everyday Apps aparece sin desplazamiento horizontal. Las cuatro interfaces son utilería para los actores: narran la desaparición de Elena Vale en North Point mediante mensajes con Mara, su última publicación, vídeos de un faro cerrado y noticias de archivo. Los gráficos originales incluyen el faro. La hora narrativa avanza de 23:14 a 23:17 y se reproduce igual al retroceder; no depende del reloj real. El texto de presentación del autor se conserva íntegro.
+
+En móvil cada párrafo acompaña a su demostración en el flujo vertical. Con movimiento reducido todas las fases permanecen legibles y estáticas. Verificado en Chrome sobre HTTP: ASCII cambiante durante la órbita, track inmóvil durante ambas narraciones, cuatro vistas coordinadas con su texto, avance y retroceso, 1440 × 900 y 1440 × 700 sin solapes con el pie, 390/320 px y movimiento reducido sin desbordamiento.
+
 ### Geometría áurea por encima de la terminal
 
 La capa naranja ya no queda recortada por el rectángulo del gráfico. Conserva exactamente el tamaño y origen del rectángulo áureo de las ventanas, y se coloca por encima de ventanas, indicadores y textura frontal. El glow puede sobresalir de los bordes. Se mantienen las proporciones áureas, los fundidos y las transiciones existentes; la capa no intercepta el ratón.
+### Lets have fun / Ship Explorer
+
+`js/fun-chapter.js` and `css/fun-chapter.css` add a playable chapter after Everyday Apps. The desktop journey resumes horizontal travel after Everyday Apps, sliding the phone away and revealing the next panel, Lets have fun. At the game panel it holds for `max(3500px, 4.5 × viewport height)`: the game remains playable, then dissolves before horizontal travel continues. Mobile and reduced-motion layouts retain the chapter in normal vertical flow.
+
+`games/ship-explorer/` contains the user's local ShipExplorer gameplay modules and assets, with a portfolio embedding entry point and green/orange colours. It runs in an iframe without the original remote popup/controller connection. Hold and drag to steer, use FIRE or Space to shoot, and Shift for turbo. The accessible Play/Restart button starts a run; wheel and page navigation pass back to the portfolio. Animation frames stop when the chapter leaves view or the document is hidden.
+
+Verified: desktop entrance/exit/reverse, real mouse coordinates, keyboard steering, wheel forwarding, offscreen suspension, 390px/320px layouts, reduced motion, and ART/DIGITAL PROPS continuation with About following the final panel.
+
+### Digital skills / vertical reveal
+The experience copy includes availability for on-site and remote work, based between Seville and Madrid.
+
+After the playable chapter, the same parent scroll timeline introduces Digital Skills from below. The second half of the extended game/skills pause expands the supplied on-set photo from a small centred image to the viewport, then reveals film-production experience and the full digital toolkit. CSS applies near-monochrome grading and a bottom-to-top green gradient without changing the original JPG. Mobile and reduced-motion layouts show the content in normal vertical flow. The parent retains ownership of pinning and resumes horizontal travel afterward.
+
+The registration rectangle retracts into four minimal corner marks and faint horizontal rules as Digital Skills enters. `js/skills-frame.js` follows the existing chapter progress, reverses on backward scrolling, and retains the frame's exact bounds. The side labels sit outside the rules on transparent backgrounds; the lower label reads ON-SET EXPERIENCE. The section and photo retain their green backgrounds. Only the lower frame label transitions to black as the expanding photo places its bright green gradient behind it; the upper label stays light. The top edge leaves room for the chapter heading. The observer and SVG are removed with the journey; mobile and reduced-motion retain the vertical layout without the animated frame. The original photo and the ASCII silhouette exclusion remain intact.
+
+### ART / The story in the detail
+
+The first chapter after the ART cover is now an introduction to Diego's graphic
+props practice, based on his Portfolio 2025. `js/graphic-story.js` contains four
+passages and the eight supplied artworks; `css/graphic-story.css` provides the
+editorial layout, local Miss Fajardose handwriting and Special Elite typewriter fonts.
+Text appears letter by letter, with a horizontal reveal across handwritten
+glyphs. Pairs of objects cross the screen vertically in opposing directions.
+
+On desktop, `scrollytelling.js` reserves `max(6400px, 8 × viewport height)` at
+the second panel. The existing horizontal pin owns this pause, including its
+contribution to next-chapter navigation, the final pause and About's position.
+The complete sequence follows scroll in either direction and cleans up when
+switching worlds. Mobile, reduced motion and the no-GSAP fallback present all
+four passages and their corresponding image pairs in normal vertical flow.
+
+The eight WebP derivatives total approximately 1.08 MB. Original artworks are
+unchanged; source mapping and font licenses are recorded in
+`assets/graphic-props/SOURCES.md` and `assets/fonts/`.
+
+Verified over HTTP in Chrome: all eight images and both fonts load, the panel
+stays still during all four passages, reverse scrolling restores the same
+positions, next chapter and world switching work, and About remains inactive
+until the journey ends. Checked desktop, 390px, 320px and reduced motion with
+no horizontal page overflow.
+
+### ART / Immediate introduction after the cover
+
+SELECTED WORK is restored to its original The Grand composition. The temporary
+second graphic-props interpretation and its extra pause have been removed.
+
+On desktop, the first graphic chapter fades over the cover from the first
+scroll movement. Both share a gradual transition of `max(850px, 1.1 × viewport
+height)`, with no empty space between them. The first 10% of the writing
+sequence plays during arrival; the rest continues through the existing pinned
+reading pause. Forward and reverse navigation include the shorter arrival.
+Mobile and reduced-motion layouts retain the normal vertical reading flow.
+
+### ART / Illustrated letterhead introduction
+
+ART now has eight panels: Cover, Introduction, Graphic Props, Selected Work,
+Project Detail, Process, Archive and Next World. Introduction shows the generated
+nineteenth-century-style factory letterhead with the Giralda and the requested
+name, specialism and contact details. The existing typographic narrative follows.
+
+`js/letterhead.js` and `css/letterhead.css` add the image, accessible description,
+telephone link and six engraved smoke wisps anchored to the chimney. Image and
+smoke share one coordinate system. The slow scale/rotation/vertical movement is
+scrubbed by the existing journey; CSS smoke pauses offscreen and when the tab is
+hidden via `ambient-motion.js`. Reduced motion disables smoke and scroll motion.
+Mobile keeps the introduction in vertical flow with a subtle scroll animation.
+
+The desktop introduction retains the gradual cover transition and holds for
+`max(1600px, 2.2 × viewport height)` before continuing to Graphic Props. Navigation,
+chapter counts, metadata and About geometry include the new panel and its pause.
+
+The web image is `assets/graphic-props/diego-letterhead.webp` (approximately
+609 KB); the full original and generation prompt are saved beside it. See
+`assets/graphic-props/LETTERHEAD.md`. Generated with the built-in image tool.
+
+Verified over HTTP in Chrome: scroll motion and reverse states, moving smoke,
+chapter navigation, world switching, offscreen pause, About after the journey,
+390px/320px mobile layouts, reduced motion, image loading and telephone link.

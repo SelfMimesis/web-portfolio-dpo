@@ -8,3 +8,17 @@ preview-mobile.png
 .preview-*.js
 web-portfolio-dpo.zip
 .publish-tools/
+.preview-phone-source/
+.preview-*
+
+# Keep reusable checks versioned; ignore local artifacts and credentials.
+!scripts/checks/.preview-*
+.env
+.env.*
+!.env.example
+*.log
+dist/
+
+# Local screenshots, inspection scripts and browser profiles.
+previews/*
+!previews/README.md

@@ -1,0 +1,189 @@
+/* Graphic's editorial grid: one frame, twelve columns, an 8px spacing rhythm.
+   Scene styles own motion; this file owns composition. See docs/GRAPHIC-GRID.md. */
+.scrolly--art {
+  --graphic-edge: max(6vw, calc((var(--panel-width, 100vw) - 1880px) / 2));
+  --graphic-width: calc(var(--panel-width, 100vw) - 2 * var(--graphic-edge));
+  --graphic-gap: clamp(20px, 2.2vw, 48px);
+  --graphic-space: 8px;
+  --graphic-title: clamp(36px, 4.2vw, 76px);
+  --graphic-body: clamp(16px, 1.25vw, 20px);
+  --graphic-detail: clamp(12px, 1.04vw, 17px);
+  --graphic-caption: clamp(11px, .85vw, 13px);
+}
+
+/* The same outer rails continue through intro, objects, envelopes and films. */
+.scrolly--art .art-cover-intro { left: var(--graphic-edge); right: var(--graphic-edge); }
+.scrolly--art .graphic-beat,
+.scrolly--art .panel--graphic-finale,
+.scrolly--art .film-page,
+.scrolly--art .film-cover { padding-inline: var(--graphic-edge); }
+.scrolly--art .panel-meta,
+.scrolly--art .film-navigation,
+.scrolly--art .film-cover-bottom { left: var(--graphic-edge); right: var(--graphic-edge); }
+.scrolly--art .film-collection-title { left: var(--graphic-edge); }
+.scrolly--art .film-cover-number { right: var(--graphic-edge); }
+
+.scrolly--art .art-cover-intro .muybridge-layout,
+.scrolly--art .graphic-beat,
+.scrolly--art .graphic-finale-layout,
+.scrolly--art .film-page .film-layout {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--graphic-gap);
+  max-width: none;
+}
+.scrolly--art .muybridge-figure { grid-column: 1 / span 7; }
+.scrolly--art .muybridge-narrative { grid-column: 8 / -1; }
+.scrolly--art .graphic-beat-copy,
+.scrolly--art .graphic-finale-copy { grid-column: 1 / span 5; }
+.scrolly--art .graphic-object,
+.scrolly--art .graphic-collection { grid-column: 6 / -1; }
+.scrolly--art .film-layout > :first-child { grid-column: 1 / span 6; }
+.scrolly--art .film-layout > :nth-child(2) { grid-column: 7 / -1; }
+.scrolly--art .film-page--opening .film-opening-copy { grid-column: 1 / span 7; }
+.scrolly--art .film-page--opening .film-opening-visual { grid-column: 8 / -1; }
+.scrolly--art .film-page--research .film-copy { grid-column: 1 / span 4; max-width: 40ch; }
+.scrolly--art .film-page--research .film-research-board { grid-column: 5 / -1; }
+
+.scrolly--art .muybridge-statement,
+.scrolly--art .graphic-beat h2,
+.scrolly--art .panel--graphic-finale h2,
+.scrolly--art .film-page .film-copy h2 { font-size: var(--graphic-title); }
+.scrolly--art .film-page--research .film-copy h2 { font-size: clamp(32px, 3.4vw, 64px); }
+.scrolly--art .graphic-beat p { font-size: var(--graphic-body); }
+.scrolly--art .graphic-finale-body p,
+.scrolly--art .has-film-stage .film-page p { font-size: var(--graphic-detail); }
+.scrolly--art .graphic-finale-body { max-width: none; }
+.scrolly--art .has-film-stage .film-night-side .film-copy p { font-size: var(--graphic-caption); }
+.scrolly--art .has-film-stage .film-night-side { height: 100%; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+.scrolly--art .has-film-stage .film-pihama-title { position: relative; flex: 1; min-height: 100px; margin: 0 0 16px !important; overflow: hidden; }
+.scrolly--art .has-film-stage .film-pihama-title img { position: absolute; top: 50%; transform: translateY(-50%); }
+.scrolly--art .has-film-stage .film-dissolve { flex: none; height: min(24svh, 250px); aspect-ratio: auto; }
+.scrolly--art .has-film-stage .film-dissolve .film-image-view,
+.scrolly--art .has-film-stage .film-dissolve img { height: 100%; object-fit: contain; }
+.scrolly--art .graphic-eyebrow,
+.scrolly--art .film-kicker { margin-bottom: calc(3 * var(--graphic-space)); }
+.scrolly--art .film-footer { margin-top: calc(3 * var(--graphic-space)); }
+
+/* Images occupy their module without clipping their original proportions. */
+.scrolly--art .graphic-object { width: min(92%, calc(58svh * var(--paper-ratio))); }
+.scrolly--art .graphic-collection.prop-envelope { max-width: none; width: 100%; }
+.scrolly--art .has-film-stage .film-palette-main,
+.scrolly--art .has-film-stage .film-cupido { width: 100%; }
+.scrolly--art .film-palette-board,
+.scrolly--art .film-places-board { gap: calc(2 * var(--graphic-space)); }
+.scrolly--art .has-film-stage .film-palette-board { width: min(100%, calc((var(--film-space-height, 70svh) - 41px) / .99)); }
+.scrolly--art .has-film-motion .film-research-board { gap: var(--graphic-gap); }
+.scrolly--art .film-sheet-frame { width: var(--graphic-width); max-width: none; }
+.scrolly--art .film-carousel-window { width: 100%; margin-left: 0; }
+.scrolly--art .film-contact-sheet { gap: var(--graphic-gap); padding-inline: 0; }
+.scrolly--art .has-film-stage .film-sheet-frame .film-image-view { height: min(49svh, calc(var(--graphic-width) / 2.39)); }
+
+@media (min-width: 701px) and (max-height: 800px) {
+  .scrolly--art { --graphic-title: clamp(32px, 3.6vw, 54px); --graphic-detail: 12px; }
+  .scrolly--art .graphic-eyebrow,
+  .scrolly--art .film-kicker { margin-bottom: 16px; }
+  .scrolly--art .has-film-stage .film-night-side .film-copy p { font-size: 11px; }
+}
+
+/* Natural flow retains these rails on phones and with reduced motion. */
+.vertical-mode .scrolly--art {
+  --graphic-edge: max(20px, 6vw);
+  --graphic-gap: 24px;
+  --graphic-title: clamp(36px, 9.5vw, 68px);
+}
+.vertical-mode .scrolly--art .art-cover-intro { left: auto; right: auto; padding-inline: var(--graphic-edge); }
+.vertical-mode .scrolly--art .art-cover-intro .muybridge-layout,
+.vertical-mode .scrolly--art .graphic-finale-layout,
+.vertical-mode .scrolly--art .film-layout { max-width: none; }
+.vertical-mode .scrolly--art .film-page p,
+.vertical-mode .scrolly--art .graphic-finale-body p { font-size: 16px; }
+.vertical-mode .scrolly--art .film-opening-visual { padding: 0; }
+.vertical-mode .scrolly--art .graphic-collection.prop-envelope { max-width: min(100%, 740px); }
+.vertical-mode .scrolly--art .has-film-motion .film-research-board { gap: 12px; }
+.vertical-mode .scrolly--art .film-sheet-frame { width: calc(100vw - 2 * var(--graphic-edge)); }
+.vertical-mode .scrolly--art .film-collection-title { font-size: 15vw; }
+
+/* An overlapping photographic introduction opens into the two-format gallery. */
+.scrolly--art .has-film-motion .film-research-board { display: block; position: relative; }
+.scrolly--art .has-film-stage .film-research-board { height: var(--film-space-height, calc(100svh - 285px)); }
+.scrolly--art .has-film-motion .film-research-main,
+.scrolly--art .has-film-motion .film-research-inset {
+  position: absolute; left: 0; top: 0; right: auto; bottom: auto;
+  border: 8px solid var(--bg); background: var(--bg); will-change: width, transform;
+}
+.scrolly--art .film-research-progress.film-scroll-dots {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  width: 44px; height: auto; margin: 0; z-index: 8;
+}
+.film-research-progress.film-scroll-dots button { flex: 0 0 44px; width: 44px; min-width: 44px; }
+.film-research-progress .film-dot-follower { left: 18px; top: -4px; }
+.vertical-mode .scrolly--art .has-film-motion .film-research-board { height: min(54svh, 420px); min-height: 290px; }
+.vertical-mode .scrolly--art .film-page--research .film-copy { max-width: none; }
+.vertical-mode .scrolly--art .film-page--research .film-copy h2 { font-size: var(--graphic-title); }
+
+/* A quiet colour strip, sampled from the photographs currently on screen. */
+.film-photo-palette { display: flex; gap: 3px; width: clamp(156px, 27%, 288px); height: 18px; }
+.film-photo-palette span { flex: 1; min-width: 0; opacity: 0; transform-origin: center bottom; }
+.has-film-motion .film-photo-palette { position: absolute; left: 0; top: 0; bottom: auto; z-index: 5; pointer-events: none; }
+.film-journey:not(.has-film-motion) .film-photo-palette { grid-column: 1 / -1; margin-top: 20px; }
+.scrolly--art .has-film-motion .film-map { bottom: 40px; }
+.film-photo-palette[hidden] { display: none; }
+
+/* One photographic window; motion stays inside its mask. */
+.scrolly--art .has-manual-carousel .film-carousel { position: relative; padding: 0; }
+.scrolly--art .has-manual-carousel .film-carousel-window {
+  position: relative; width: var(--viewer-width, 100%) !important; height: var(--viewer-height, 45svh);
+  max-width: 100%; margin: 0 auto !important; padding: 0; overflow: hidden; background: var(--bg);
+}
+.scrolly--art .has-manual-carousel .film-contact-sheet {
+  position: absolute; inset: 0; display: block !important; width: 100%; height: 100%;
+  gap: 0 !important; padding: 0 !important; transform: none !important;
+}
+.scrolly--art .has-manual-carousel .film-sheet-frame {
+  position: absolute; inset: 0; margin: 0; width: 100% !important; height: 100%;
+  max-width: none; border: 0; padding: 0; visibility: hidden; will-change: transform;
+}
+.scrolly--art .has-manual-carousel .film-sheet-frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.film-reel-zones { position: absolute; inset: 0; z-index: 2; display: flex; }
+.film-reel-zones button { position: relative; flex: 1; border: 0; padding: 0; background: transparent; color: var(--bg); cursor: pointer; }
+.film-reel-zones button span { position: absolute; bottom: 12px; left: 12px; padding: 6px 8px; background: var(--fg); font: 10px/1.5 var(--mono); opacity: 0; }
+.film-reel-zones button:last-child span { left: auto; right: 12px; }
+.film-reel-zones button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+.film-reel-zones button:focus-visible span { opacity: 1; }
+.scrolly--art .has-manual-carousel .film-carousel-controls {
+  position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  width: min(100%, 966px); margin: 14px auto 0; padding: 0; gap: 0; border-top: 1px solid var(--line);
+}
+.scrolly--art .film-carousel-controls button {
+  position: relative; min-width: 0; min-height: 44px; padding: 8px 0; border: 0;
+  background: transparent; color: var(--muted); font: 11px/1 var(--mono); cursor: pointer;
+}
+.film-carousel-controls button::before { content: ''; position: absolute; top: -1px; left: 20%; right: 20%; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform .35s; }
+.scrolly--art .film-carousel-controls button[aria-current=true] { color: var(--accent); }
+.film-carousel-controls button[aria-current=true]::before { transform: scaleX(1); }
+.film-reel-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.film-reel-cursor {
+  position: absolute; top: 0; left: 0; z-index: 8; pointer-events: none;
+  display: flex; width: 136px; height: 44px; margin: -22px 0 0 -68px;
+  border: 1px solid var(--accent); background: var(--bg); color: var(--fg);
+  opacity: 0; font: 11px/1 var(--mono); transition: opacity .15s; will-change: transform;
+}
+.film-reel-cursor span { flex: 1; display: grid; place-items: center; }
+.film-reel-cursor span + span { border-left: 1px solid var(--accent); }
+.film-reel-cursor[data-direction=previous] span:first-child,
+.film-reel-cursor[data-direction=next] span:last-child { background: var(--accent); color: var(--bg); }
+.film-reel-cursor.is-visible { opacity: 1; }
+body.film-carousel-pointer .custom-cursor { visibility: hidden !important; }
+@media (any-hover: hover) and (any-pointer: fine) {
+  .film-carousel-pointer .film-reel-zones button { cursor: none; }
+}
+@media (hover: none) {
+  .film-reel-zones button span { opacity: 1; }
+}
+@media (max-width: 700px) {
+  .scrolly--art .has-manual-carousel .film-carousel-controls { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .film-reel-cursor, .film-carousel-controls button::before { transition: none; }
+}

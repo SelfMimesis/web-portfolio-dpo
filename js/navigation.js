@@ -1,4 +1,4 @@
-import { state, syncPreferences } from './state.js';
+import { state, syncPreferences, COMPACT_QUERY } from './state.js';
 import { resetHero, expandHero } from './animations.js';
 import { initArtScrollytelling, initDevScrollytelling, destroyScrollTriggers, nextPanel } from './scrollytelling.js';
 import { updateThreeScene } from './three-scene.js';
@@ -7,6 +7,76 @@ import { startScrollCue, armScrollCue, clearScrollCue } from './cursor.js';
 const hero = () => document.querySelector('.hero-selector');
 let homeSlot;
 let syncNavigationMarker = () => {};
+let restoring = false;
+let savedView;
+let scrollTimer;
+const afterLayout = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+function captureView() {
+  const view = { y: scrollY, width: innerWidth, height: innerHeight, world: state.activeWorld };
+  const pin = window.ScrollTrigger?.getAll().find(trigger => trigger.pin && trigger.trigger?.matches('.scrolly:not([hidden])'));
+  if (pin && scrollY >= pin.start && scrollY < pin.end) {
+    return { ...view, journey: (scrollY - pin.start) / (pin.end - pin.start), panel: state.currentPanel };
+  }
+  const candidates = [...document.querySelectorAll('.scrolly:not([hidden]) .panel, #about, .about-chapter, .about-clients, .filmography, #contact')];
+  const top = document.querySelector('.site-header').offsetHeight;
+  const element = candidates.filter(node => {
+    const bounds = node.getBoundingClientRect();
+    return bounds.height && bounds.top <= top + 8 && bounds.bottom > top;
+  }).pop();
+  if (element) {
+    view.target = element.id ? `#${element.id}` : element.matches('.panel')
+      ? `.scrolly--${state.activeWorld} .panel:nth-child(${[...element.parentElement.children].indexOf(element) + 1})`
+      : element.matches('.about-clients') ? '.about-clients' : '.filmography';
+    view.fraction = (scrollY - (element.getBoundingClientRect().top + scrollY)) / Math.max(1, element.offsetHeight);
+  }
+  return view;
+}
+function rememberView() {
+  if (restoring || state.transitionInProgress) return;
+  savedView = captureView();
+  history.replaceState({ ...history.state, portfolio: savedView }, '', location.href);
+}
+function pushLocation(hash) {
+  history.pushState({ portfolio: captureView() }, '', hash);
+  savedView = captureView();
+}
+async function restoreView(view, hash = location.hash) {
+  restoring = true;
+  const world = view?.world ?? (['#art', '#dev'].includes(hash) ? hash.slice(1) : null);
+  if (world && state.activeWorld !== world) await selectWorld(world, false);
+  else if (!world && state.activeWorld) resetToHome(false);
+  await afterLayout();
+  window.ScrollTrigger?.refresh();
+  let top = view?.y;
+  if (view && (view.width !== innerWidth || view.height !== innerHeight)) {
+    const pin = window.ScrollTrigger?.getAll().find(trigger => trigger.pin && trigger.trigger?.matches('.scrolly:not([hidden])'));
+    if (view.journey !== undefined && pin) top = pin.start + view.journey * (pin.end - pin.start);
+    else {
+      const element = view.target ? document.querySelector(view.target) : document.querySelector(`.scrolly--${world} .panel:nth-child(${(view.panel || 0) + 1})`);
+      if (element) top = element.getBoundingClientRect().top + scrollY + (view.fraction || 0) * element.offsetHeight;
+    }
+  }
+  if (top === undefined) {
+    const element = document.getElementById(hash.slice(1));
+    top = element && !['#art', '#dev', '#home'].includes(hash) ? element.getBoundingClientRect().top + scrollY - document.querySelector('.site-header').offsetHeight : 0;
+  }
+  window.scrollTo({ top, behavior: 'instant' });
+  window.ScrollTrigger?.update();
+  await afterLayout();
+  restoring = false;
+  rememberView();
+}
+export async function restoreInitialNavigation() {
+  await restoreView(history.state?.portfolio, location.hash);
+}
+
+function visitSection(target, hash) {
+  rememberView();
+  pushLocation(hash);
+  target.scrollIntoView({ behavior: state.reducedMotion ? 'instant' : 'smooth' });
+  target.tabIndex = -1; target.focus({ preventScroll: true });
+}
 
 function initSectionMarker() {
   const header = document.querySelector('.site-header');
@@ -24,6 +94,7 @@ function initSectionMarker() {
     // About includes its opening, five chapters and the entire filmography.
     // Keep it selected until its last visible portion passes under the header.
     const section = visible(aboutBounds) ? 'about' : visible(contactBounds) ? 'contact' : state.activeWorld;
+    header.classList.toggle('is-digital',section==='dev');
     if (marked === section) return;
     marked = section;
     links.forEach(link => {
@@ -68,35 +139,45 @@ export async function selectWorld(world, updateHash = true, source = null) {
     else window.scrollTo({ top: 0, behavior: 'instant' });
     return;
   }
+  if (updateHash) rememberView();
   state.transitionInProgress = true;
+  document.querySelector('.site-header').classList.toggle('is-digital',world==='dev');
   document.body.classList.add('is-transitioning');
-  startScrollCue(world);
   if (source?.querySelector('.lcd-display')) await bootLCD(source);
   destroyScrollTriggers();
   if (state.activeWorld) restoreHero();
   document.querySelectorAll('.scrolly').forEach(s => { s.hidden = true; if (window.gsap) gsap.set(s, { clearProps: 'transform,opacity' }); });
+  // A previous pin can still have its scroll position cached until the next frame.
+  window.ScrollTrigger?.clearScrollMemory();
   window.scrollTo({ top: 0, behavior: 'instant' });
   hero().hidden = false;
-  await expandHero(world);
-  state.activeWorld = world;
-  state.scrollProgress = 0;
-  state.currentPanel = 0;
   const selectedSection = document.querySelector(`.scrolly--${world}`);
-  selectedSection.querySelector('.panel--hero').append(hero());
-  selectedSection.hidden = false;
-  syncPreferences();
-  updateNavigation();
-  updateThreeScene(world);
+  await expandHero(world, () => {
+    state.activeWorld = world;
+    state.scrollProgress = 0;
+    state.currentPanel = 0;
+    selectedSection.querySelector('.panel--hero').prepend(hero());
+    selectedSection.hidden = false;
+    syncPreferences();
+    updateNavigation();
+    updateThreeScene(world);
+    (world === 'art' ? initArtScrollytelling : initDevScrollytelling)();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.ScrollTrigger?.update();
+    startScrollCue(world);
+  });
   document.body.classList.remove('is-transitioning');
-  (world === 'art' ? initArtScrollytelling : initDevScrollytelling)();
   state.transitionInProgress = false;
+  // Measure downstream chapters after the cover has finished changing layout.
+  window.ScrollTrigger?.refresh();
   syncNavigationMarker();
   armScrollCue();
   focusScene(selectedSection);
-  if (updateHash) history.pushState(null, '', `#${world}`);
+  if (updateHash) pushLocation(`#${world}`);
 }
 export function resetToHome(updateHash = true) {
   if (state.transitionInProgress) return;
+  if (updateHash) rememberView();
   if (window.gsap) clearScrollCue();
   destroyScrollTriggers();
   restoreHero();
@@ -107,10 +188,11 @@ export function resetToHome(updateHash = true) {
   window.ScrollTrigger?.refresh();
   window.scrollTo({ top: 0, behavior: 'instant' });
   syncNavigationMarker();
-  if (updateHash) history.pushState(null, '', '#home');
+  if (updateHash) pushLocation('#home');
   document.querySelector('.wordmark').focus({ preventScroll: true });
 }
 export function initNavigation() {
+  history.scrollRestoration = 'manual';
   homeSlot = document.createComment('Home cover returns here between journeys');
   hero().before(homeSlot);
   initSectionMarker();
@@ -119,9 +201,7 @@ export function initNavigation() {
     if (state.transitionInProgress) return;
     if (link.classList.contains('is-descending')) {
       const about = document.querySelector('#about');
-      about.scrollIntoView({ behavior: state.reducedMotion ? 'instant' : 'smooth' });
-      about.tabIndex = -1; about.focus({ preventScroll: true });
-      history.pushState(null, '', '#about');
+      visitSection(about, '#about');
     } else selectWorld(link.dataset.world, true, link);
   }));
   document.querySelector('.wordmark').addEventListener('click', event => { event.preventDefault(); resetToHome(); });
@@ -130,24 +210,20 @@ export function initNavigation() {
     if (state.transitionInProgress) { event.preventDefault(); return; }
     event.preventDefault();
     const target = document.querySelector(link.hash);
-    target.scrollIntoView({ behavior: state.reducedMotion ? 'instant' : 'smooth' });
-    target.tabIndex = -1; target.focus({ preventScroll: true });
-    history.pushState(null, '', link.hash);
+    visitSection(target, link.hash);
   }));
-  window.addEventListener('popstate', () => {
-    const hash = location.hash.slice(1);
-    if (['art', 'dev'].includes(hash)) selectWorld(hash, false);
-    else if (!hash || hash === 'home') resetToHome(false);
-    else document.getElementById(hash)?.scrollIntoView();
-  });
-  document.querySelector('.contact-button').addEventListener('click', event => {
-    const note = document.querySelector('#contact-note'); note.hidden = !note.hidden;
-    event.currentTarget.setAttribute('aria-expanded', String(!note.hidden));
-  });
-  ['(max-width: 700px)', '(min-height: 600px)', '(prefers-reduced-motion: reduce)'].forEach(query => matchMedia(query).addEventListener('change', () => {
+  window.addEventListener('popstate', event => { restoreView(event.state?.portfolio); });
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(rememberView, 120);
+  }, { passive: true });
+  window.addEventListener('pagehide', rememberView);
+  [COMPACT_QUERY, '(min-height: 600px)', '(prefers-reduced-motion: reduce)'].forEach(query => matchMedia(query).addEventListener('change', () => {
+    const view = savedView || captureView();
     destroyScrollTriggers(); syncPreferences();
     if (!state.activeWorld) resetHero();
     if (state.activeWorld) (state.activeWorld === 'art' ? initArtScrollytelling : initDevScrollytelling)();
     updateThreeScene(state.activeWorld);
+    restoreView(view);
   }));
 }

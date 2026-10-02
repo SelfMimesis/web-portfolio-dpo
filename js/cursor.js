@@ -153,6 +153,12 @@ export function initCursor() {
     }
     const start = () => { if (!running) { gsap.ticker.add(tick); running = true; } };
     const update = element => {
+        if (element?.closest('.site-header, .about-visual--screen, .about-visual--network')) {
+        if (cueActive) clearScrollCue();
+        stop(); visible = seeded = false;
+        gsap.killTweensOf(cursor); gsap.set(cursor, { opacity: 0 });
+        return;
+      }
       if (cueActive) return;
       if (state.activeWorld) { hide(); return; }
       if (element?.closest('.wordmark')) {

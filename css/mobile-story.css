@@ -2,7 +2,7 @@
 .poster-details,.poster-gesture-hint{display:none}
 .poster-stack{touch-action:pan-y pinch-zoom}
 .poster-stack:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-@media(max-width:700px){
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){
   .scrolly--dev .mobile-chapter-progress i{background:var(--green)}
   .has-mobile-story .mobile-chapter-progress{position:relative;margin-bottom:26px}
   .has-mobile-story .mobile-chapter-progress::after{content:'↔';position:absolute;right:0;top:5px;font:13px var(--mono);opacity:.55}
