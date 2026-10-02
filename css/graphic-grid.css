@@ -124,7 +124,7 @@
 
 /* A quiet colour strip, sampled from the photographs currently on screen. */
 .film-photo-palette { display: flex; gap: 3px; width: clamp(156px, 27%, 288px); height: 18px; }
-.film-photo-palette span { flex: 1; min-width: 0; opacity: 0; transform-origin: center bottom; }
+.film-photo-palette span { flex: 1; min-width: 0; opacity: 0; transform-origin: right center; backface-visibility: hidden; }
 .has-film-motion .film-photo-palette { position: absolute; left: 0; top: 0; bottom: auto; z-index: 5; pointer-events: none; }
 .film-journey:not(.has-film-motion) .film-photo-palette { grid-column: 1 / -1; margin-top: 20px; }
 .scrolly--art .has-film-motion .film-map { bottom: 40px; }
