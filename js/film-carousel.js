@@ -42,6 +42,8 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
   const rest = () => frames.forEach((frame, i) => {
     frame.style.visibility = i === index ? 'visible' : 'hidden';
     frame.style.transform = 'translateX(0)';
+    frame.style.opacity = '1';
+    frame.style.removeProperty('z-index');
     frame.inert = i !== index; frame.setAttribute('aria-hidden', String(i !== index));
   });
   const size = () => {
@@ -79,12 +81,16 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
       frame.style.visibility = i === previous || i === index ? 'visible' : 'hidden';
       frame.inert = i !== index; frame.setAttribute('aria-hidden', String(i !== index));
     });
-    gsap.set(outgoing, { xPercent: 0 }); gsap.set(incoming, { xPercent: direction * 100 });
+    // Keep the current still steady beneath a short, slow drift and dissolve.
+    // The overlap covers the frame edges throughout; no full-width sweep or zoom.
+    gsap.set(outgoing, { xPercent: 0, opacity: 1, zIndex: 1 });
+    gsap.set(incoming, { xPercent: direction * 2, opacity: 0, zIndex: 2 });
     carousel.setAttribute('aria-busy', 'true');
     transition = gsap.timeline({ onComplete: finish })
-      .to(viewport, { ...geometry, duration: .8, ease: 'power3.inOut' }, 0)
-      .to(outgoing, { xPercent: -direction * 100, duration: .8, ease: 'power3.inOut' }, 0)
-      .to(incoming, { xPercent: 0, duration: .8, ease: 'power3.inOut' }, 0);
+      .to(viewport, { ...geometry, duration: 1.1, ease: 'sine.inOut' }, 0)
+      .to(incoming, { xPercent: 0, duration: 1.1, ease: 'sine.out' }, 0)
+      .to(incoming, { opacity: 1, duration: 1.05, ease: 'sine.inOut' }, .05)
+      .to(outgoing, { opacity: 0, duration: .22, ease: 'sine.inOut' }, .88);
   };
   const choose = (value, direction = 1) => {
     requested = wrap(value); requestedDirection = direction;
@@ -182,7 +188,7 @@ export function createFilmCarousel(root, { reducedMotion = false } = {}) {
     disposed = true; leave(); transition?.kill(); observer.disconnect();
     gsap?.killTweensOf([viewport, cursor, face, arrow, ...frames]);
     bindings.forEach(([target, event, handler]) => target.removeEventListener(event, handler, event === 'scroll'));
-    frames.forEach(frame => { frame.inert = false; frame.removeAttribute('aria-hidden'); frame.style.removeProperty('transform'); frame.style.removeProperty('visibility'); });
+    frames.forEach(frame => { frame.inert = false; frame.removeAttribute('aria-hidden'); ['transform', 'visibility', 'opacity', 'z-index'].forEach(property => frame.style.removeProperty(property)); });
     for (const name of ['--viewer-width', '--viewer-height', '--viewer-top']) viewport.style.removeProperty(name);
     carousel.style.removeProperty('min-height'); carousel.style.removeProperty('--viewer-width'); carousel.removeAttribute('aria-busy');
     controls.replaceChildren(); controls.style.removeProperty('--frame-count'); zones.remove(); cursor.remove();
