@@ -1,0 +1,73 @@
+/* ORBIT / NEXUS: self-contained spacecraft instrument panel. */
+@font-face{font-family:'Automatron';src:url('../assets/fonts/Automatron-Numbersdec.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+.flight-deck.cockpit{--mono:'Automatron','Courier New',monospace;--sans:'Automatron',Arial,sans-serif;font-synthesis:none}
+.flight-deck.cockpit{--cockpit-line:#858b8438;--cockpit-signal:var(--green);position:absolute;left:5%;top:6%;width:90%;max-width:calc(760px * var(--display-scale,1));container-type:inline-size;padding:2%;color:#dddeda;background:linear-gradient(125deg,#252823eF,#111511 62%,#1d221deF);border:1px solid #777d7059;box-shadow:8px 12px 0 #0b100b55,inset 0 1px #e6ead61a;transform:perspective(1200px) rotateY(-5deg) rotateX(3deg) rotateZ(2deg);font-family:var(--mono)}
+.cockpit::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,#00000012 0 1px,transparent 1px 4px)}
+.cockpit-head,.cockpit-command,.cockpit-footer{display:flex;align-items:center;justify-content:space-between;gap:1cqw;font-size:1.05cqw;letter-spacing:.04em}
+.cockpit-head{padding-bottom:1.7cqw;border-bottom:1px solid var(--cockpit-line)}
+.cockpit-head>b{font:500 3.5cqw/1 var(--sans);letter-spacing:.13em}.cockpit-head>b>span{font:400 1.1cqw var(--mono);letter-spacing:.03em}.cockpit-online{color:var(--cockpit-signal)}
+.cockpit-command{padding:1.3cqw 0;color:#a5aa9e}.cockpit-command b,.cockpit-footer b{color:var(--cockpit-signal)}
+.cockpit-grid{display:grid;grid-template-columns:21fr 53fr 26fr;gap:1cqw}
+.cockpit-window{border:1px solid var(--cockpit-line);min-width:0;padding:1.3cqw;background:#080c0866;position:relative;overflow:hidden}
+.cockpit-window::before{content:'';position:absolute;left:-1px;top:-1px;width:1.3cqw;height:1.3cqw;border-top:1px solid #c0c5b7;border-left:1px solid #c0c5b7;pointer-events:none}
+.cockpit-label{display:flex;justify-content:space-between;gap:.5cqw;font-size:.85cqw;line-height:1.5;letter-spacing:.035em;color:#a9ada2;padding-bottom:1.1cqw;border-bottom:1px solid var(--cockpit-line);margin-bottom:1.3cqw}.cockpit-label>span{color:var(--cockpit-signal);white-space:nowrap}
+.cockpit small{display:block;font:400 .9cqw/1.5 var(--mono);color:#a9ada2;letter-spacing:.025em}.cockpit strong{font:400 4.5cqw/1.12 var(--sans);letter-spacing:-.04em;display:block;margin:.5cqw 0}.cockpit sub{font:400 1.1cqw var(--mono);margin-left:.5cqw;vertical-align:baseline}.cockpit em{font:400 .85cqw var(--mono);display:flex;justify-content:space-between;color:#b7bdad}.cockpit em>span{color:var(--cockpit-signal)}
+.cockpit svg{fill:none;display:block}.cockpit-vitals>svg{width:100%;height:5cqw;margin:1.3cqw 0}.cockpit-chart-base{stroke:#b1b9a326;stroke-width:.7}.cockpit-chart{stroke:var(--cockpit-signal);stroke-width:1.2;fill:none}.cockpit .cockpit-altitude{font-size:3.3cqw}
+.cockpit-data{display:grid;gap:.7cqw;margin-top:1.8cqw;font-size:.95cqw}.cockpit-data>span{display:flex;justify-content:space-between;color:#999f92}.cockpit-data b{font-weight:400;color:#d8dccf}
+.cockpit-navigation{padding:1.3cqw 1.1cqw 1cqw}.cockpit-radar{position:relative;aspect-ratio:340/240;background:radial-gradient(ellipse,#6b75550a,transparent 70%)}
+.cockpit-reticle{position:absolute;inset:0;width:100%;height:100%;stroke:#89927a57;stroke-width:.6}.cockpit-axis{stroke:var(--cockpit-signal);stroke-width:1.3}
+.cockpit .golden-display{position:absolute;inset:14% 9%;width:82%;height:72%;overflow:visible}.golden-line{stroke:var(--accent);stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;fill:none}
+.cockpit-target{position:absolute;color:#d6dacd;font-size:2.1cqw;line-height:1;border:1px solid #939a7959;width:3cqw;height:3cqw;display:grid;place-items:center}.cockpit-target small{position:absolute;top:100%;left:0;font-size:.65cqw;white-space:nowrap;margin-top:.3cqw}.target-a{left:72%;top:20%}.target-b{left:24%;top:69%}.cockpit-coordinates,.cockpit-lock{position:absolute;bottom:0;font-size:.7cqw;color:#868d7c;line-height:1.5}.cockpit-coordinates{left:0}.cockpit-lock{right:0;text-align:right}.cockpit-lock b{color:var(--cockpit-signal);font-weight:400}
+.cockpit-nav-footer{display:flex;justify-content:space-between;gap:1cqw;font-size:.8cqw;border-top:1px solid var(--cockpit-line);padding-top:1cqw;margin-top:1cqw;color:#b5bba9}
+.cockpit-bars{display:flex;gap:.5cqw;align-items:end;height:5.5cqw;margin:1cqw 0 1.5cqw;border-bottom:1px solid #91977c55}.cockpit-bars i{height:var(--level);flex:1;background:repeating-linear-gradient(to top,var(--cockpit-signal) 0 2px,transparent 2px 3px);transform-origin:bottom}
+.cockpit-meter{height:.55cqw;background:#a4af8c1f}.cockpit-meter i{display:block;width:var(--level);height:100%;background:#a8b394;transform-origin:left}.cockpit-alert{font-size:.8cqw;margin-top:1.8cqw;color:var(--cockpit-signal)}
+.cockpit-spectrum{grid-column:1/3}.cockpit-spectrum>svg{width:100%;height:5cqw}.cockpit-spectrum-foot{display:flex;justify-content:space-between;font-size:.75cqw;margin-top:.6cqw;color:#a3aa96}.cockpit-route-body{display:flex;gap:1cqw;align-items:center}.cockpit-route-body>svg{width:40%;stroke:#a5b197;stroke-width:1}.cockpit-route-body>div{flex:1}.cockpit-route-body b{font-size:1.15cqw;font-weight:400;color:var(--cockpit-signal)}.cockpit-route-body small{font-size:.7cqw;margin-top:.5cqw}.cockpit-route-body strong{font:400 1.9cqw var(--mono)}
+.cockpit-footer{padding-top:1.5cqw;color:#929985;font-size:.85cqw}.cockpit-binary{color:var(--cockpit-signal);letter-spacing:.2cqw}
+.dev-composition .code-tag{right:5%;top:0;bottom:auto;font-size:calc(6px * var(--display-scale,1));letter-spacing:.07em}
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){.hero-selector .flight-deck.cockpit{width:100%;left:0;top:50%;padding:3%;transform:translateY(-50%) rotate(-3deg)}.cockpit-head>b{font-size:4cqw}.cockpit-head>b>span{font-size:1.6cqw}.cockpit-head>span{font-size:1.3cqw}.cockpit-head>span:last-child{display:none}.golden-line{stroke-width:.8}.cockpit-window{padding:1.5cqw}.cockpit-label{font-size:1.2cqw}.cockpit small{font-size:1.2cqw}.cockpit-data{font-size:1.2cqw}.cockpit-nav-footer{font-size:1cqw}}
+@media(prefers-reduced-motion:reduce){.cockpit *{animation:none!important}}
+
+/* One physical golden rectangle: successive squares, clockwise subdivision.
+   Coordinates share the SVG's 323.60679775 × 200 reference plane. */
+.cockpit-grid{position:relative;display:block;aspect-ratio:1.61803398875;isolation:isolate;background:#141b13}
+.cockpit-grid>.cockpit-window{position:absolute;box-sizing:border-box;margin:0;border-color:#a3ba7e66;padding:1.4cqw;min-height:0}
+.cockpit-navigation{left:0;top:0;width:61.803399%;height:100%;display:flex;flex-direction:column}
+.cockpit-vitals{left:61.803399%;top:0;width:38.196601%;height:61.803399%}
+.cockpit-power{left:76.393202%;top:61.803399%;width:23.606798%;height:38.196601%}
+.cockpit-spectrum{left:61.803399%;top:61.803399%;width:14.589803%;height:23.606798%}
+.cockpit-route{left:67.376208%;top:85.410197%;width:9.016994%;height:14.589803%}
+.cockpit-grid::before{content:'';position:absolute;left:61.803399%;top:85.410197%;width:5.572809%;height:14.589803%;border:1px solid #a3ba7e66;background:repeating-linear-gradient(0deg,transparent 0 5px,#c1d99b18 5px 6px),repeating-linear-gradient(90deg,transparent 0 5px,#c1d99b18 5px 6px)}
+.cockpit-grid>.golden-display{inset:0;width:100%;height:100%;z-index:10;pointer-events:none;overflow:visible}
+/* Let the luminous geometry overlap the terminal chrome as well as its windows. */
+.flight-deck.cockpit{isolation:isolate;overflow:visible}
+.cockpit-grid{isolation:auto;overflow:visible}
+.cockpit-grid>.cockpit-window{z-index:0}
+.cockpit::after{z-index:1}
+.cockpit-grid .golden-line{stroke-width:2;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:1.4 .8;filter:drop-shadow(0 0 1px var(--accent)) drop-shadow(0 0 3px color-mix(in srgb,var(--accent) 45%,transparent))}
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){.cockpit-grid .golden-line{stroke-width:1.5;stroke-dasharray:1 .7;filter:drop-shadow(0 0 1px var(--accent))}}
+/* Static pixel mask: no animated noise, blur or glow. */
+.cockpit-window::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background-image:radial-gradient(ellipse at center,transparent 45%,#070d0799 70%);background-size:3px 3px;opacity:.55}
+.cockpit-window{color:var(--green);background:linear-gradient(125deg,#27332088,#0b130bbb)}
+.cockpit-window strong,.cockpit-data b{color:var(--green);font-family:var(--mono);font-variant-numeric:tabular-nums}
+.cockpit-navigation .cockpit-radar{flex:1;min-height:0;aspect-ratio:auto}
+.cockpit-navigation .cockpit-label{font-size:1cqw}
+.cockpit-vitals .cockpit-label{font-size:.95cqw;margin-bottom:1cqw;padding-bottom:.8cqw}
+.cockpit-vitals>strong{font-size:5cqw;margin:.6cqw 0}
+.cockpit-vitals .cockpit-altitude{font-size:3cqw}
+.cockpit-vitals>svg{height:5cqw;margin:1cqw 0}
+.cockpit-vitals .cockpit-data{grid-template-columns:repeat(3,1fr);gap:1cqw;margin-top:1cqw;font-size:.8cqw}
+.cockpit-vitals .cockpit-data>span{display:block}.cockpit-vitals .cockpit-data b{display:block;margin-top:.4cqw}
+.cockpit-power .cockpit-label{font-size:.8cqw;padding-bottom:.6cqw;margin-bottom:.5cqw}
+.cockpit-power strong{font-size:3cqw;margin:.4cqw 0}.cockpit-power>small{font-size:.8cqw}
+.cockpit-power .cockpit-bars{height:4cqw;margin:.5cqw 0}.cockpit-power .cockpit-data{margin-top:.5cqw;gap:.3cqw;font-size:.7cqw;grid-template-columns:1fr 1fr;align-items:center}
+.cockpit-power .cockpit-alert{font-size:.65cqw;margin-top:.6cqw}
+.cockpit-grid>.cockpit-spectrum{padding:.8cqw;display:flex;flex-direction:column}
+.cockpit-spectrum .cockpit-label{font-size:.65cqw;line-height:1.4;margin:0;padding-bottom:.6cqw}.cockpit-spectrum .cockpit-label>span{display:none}
+.cockpit-spectrum>svg{flex:1;width:100%;min-height:0;height:auto;shape-rendering:crispEdges}
+.cockpit-spectrum-foot{font-size:.6cqw;line-height:1.3}.cockpit-spectrum-foot>span:first-child{display:none}
+.cockpit-grid>.cockpit-route{padding:.5cqw}.cockpit-route .cockpit-label{font-size:.55cqw;padding:0;margin:0;border:0}.cockpit-route .cockpit-label>span{display:none}
+.cockpit-route-body{height:calc(100% - 1cqw)}.cockpit-route-body>svg{width:100%;height:100%;shape-rendering:crispEdges}.cockpit-route-body>div{display:none}
+
+/* WebGL belongs to the navigation instrument, never to the page viewport. */
+.cockpit-radar #webgl{position:absolute;inset:auto;left:50%;top:50%;width:64%;height:auto;aspect-ratio:1;transform:translate(-50%,-50%);z-index:0;opacity:.3;pointer-events:none;clip-path:circle(49%)}
+.cockpit-radar .cockpit-reticle{z-index:1}.cockpit-radar .cockpit-target,.cockpit-radar .cockpit-coordinates,.cockpit-radar .cockpit-lock{z-index:2}

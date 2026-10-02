@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg"><defs>
+  <filter id="green-media" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer>
+      <feFuncR type="table" tableValues="0.075 0.757"/>
+      <feFuncG type="table" tableValues="0.102 0.851"/>
+      <feFuncB type="table" tableValues="0.075 0.608"/>
+    </feComponentTransfer>
+  </filter>
+</defs></svg>

@@ -1,0 +1,5 @@
+Necromech — Winamp skin by Peacemaker, May 2003.
+Source: 60.wsz supplied by the portfolio owner.
+Main, equalizer, controls and playlist sprites converted losslessly from BMP to PNG.
+Playlist colors follow the original PLEDIT.TXT.
+Original artwork and authorship remain credited to Peacemaker.

@@ -1,0 +1,47 @@
+.fun-story{position:relative;display:flex;flex-direction:column;align-items:center;gap:20px;margin-top:90px;color:var(--light);perspective:1200px}
+.fun-heading{width:100%;display:grid;grid-template-columns:1fr auto;align-items:end;gap:12px 30px}
+.fun-kicker{grid-column:1/-1;font:10px/1.4 var(--mono);letter-spacing:.12em;color:var(--green)}
+.panel .fun-heading h2{font-size:clamp(40px,5vw,78px);line-height:.95;letter-spacing:-.035em;transform-origin:center bottom}
+.panel .fun-heading p{margin:0;max-width:250px;font:clamp(14px,1.3vw,18px)/1.5 var(--sans)}
+.fun-console{position:relative;min-height:0;width:100%;border:1px solid #a9be8e65;background:#141b14;overflow:hidden;transform-origin:center;flex:1}
+.fun-console-bar{height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid #a9be8e35;font:8px var(--mono);color:var(--green)}
+.fun-game{position:relative;width:100%;height:calc(100% - 28px);min-height:0;aspect-ratio:7/4;display:grid;place-items:center}
+.fun-game iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.fun-loading{font:10px var(--mono);letter-spacing:.14em;color:var(--green)}.game-loaded .fun-loading{visibility:hidden}
+.fun-scan{position:absolute;left:0;width:100%;height:2px;background:var(--green);box-shadow:0 0 25px var(--green);pointer-events:none;opacity:0}
+.fun-controls{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.panel .fun-controls p{font:9px/1.6 var(--mono);margin:0;max-width:430px;color:#abb99c}
+.fun-controls>div{display:flex;gap:16px}.fun-controls button{background:none;border:0;border-bottom:1px solid #a9be8e70;color:var(--green);padding:10px 0;font:9px/1.3 var(--mono);cursor:pointer}
+.fun-controls button:hover{color:var(--accent)}.fun-controls button:focus-visible{outline:2px solid var(--green);outline-offset:5px}
+.fun-story.is-fun-pinned{position:absolute;left:0;top:0;width:100%;height:100svh;padding:calc(var(--header) + 90px) max(7vw,calc((100vw - 1160px)/2)) 115px;margin:0;z-index:115;visibility:hidden;opacity:0;gap:18px}
+.vertical-mode .panel--fun .fun-story{margin-top:0}
+.is-fun-pinned .fun-console{max-width:calc((100svh - var(--header) - 360px)*1.75)}
+.vertical-mode .fun-story{width:100%;margin-top:100px;gap:20px}.vertical-mode .fun-console{flex:none}.vertical-mode .fun-game{height:auto;min-height:220px}.vertical-mode .fun-heading{display:block}.vertical-mode .fun-heading h2{margin:18px 0}.vertical-mode .fun-heading p{max-width:none}.vertical-mode .fun-controls{align-items:flex-start;flex-direction:column}.vertical-mode .fun-status{display:none}
+@media(max-height:750px) and (min-width:701px) and (pointer:fine),(max-height:750px) and (min-width:1025px){.fun-story.is-fun-pinned{padding-top:calc(var(--header) + 78px);padding-bottom:102px;gap:10px}.panel .fun-heading h2{font-size:42px}.fun-kicker{font-size:8px}.is-fun-pinned .fun-console{max-width:calc((100svh - var(--header) - 290px)*1.75)}}
+/* The phone rests half a panel earlier; close that gap before the play chapter. */
+body:not(.vertical-mode) .dev-track .panel--fun{margin-left:calc(var(--panel-width,100vw)*-.5)}
+.fun-story.is-fun-pinned{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:1fr auto;align-content:center;align-items:center;column-gap:5vw;row-gap:20px;padding:calc(var(--header) + 80px) 6vw 120px}
+.is-fun-pinned .fun-heading{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-start;gap:22px}
+.is-fun-pinned .fun-console{grid-column:1;grid-row:1;max-width:none;width:100%;height:auto;align-self:end}
+.is-fun-pinned .fun-game{height:auto;aspect-ratio:7/4}
+.is-fun-pinned .fun-controls{grid-column:1;grid-row:2;align-self:start;flex-direction:column;align-items:flex-start;gap:10px}
+.panel .fun-heading h2{font-size:clamp(42px,5.5vw,90px)}
+.panel .fun-heading > p{max-width:none;color:var(--green)}
+.fun-copy{display:grid;gap:18px;width:100%}
+.panel .fun-copy p{max-width:none;font:clamp(14px,1.15vw,19px)/1.6 var(--sans);margin:0}
+@media(max-height:750px) and (min-width:701px) and (pointer:fine),(max-height:750px) and (min-width:1025px){.fun-story.is-fun-pinned{padding-top:calc(var(--header) + 65px);padding-bottom:105px}.is-fun-pinned .fun-heading{gap:14px}.fun-copy{gap:12px}.panel .fun-copy p{font-size:14px}.panel .fun-heading h2{font-size:52px}}
+.vertical-mode .fun-copy{margin-top:24px}.vertical-mode .fun-copy p{font-size:16px}
+.is-fun-pinned .fun-console{height:min(30vw,calc(100svh - var(--header) - 320px))}
+.is-fun-pinned .fun-game{height:calc(100% - 28px);aspect-ratio:auto}
+/* An on-set still keeps its source colour, with a restrained monitor texture. */
+.fun-still{width:100%;margin:0;border-top:1px solid #a9be8e65;padding-top:10px}
+.fun-still-image{position:relative;overflow:hidden;background:#141b14}
+.fun-still img{display:block;width:100%;height:190px;object-fit:cover;object-position:50% 48%;filter:saturate(.88) contrast(1.04) brightness(.94)}
+.fun-still-image::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#1f261e15 3px 4px);box-shadow:inset 0 0 24px #141b1426}
+.fun-still figcaption{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font:8px/1.4 var(--mono);letter-spacing:.05em;color:var(--green)}
+.is-fun-pinned .fun-heading{gap:16px}
+.is-fun-pinned .fun-copy{display:grid;min-height:100px}
+.is-fun-pinned .fun-copy p{grid-area:1/1;align-self:start}
+.is-fun-pinned .fun-console{transform-style:preserve-3d;backface-visibility:hidden}
+@media(max-height:750px) and (min-width:701px) and (pointer:fine),(max-height:750px) and (min-width:1025px){.is-fun-pinned .fun-heading{gap:10px}.is-fun-pinned .fun-still img{height:115px}.is-fun-pinned .fun-copy{min-height:92px}.panel .fun-heading h2{font-size:46px}.fun-still figcaption{font-size:7px}}
+.vertical-mode .fun-still{margin-top:24px}.vertical-mode .fun-still img{height:auto;aspect-ratio:4/3;object-fit:contain}

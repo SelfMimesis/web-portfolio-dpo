@@ -1,0 +1,11 @@
+/* Keep position, deformation and text separate so the label stays readable. */
+.custom-cursor{background:none;color:var(--fg);border-radius:0;isolation:isolate;will-change:transform,opacity}
+.cursor-shape{position:absolute;inset:0;background:var(--accent);border:1px solid transparent;border-radius:50%;will-change:transform;overflow:hidden}
+.cursor-label{position:relative;z-index:1;color:#fff;white-space:nowrap;letter-spacing:.025em}
+.cursor-detail{position:absolute;inset:7px;opacity:0;border:1px solid currentColor;border-radius:6px;pointer-events:none}
+.cursor-detail::before,.cursor-detail::after{content:'';position:absolute;left:50%;width:8px;height:2px;background:currentColor;transform:translateX(-50%)}
+.cursor-detail::before{top:-2px}.cursor-detail::after{bottom:-2px}
+@media(any-hover:none){.custom-cursor{display:none}}
+.cursor-scroll-icon{position:absolute;bottom:12px;left:0;right:0;text-align:center;font:23px/1 var(--sans);opacity:0}
+.custom-cursor.is-scroll-cue{display:grid!important;font:10px var(--mono)}
+.wordmark,.wordmark *{animation:none;transition:none}

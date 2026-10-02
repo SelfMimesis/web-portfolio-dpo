@@ -1,0 +1,141 @@
+// One small SVG morph per visible terminal. Geometry is sampled once, never on scroll.
+const PHI = (1 + Math.sqrt(5)) / 2;
+const names = ['FIBONACCI', 'TRIANGULATION', 'GOLDEN SPIRAL', 'DIAMOND', 'NESTED CIRCLES', 'ARCS'];
+
+function compositions() {
+  const squares = [];
+  let x = 0, y = 0, w = 200 * PHI, h = 200;
+  for (let i = 0; i < 9; i++) {
+    const s = Math.min(w, h), dir = i % 4;
+    const sx = dir === 2 ? x + w - s : x;
+    const sy = dir === 3 ? y + h - s : y;
+    squares.push({ x: sx, y: sy, s });
+    if (dir === 0) { x += s; w -= s; }
+    if (dir === 1) { y += s; h -= s; }
+    if (dir === 2) w -= s;
+    if (dir === 3) h -= s;
+  }
+  const spiral = 'M0 200 ' + squares.map(({ x, y, s }, i) => {
+    const end = [[x+s,y],[x+s,y+s],[x,y+s],[x,y]][i%4];
+    return `A${s} ${s} 0 0 1 ${end[0]} ${end[1]}`;
+  }).join(' ');
+  const triangles = squares.map(({x,y,s},i) => `M${x} ${y+s}L${x+s} ${y}L${x+s} ${y+s}${i%2 ? `L${x} ${y}` : ''}`).join(' ');
+  const diamonds = squares.map(({x,y,s}) => `M${x} ${y+s/2}L${x+s/2} ${y}L${x+s} ${y+s/2}L${x+s/2} ${y+s}Z`).join(' ');
+  const circles = squares.map(({x,y,s}) => `M${x} ${y+s/2}a${s/2} ${s/2} 0 1 0 ${s} 0a${s/2} ${s/2} 0 1 0 ${-s} 0`).join(' ');
+  const arcs = squares.map(({x,y,s}) => `M${x} ${y+s}A${s} ${s} 0 0 0 ${x+s} ${y}M${x} ${y}A${s} ${s} 0 0 1 ${x+s} ${y+s}`).join(' ');
+  // A true logarithmic spiral: radius shrinks by φ every quarter-turn.
+  const points = Array.from({length:200},(_,i) => {
+    const a = i / 199 * Math.PI * 5;
+    const r = 200 * Math.exp(-Math.log(PHI) * a / (Math.PI/2));
+    return [r*Math.cos(a),r*Math.sin(a)];
+  });
+  const xs=points.map(p=>p[0]), ys=points.map(p=>p[1]);
+  const minX=Math.min(...xs),minY=Math.min(...ys);
+  const scale=Math.min(323.607/(Math.max(...xs)-minX),200/(Math.max(...ys)-minY));
+  const smooth = points.map(([px,py],i)=>`${i?'L':'M'}${(px-minX)*scale} ${(py-minY)*scale}`).join(' ');
+  return [spiral, triangles, smooth, diamonds, circles, arcs];
+}
+
+export function initGoldenDisplays() {
+  if (!window.gsap) return; // The inline SVG is the accessible, static fallback.
+  const paths = compositions();
+  const probe = document.createElementNS('http://www.w3.org/2000/svg','path');
+  // Sample each physical stroke independently: never join separate SVG subpaths.
+  const samples = paths.map(d => d.match(/M[^M]*/g).map(part => {
+    probe.setAttribute('d',part);
+    const length=probe.getTotalLength();
+    return Array.from({length:180},(_,i)=>probe.getPointAtLength(length*i/179));
+  }));
+  const draw = points => points.map((p,j)=>`${j?'L':'M'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(' ');
+  const settled = samples.map(strokes=>strokes.map(draw));
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const controllers = new Map();
+  document.querySelectorAll('.golden-display').forEach(svg => {
+    const line=svg.querySelector('.golden-line'), deck=svg.closest('.flight-deck');
+    const strokes=[line];
+    for(let i=1;i<Math.max(...samples.map(shape=>shape.length));i++) {
+      const stroke=line.cloneNode(false);
+      stroke.setAttribute('aria-hidden','true');
+      svg.append(stroke);strokes.push(stroke);
+    }
+    const label=deck.querySelector('[data-golden-label]'), readout=deck.querySelector('[data-golden-state]');
+    const speed=deck.querySelector('[data-cockpit-speed]');
+    const power=deck.querySelector('[data-cockpit-power]');
+    const frame=deck.querySelector('[data-cockpit-frame]');
+    const bars=[...deck.querySelectorAll('.cockpit-bars i')];
+    const charts=[...deck.querySelectorAll('.cockpit-chart')];
+    const targets=[...deck.querySelectorAll('.cockpit-target')];
+    const beacons=[...deck.querySelectorAll('.cockpit-route circle')];
+    const meters=[...deck.querySelectorAll('.cockpit-meter i')];
+    const waveFrames=Array.from({length:8},(_,f)=>charts.map(chart=>{
+      const box=chart.ownerSVGElement.viewBox.baseVal;
+      return Array.from({length:45},(_,j)=>`${j?'L':'M'}${j*box.width/44} ${box.height*(.5+Math.sin(j*1.7+f*.8)*Math.sin(j*.31+f*.4)*.36)}`).join(' ');
+    }));
+    let lastFrame=-1;
+    const electronicFrame = tick => {
+      if(tick===lastFrame)return;
+      lastFrame=tick;
+      const f=tick%8;
+      charts.forEach((chart,j)=>chart.setAttribute('d',waveFrames[f][j]));
+      bars.forEach((bar,j)=>{bar.style.transform=`scaleY(${.45+((f*3+j*2)%9)*.06})`;});
+      targets.forEach((target,j)=>{target.style.opacity=(f+j)%4===0?'.12':'.9';});
+      beacons.forEach((beacon,j)=>{beacon.style.opacity=(f+j)%3===0?'.12':'.94';});
+      meters.forEach((meter,j)=>{meter.style.transform=`scaleX(${1-((f+j)%3)*.025})`;});
+      if(frame)frame.textContent=`FRAME / ${String(f+1).padStart(3,'0')}`;
+    };
+    const proxy={mix:0};
+    const show = i => {
+      strokes.forEach((stroke,j)=>{
+        stroke.setAttribute('d',settled[i][j] || 'M0 0');
+        stroke.style.opacity=settled[i][j] ? '1' : '0';
+      });
+      label.textContent=`0${i+1} / ${names[i]}`;
+      readout.textContent=`0${i+1} / 06`;
+      svg.dataset.geometry=String(i);
+      // Electronic readouts switch at settled poses, without a second timer.
+      if(speed) speed.textContent=['07.82','07.86','07.91','07.88','07.84','07.82'][i];
+      if(power) power.textContent=String([68,72,74,71,69,68][i]);
+      if(frame) frame.textContent=`FRAME / 00${i+1}`;
+      bars.forEach((bar,j)=>{bar.style.transform=`scaleY(${.65+((i*3+j*2)%7)*.05})`;});
+    };
+    const timeline=gsap.timeline({paused:true,repeat:-1});
+    timeline.eventCallback('onUpdate',()=>electronicFrame(Math.floor(timeline.time()/.12)));
+    for(let i=0;i<paths.length;i++) {
+      const next=(i+1)%paths.length, from=samples[i], to=samples[next];
+      timeline.fromTo(proxy,{mix:0},{mix:1,duration:1.65,delay:2.3,ease:'sine.inOut',immediateRender:false,
+        onUpdate:()=>strokes.forEach((stroke,j)=>{
+          const a=from[j], b=to[j], mix=proxy.mix;
+          if(a && b) {
+            stroke.setAttribute('d',draw(a.map((p,k)=>({x:p.x+(b[k].x-p.x)*mix,y:p.y+(b[k].y-p.y)*mix}))));
+            stroke.style.opacity='1';
+          } else {
+            // Unmatched strokes keep their geometry and crossfade, including at loop boundaries.
+            stroke.setAttribute('d',a ? settled[i][j] : b ? settled[next][j] : 'M0 0');
+            stroke.style.opacity=String(a ? 1-mix : b ? mix : 0);
+          }
+        }),
+        onComplete:()=>{show(next);proxy.mix=0;}
+      });
+    }
+    show(0);
+    electronicFrame(0);
+    controllers.set(svg,{timeline,show,electronicFrame,visible:false});
+  });
+  const sync=()=>controllers.forEach(({timeline,show,electronicFrame,visible})=>{
+    if(reduced.matches){timeline.pause(0);show(0);electronicFrame(0);}
+    else if(visible&&!document.hidden)timeline.play();
+    else timeline.pause();
+  });
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{controllers.get(entry.target).visible=entry.isIntersecting&&entry.intersectionRatio>.1;});
+    sync();
+  },{threshold:[0,.1]});
+  controllers.forEach((_,svg)=>observer.observe(svg));
+  reduced.addEventListener('change',sync);
+  document.addEventListener('visibilitychange',sync);
+  window.addEventListener('pagehide',event=>{
+    if(event.persisted)return;
+    observer.disconnect();controllers.forEach(({timeline})=>timeline.kill());
+    reduced.removeEventListener('change',sync);document.removeEventListener('visibilitychange',sync);
+  });
+}

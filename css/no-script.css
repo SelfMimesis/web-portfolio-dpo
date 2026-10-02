@@ -1,0 +1,8 @@
+/* Readable navigation when JavaScript is explicitly disabled. */
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){
+  :root{--header:128px}
+  .site-header{height:var(--header);flex-wrap:wrap;align-content:center;row-gap:0}
+  .site-header nav{flex:0 0 100%;gap:0;justify-content:space-between;flex-wrap:wrap}
+  .site-header nav a{font-size:12px;min-height:44px}
+  .site-header .world-indicator{display:none}
+}

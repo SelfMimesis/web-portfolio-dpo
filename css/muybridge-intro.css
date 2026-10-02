@@ -1,0 +1,141 @@
+.panel.panel--muybridge{height:100svh;min-height:100svh;align-self:flex-start;padding:calc(var(--header) + 72px) 5vw 100px;justify-content:center}
+.panel--muybridge .panel-meta{left:5vw;right:5vw}
+.muybridge-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:center;gap:5vw;width:100%;max-width:1700px;margin:auto}
+.muybridge-figure{margin:0;min-width:0}
+.muybridge-plate{position:relative;width:100%;aspect-ratio:2284/1208;overflow:hidden;background:var(--bg)}
+.muybridge-source{position:absolute;max-width:none;width:var(--source-width);height:auto;left:var(--source-left);top:var(--source-top)}
+.muybridge-canvas{position:absolute;inset:0;width:100%;height:100%;visibility:hidden}
+.muybridge-ready .muybridge-canvas{visibility:visible}
+.muybridge-image-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;font:10px/1.4 var(--mono);letter-spacing:.04em}
+.muybridge-toggle{padding:8px 0;background:none;border:0;border-bottom:1px solid var(--fg);color:var(--fg);font:11px/1.4 var(--mono);min-height:40px;cursor:pointer}
+.muybridge-toggle:disabled{cursor:default;color:#66675d;border-color:var(--line)}
+.muybridge-figure figcaption{max-width:480px;margin-top:12px;color:#626358;font:12px/1.6 var(--sans)}
+.muybridge-narrative{min-width:0}
+.muybridge-label{display:block;margin-bottom:24px;color:var(--accent);font:10px/1.4 var(--mono);letter-spacing:.1em}
+.muybridge-statement{font:400 clamp(32px,3.6vw,64px)/1.04 var(--sans);letter-spacing:-.035em;max-width:17ch;margin:0 0 26px}
+.muybridge-statement em{font:italic 1em/1.08 Georgia,serif;color:var(--accent);letter-spacing:-.035em}
+.panel--muybridge .muybridge-beat p{font:16px/1.6 var(--sans);max-width:39ch;margin:0 0 16px}
+.muybridge-explore{display:inline-block;margin-top:18px;padding:10px 0;border-bottom:1px solid var(--accent);font:13px/1.5 var(--mono);color:var(--fg)}
+.muybridge-explore:hover{color:var(--accent)}
+.muybridge-steps{display:flex;gap:18px;margin-top:32px}
+.muybridge-steps button{background:none;border:0;border-top:1px solid var(--line);padding:12px 8px 8px;color:var(--muted);font:11px/1 var(--mono);cursor:pointer;min-height:40px}
+.muybridge-steps [aria-current]{border-color:var(--accent);color:var(--accent)}
+.muybridge-toggle:focus-visible,.muybridge-steps button:focus-visible,.muybridge-explore:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+.muybridge-desktop .muybridge-narrative{min-height:460px;display:flex;flex-direction:column;justify-content:center}
+.muybridge-desktop .muybridge-beat[hidden]{display:none}
+@media(min-width:701px) and (max-height:740px) and (pointer:fine),(min-width:1025px) and (max-height:740px){
+ .panel.panel--muybridge{padding-top:calc(var(--header) + 54px);padding-bottom:75px}
+ .muybridge-desktop .muybridge-narrative{min-height:0}
+ .muybridge-statement{font-size:clamp(30px,3vw,48px);margin-bottom:16px}
+ .muybridge-label{margin-bottom:14px}
+ .panel--muybridge .muybridge-beat p{font-size:14px;margin-bottom:10px}
+ .muybridge-steps{margin-top:14px}
+ .muybridge-figure{width:min(100%,80svh);justify-self:center}
+}
+.vertical-mode .scrolly--art .scrolly-sticky{overflow:visible}
+@media(min-width:701px) and (max-height:520px) and (pointer:fine),(min-width:1025px) and (max-height:520px){
+ .panel.panel--muybridge{padding-top:calc(var(--header) + 36px);padding-bottom:50px}
+ .muybridge-layout{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:4vw}
+ .muybridge-figure{width:min(100%,54svh)}
+ .muybridge-statement{font-size:26px;max-width:none;margin-bottom:10px}
+ .muybridge-label{font-size:8px;margin-bottom:8px}
+ .panel--muybridge .muybridge-beat p{font-size:12px;line-height:1.35;max-width:none;margin-bottom:8px}
+ .muybridge-steps{margin-top:4px;gap:12px}
+ .muybridge-steps button{min-height:28px;padding:6px}
+ .muybridge-image-tools>span{display:none}
+ .muybridge-image-tools{margin-top:4px;justify-content:flex-end}
+ .muybridge-figure figcaption{font-size:10px;line-height:1.4;margin-top:6px}
+}
+.vertical-mode .panel.panel--muybridge{height:auto;overflow:visible;display:block;padding:calc(var(--header) + 60px) 6vw 60px;min-height:0}
+.vertical-mode .muybridge-layout{display:block;max-width:720px}
+.vertical-mode .muybridge-figure{position:sticky;top:var(--header);z-index:2;background:var(--bg);padding:10px 0 16px}
+.vertical-mode .muybridge-plate{max-width:min(100%,60svh);margin:auto}
+.vertical-mode .muybridge-beat{min-height:44svh;padding:32px 0 48px;scroll-margin-top:calc(var(--header) + 36svh)}
+.vertical-mode .muybridge-statement{font-size:clamp(32px,7.8vw,54px);max-width:17ch;margin-bottom:22px}
+.vertical-mode .muybridge-label{margin-bottom:18px}
+.vertical-mode .muybridge-steps{display:none}
+@media(max-width:700px),(pointer:coarse) and (max-width:1024px){
+ .panel--muybridge .panel-meta{font-size:8px;gap:12px}
+ .panel--muybridge .panel-meta span:last-child{text-align:right;max-width:18ch}
+ .muybridge-figure figcaption{font-size:11px;margin-top:6px}
+ .muybridge-image-tools{font-size:8px;margin-top:6px}
+ .muybridge-toggle{font-size:11px;min-height:44px}
+ .panel--muybridge .muybridge-beat p{font-size:16px;line-height:1.6}
+}
+@media(prefers-reduced-motion:reduce){
+ .vertical-mode .muybridge-figure{position:static}
+ .vertical-mode .muybridge-beat{min-height:0;padding:32px 0}
+}
+
+/* The motion study shares the expanded ART cover; the track leaves only afterward. */
+.has-art-intro .art-composition > *{translate:var(--cover-exit-x,0px) var(--cover-exit-y,0px)}
+.art-cover-intro{position:absolute;z-index:5;left:7%;right:7%;top:calc(var(--header) + 56px);bottom:96px;min-width:0}
+.art-cover-intro .muybridge-layout{height:100%;max-width:1880px;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(36px,4vw,88px);align-items:start;align-content:center}
+.art-cover-intro .muybridge-figure{width:100%;justify-self:center}
+.art-cover-intro .muybridge-narrative{min-height:0;display:block;position:relative;top:0;padding-top:6px}
+.art-cover-intro .muybridge-beat{display:block}
+.art-cover-intro .muybridge-beat[hidden]{display:none}
+.art-cover-intro .muybridge-label{grid-column:1/-1;margin-bottom:16px}
+.art-cover-intro .muybridge-statement{font-size:clamp(38px,3.7vw,76px);line-height:1.04;margin:0 0 26px;max-width:17ch}
+.art-cover-intro .muybridge-beat p{font-size:clamp(16px,1.25vw,20px);line-height:1.65;margin-bottom:14px;max-width:43ch}
+.art-cover-intro .muybridge-explore{font-size:12px;margin-top:6px}
+.art-cover-intro .muybridge-steps{margin-top:14px}
+.art-cover-intro .muybridge-steps button{padding:8px;min-height:32px}
+@media(min-width:701px) and (max-height:740px) and (pointer:fine),(min-width:1025px) and (max-height:740px){
+ .art-cover-intro{top:calc(var(--header) + 42px);bottom:70px}
+ .art-cover-intro .muybridge-layout{gap:clamp(28px,4vw,64px)}
+ .art-cover-intro .muybridge-narrative{height:auto;top:0}
+ .art-cover-intro .muybridge-figure{width:min(100%,76svh)}
+ .art-cover-intro .muybridge-statement{font-size:clamp(32px,3.5vw,58px)}
+ .art-cover-intro .muybridge-beat p{font-size:12px;line-height:1.45;margin-bottom:8px}
+ .art-cover-intro .muybridge-label{font-size:8px;margin-bottom:10px}
+ .art-cover-intro .muybridge-figure figcaption{font-size:10px;line-height:1.4;margin-top:5px}
+ .art-cover-intro .muybridge-image-tools{margin-top:3px}
+ .art-cover-intro .muybridge-steps{margin-top:8px}
+}
+@media(min-width:701px) and (max-height:520px) and (pointer:fine),(min-width:1025px) and (max-height:520px){
+ .art-cover-intro{left:5%;right:5%;top:calc(var(--header) + 40px);bottom:58px}
+ .art-cover-intro .muybridge-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto;gap:24px}
+ .art-cover-intro .muybridge-figure{width:min(100%,66svh)}
+ .art-cover-intro .muybridge-beat{display:block}
+ .art-cover-intro .muybridge-narrative{height:auto}
+ .art-cover-intro .muybridge-statement{font-size:clamp(26px,3vw,34px);margin-bottom:10px}
+ .art-cover-intro .muybridge-beat p{font-size:11px;line-height:1.35;margin-bottom:6px}
+ .art-cover-intro .muybridge-steps button{padding:5px;min-height:24px}
+}
+.vertical-mode .panel--hero.has-art-intro{height:auto;min-height:100svh;overflow:visible}
+.vertical-mode .art-cover-intro{position:relative;inset:auto;padding:36px 6vw 60px;z-index:2}
+.vertical-mode .art-cover-intro .muybridge-layout{display:block;height:auto;max-width:720px}
+.vertical-mode .art-cover-intro .muybridge-narrative{height:auto;top:0}
+.vertical-mode .art-cover-intro .muybridge-figure{width:100%;max-width:none}
+.vertical-mode .art-cover-intro .muybridge-beat{display:block;min-height:44svh;padding:32px 0 48px}
+.vertical-mode .art-cover-intro .muybridge-statement{font-size:clamp(40px,10vw,68px);margin-bottom:22px}
+.vertical-mode .art-cover-intro .muybridge-beat p{font-size:16px;line-height:1.6;margin-bottom:16px}
+.vertical-mode .art-cover-intro .muybridge-steps{display:none}
+@media(prefers-reduced-motion:reduce){.vertical-mode .art-cover-intro .muybridge-beat{min-height:0}}
+
+/* Fixed headline and a reserved reading area prevent jumps between passages. */
+.muybridge-copy{display:grid;height:260px;max-width:43ch;padding-top:24px;border-top:1px solid var(--line)}
+.art-cover-intro .muybridge-copy .muybridge-beat{grid-area:1/1;align-self:start}
+.muybridge-passage-label{display:block;margin-bottom:18px;font:9px/1.4 var(--mono);letter-spacing:.08em;color:var(--muted)}
+.art-cover-intro .muybridge-statement{letter-spacing:-.035em}
+.art-cover-intro .muybridge-statement em{font:italic 1em/1.08 Georgia,serif;color:var(--accent);letter-spacing:-.035em}
+.art-cover-intro .muybridge-steps{margin-top:12px}
+@media(min-width:701px) and (max-height:740px) and (pointer:fine),(min-width:1025px) and (max-height:740px){
+ .muybridge-copy{height:190px;padding-top:16px}
+ .muybridge-passage-label{margin-bottom:12px}
+}
+@media(min-width:701px) and (max-height:520px) and (pointer:fine),(min-width:1025px) and (max-height:520px){
+ .muybridge-copy{height:94px;padding-top:6px}
+ .muybridge-passage-label{font-size:8px;margin-bottom:8px}
+ .art-cover-intro .muybridge-statement{margin-bottom:14px}
+ .art-cover-intro .muybridge-narrative>.muybridge-label{display:none}
+ .art-cover-intro .muybridge-explore{font-size:10px;line-height:1.3;margin-top:0;padding:4px 0}
+}
+.vertical-mode .muybridge-copy{display:block;height:auto;min-height:0;max-width:none;padding-top:0}
+.vertical-mode .art-cover-intro .muybridge-narrative{padding-top:28px}
+.vertical-mode .art-cover-intro .muybridge-copy .muybridge-beat{padding-top:24px}
+
+/* The second title line advances like registered film frames. */
+.art-cover-intro .muybridge-statement .muybridge-kinetic{display:inline-block;white-space:nowrap;transform:translateX(var(--frame-x,0px)) skewX(var(--frame-skew,0deg));text-shadow:var(--frame-echo,0px) 0 #d74a3026;transform-origin:50% 70%}
+@media(prefers-reduced-motion:reduce){.art-cover-intro .muybridge-statement .muybridge-kinetic{transform:none;text-shadow:none}}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <filter id="ink" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="18" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .333 .333 .333 0 0"/>
+    <feComponentTransfer><feFuncA type="discrete" tableValues=".35 .65 .88 .98 1"/></feComponentTransfer>
+  </filter>
+  <path fill="white" filter="url(#ink)" d="M0 0h160v160H0z"/>
+</svg>

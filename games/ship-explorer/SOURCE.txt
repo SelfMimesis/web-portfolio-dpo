@@ -1,0 +1,4 @@
+Copied from the user's D:\diego\MURDERBOT\shipexplorer2hotel.
+Local gameplay modules and assets are retained. The portfolio supplies its own
+embedding entry point, visibility lifecycle, scroll bridge and green/orange palette.
+The standalone popup/WebSocket client, controller and server are not embedded.
