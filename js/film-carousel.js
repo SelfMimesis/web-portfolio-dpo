@@ -1,112 +1,184 @@
-// An independent, masked viewer. Page scroll never selects a frame.
+// One masked viewer: explicit navigation never captures or advances page scroll.
 export function createFilmCarousel(root, { reducedMotion = false } = {}) {
   const carousel = root.querySelector('.film-carousel');
   const viewport = carousel.querySelector('.film-carousel-window');
   const frames = [...carousel.querySelector('.film-contact-sheet').children];
   const controls = carousel.querySelector('.film-carousel-controls');
   const images = frames.map(frame => frame.querySelector('img'));
-  const motion = window.gsap && !reducedMotion;
+  const gsap = window.gsap, motion = !!gsap && !reducedMotion;
+  const wrap = value => ((value % frames.length) + frames.length) % frames.length;
+  const ratio = image => Number(image.getAttribute('width')) / Number(image.getAttribute('height')) || image.naturalWidth / image.naturalHeight || 2.39;
+  const minRatio = Math.min(...images.map(ratio));
   root.classList.add('has-manual-carousel');
   const zones = document.createElement('div');
   zones.className = 'film-reel-zones';
-  zones.innerHTML = '<button type="button" data-step="-1" aria-label="Fotografía anterior"><span>ANTERIOR</span></button><button type="button" data-step="1" aria-label="Fotografía siguiente"><span>SIGUIENTE</span></button>';
+  zones.innerHTML = '<button type="button" data-step="1" aria-label="Ver la siguiente fotografía"><span>SIGUIENTE →</span></button>';
   viewport.append(zones);
   const cursor = document.createElement('div');
   cursor.className = 'film-reel-cursor'; cursor.setAttribute('aria-hidden', 'true');
-  cursor.innerHTML = '<span>ANT.</span><span>SIG.</span>';
-  carousel.append(cursor);
-  controls.innerHTML = frames.map((_, i) => `<button type="button" data-frame="${i}" aria-label="Ver fotografía ${i + 1}: ${images[i].alt}">${String(i + 1).padStart(2, '0')}</button>`).join('') + '<output class="film-reel-status" aria-live="polite" aria-atomic="true"></output>';
+  cursor.innerHTML = '<div class="film-reel-cursor-face"><span>SIGUIENTE</span><svg viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12h34M25 2l11 10-11 10"/></svg></div>';
+  // Fixed to the window, outside transformed/pinned film ancestors.
+  document.body.append(cursor);
+  const face = cursor.firstElementChild, arrow = cursor.querySelector('svg');
+  controls.replaceChildren();
+  const buttons = frames.map((_, i) => {
+    const button = document.createElement('button');
+    button.type = 'button'; button.dataset.frame = i;
+    button.setAttribute('aria-label', `Ver fotografía ${i + 1}: ${images[i].alt}`);
+    button.textContent = String(i + 1).padStart(2, '0'); controls.append(button);
+    return button;
+  });
+  const status = document.createElement('output');
+  status.className = 'film-reel-status'; status.setAttribute('aria-live', 'polite'); status.setAttribute('aria-atomic', 'true'); controls.append(status);
   controls.hidden = false;
-  const buttons = [...controls.querySelectorAll('button')];
-  let index = 0, previous = 0, direction = 1, progress = 1, velocity = 0, ticking = false, disposed = false;
-  const pointer = { x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, visible: false };
-  const paint = () => {
-    const p = Math.max(0, Math.min(1, progress));
-    frames.forEach((frame, i) => {
-      frame.style.visibility = i === index || (p < 1 && i === previous) ? 'visible' : 'hidden';
-      frame.inert = i !== index; frame.setAttribute('aria-hidden', String(i !== index));
-      frame.style.transform = `translateX(${i === index ? direction * (1 - p) * 100 : -direction * p * 100}%)`;
-    });
-  };
-  const tick = (_time, delta) => {
-    const dt = Math.min(delta / 1000, .025);
-    velocity += ((1 - progress) * 230 - velocity * 29) * dt; progress += velocity * dt;
-    if (Math.abs(1 - progress) < .001 && Math.abs(velocity) < .01) { progress = 1; velocity = 0; }
-    paint();
-    for (const axis of ['x', 'y']) {
-      const v = 'v' + axis, t = 't' + axis;
-      pointer[v] += ((pointer[t] - pointer[axis]) * 260 - pointer[v] * 27) * dt;
-      pointer[axis] += pointer[v] * dt;
-    }
-    gsap.set(cursor, { x: pointer.x, y: pointer.y, rotation: Math.max(-5, Math.min(5, pointer.vx * .008)) });
-    const settled = Math.abs(pointer.tx - pointer.x) + Math.abs(pointer.ty - pointer.y) + Math.abs(pointer.vx) + Math.abs(pointer.vy) < .15;
-    if (progress === 1 && (settled || !pointer.visible)) { gsap.ticker.remove(tick); ticking = false; }
-  };
-  const wake = () => { if (motion && !ticking) { gsap.ticker.add(tick); ticking = true; } };
-  const size = (animate = false) => {
-    const image = images[index], ratio = image.naturalWidth / image.naturalHeight || 2.39;
-    const width = Math.min(carousel.clientWidth, innerHeight * .45 * ratio), height = width / ratio;
-    if (motion && animate) gsap.to(viewport, { '--viewer-width': `${width}px`, '--viewer-height': `${height}px`, duration: .65, ease: 'power3.inOut', overwrite: true });
-    else { window.gsap?.killTweensOf(viewport); viewport.style.setProperty('--viewer-width', `${width}px`); viewport.style.setProperty('--viewer-height', `${height}px`); }
-  };
+  let index = 0, requested = 0, requestedDirection = 1, transition, disposed = false, ticking = false;
+  const pointer = { x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, visible: false, clientX: 0, clientY: 0 };
   const update = () => {
     carousel.dataset.frame = index;
     buttons.forEach((button, i) => button.setAttribute('aria-current', String(i === index)));
-    controls.querySelector('output').textContent = `Fotografía ${index + 1} de ${frames.length}`;
+    status.textContent = `Fotografía ${index + 1} de ${frames.length}`;
   };
-  const choose = (value, step) => {
-    const next = (value + frames.length) % frames.length;
-    if (next === index) return;
-    previous = index; index = next; direction = step || (index > previous ? 1 : -1);
-    progress = motion ? 0 : 1; velocity = 0;
-    update(); size(true); paint(); wake();
+  const rest = () => frames.forEach((frame, i) => {
+    frame.style.visibility = i === index ? 'visible' : 'hidden';
+    frame.style.transform = 'translateX(0)';
+    frame.inert = i !== index; frame.setAttribute('aria-hidden', String(i !== index));
+  });
+  const size = () => {
+    const page = carousel.closest('.film-page'), layout = carousel.parentElement;
+    const heading = page.querySelector('.film-frames-heading');
+    const headingSpace = heading.offsetHeight + parseFloat(getComputedStyle(heading).marginBottom);
+    const controlSpace = controls.offsetHeight + 14;
+    const available = root.classList.contains('has-film-stage')
+      ? Math.max(180, layout.clientHeight - headingSpace - controlSpace)
+      : innerHeight * .65;
+    // Choose one width for the collection, including its 4:3 final photograph.
+    // The outer space stays reserved, so selecting a frame cannot shift page scroll.
+    const width = Math.min(carousel.clientWidth, available * minRatio);
+    const tallest = width / minRatio, height = width / ratio(images[index]);
+    carousel.style.minHeight = `${tallest + controlSpace}px`;
+    carousel.style.setProperty('--viewer-width', `${width}px`);
+    viewport.style.setProperty('--viewer-width', `${width}px`);
+    return { '--viewer-height': `${height}px`, '--viewer-top': `${(tallest - height) / 2}px` };
+  };
+  const finish = () => {
+    transition = null; carousel.removeAttribute('aria-busy'); rest(); update();
+    if (!disposed && requested !== index) navigate();
+  };
+  const navigate = () => {
+    if (disposed || transition || requested === index) return;
+    const previous = index, direction = requestedDirection;
+    index = requested;
+    const geometry = size(); update();
+    if (!motion) {
+      Object.entries(geometry).forEach(([key, value]) => viewport.style.setProperty(key, value));
+      rest(); return;
+    }
+    const outgoing = frames[previous], incoming = frames[index];
+    frames.forEach((frame, i) => {
+      frame.style.visibility = i === previous || i === index ? 'visible' : 'hidden';
+      frame.inert = i !== index; frame.setAttribute('aria-hidden', String(i !== index));
+    });
+    gsap.set(outgoing, { xPercent: 0 }); gsap.set(incoming, { xPercent: direction * 100 });
+    carousel.setAttribute('aria-busy', 'true');
+    transition = gsap.timeline({ onComplete: finish })
+      .to(viewport, { ...geometry, duration: .8, ease: 'power3.inOut' }, 0)
+      .to(outgoing, { xPercent: -direction * 100, duration: .8, ease: 'power3.inOut' }, 0)
+      .to(incoming, { xPercent: 0, duration: .8, ease: 'power3.inOut' }, 0);
+  };
+  const choose = (value, direction = 1) => {
+    requested = wrap(value); requestedDirection = direction;
+    // Finish the current movement, then go to the latest requested destination.
+    navigate();
   };
   const click = event => {
     const button = event.target.closest('button');
-    if (button?.hasAttribute('data-step')) choose(index + Number(button.dataset.step), Number(button.dataset.step));
-    else if (button?.hasAttribute('data-frame')) choose(Number(button.dataset.frame));
+    if (button?.hasAttribute('data-step')) {
+      choose(requested + 1);
+      if (motion && pointer.visible) {
+        gsap.fromTo(arrow, { x: -6 }, { x: 0, duration: .65, ease: 'elastic.out(1, .4)', overwrite: true });
+        gsap.fromTo(face, { scale: .92 }, { scale: 1, duration: .65, ease: 'elastic.out(1, .5)', overwrite: true });
+      }
+    } else if (button?.hasAttribute('data-frame')) {
+      const next = Number(button.dataset.frame); choose(next, next >= index ? 1 : -1);
+    }
   };
   const key = event => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
-    if (event.key === 'Home') choose(0);
+    if (event.key === 'Home') choose(0, -1);
     else if (event.key === 'End') choose(frames.length - 1);
-    else { const step = event.key === 'ArrowLeft' ? -1 : 1; choose(index + step, step); }
+    else { const step = event.key === 'ArrowLeft' ? -1 : 1; choose(requested + step, step); }
   };
   const leave = () => {
-    pointer.visible = false; cursor.classList.remove('is-visible');
-    document.body.classList.remove('film-carousel-pointer');
+    pointer.visible = false; pointer.vx = pointer.vy = 0;
+    cursor.classList.remove('is-visible'); document.body.classList.remove('film-carousel-pointer');
+    gsap?.killTweensOf([face, arrow]);
+    if (ticking) { gsap.ticker.remove(tick); ticking = false; }
+  };
+  const hit = () => {
+    if (disposed || document.hidden || viewport.closest('[inert]')) return false;
+    const element = document.elementFromPoint(pointer.clientX, pointer.clientY);
+    return !!element && zones.contains(element);
+  };
+  const tick = (_time, delta) => {
+    // Re-test while hovering: pinned ancestors can move without a pointerleave.
+    if (!pointer.visible || !hit()) { leave(); return; }
+    let remaining = Math.min(delta / 1000, .05);
+    while (remaining > 0) {
+      const dt = Math.min(remaining, 1 / 120); remaining -= dt;
+      for (const axis of ['x', 'y']) {
+        const v = 'v' + axis;
+        pointer[v] += ((pointer['t' + axis] - pointer[axis]) * 360 - pointer[v] * 30) * dt;
+        pointer[axis] += pointer[v] * dt;
+      }
+    }
+    const speed = Math.min(1, Math.hypot(pointer.vx, pointer.vy) / 1800);
+    gsap.set(cursor, { x: pointer.x, y: pointer.y, rotation: Math.max(-9, Math.min(9, pointer.vx * .009)), scaleX: 1 + speed * .09, scaleY: 1 - speed * .05 });
   };
   const move = event => {
-    if (event.pointerType === 'touch' || !matchMedia('(any-hover: hover)').matches) return;
-    const rect = carousel.getBoundingClientRect(), windowRect = viewport.getBoundingClientRect();
-    pointer.tx = event.clientX - rect.left; pointer.ty = event.clientY - rect.top;
-    if (!pointer.visible) { pointer.x = pointer.tx; pointer.y = pointer.ty; pointer.vx = pointer.vy = 0; }
-    pointer.visible = true;
-    cursor.dataset.direction = event.clientX < windowRect.left + windowRect.width / 2 ? 'previous' : 'next';
-    cursor.classList.add('is-visible'); document.body.classList.add('film-carousel-pointer');
-    if (motion) wake(); else cursor.style.transform = `translate(${pointer.x}px, ${pointer.y}px)`;
+    if (event.pointerType !== 'mouse' || !matchMedia('(any-hover: hover) and (any-pointer: fine)').matches) { leave(); return; }
+    pointer.clientX = event.clientX; pointer.clientY = event.clientY;
+    if (!hit()) { leave(); return; }
+    pointer.tx = Math.max(76, Math.min(innerWidth - 76, event.clientX));
+    pointer.ty = Math.max(28, Math.min(innerHeight - 28, event.clientY));
+    if (!pointer.visible) {
+      pointer.x = pointer.tx; pointer.y = pointer.ty; pointer.vx = pointer.vy = 0;
+      if (motion) gsap.fromTo(face, { scale: .84 }, { scale: 1, duration: .5, ease: 'back.out(1.7)', overwrite: true });
+    }
+    pointer.visible = true; cursor.classList.add('is-visible'); document.body.classList.add('film-carousel-pointer');
+    if (motion) { if (!ticking) { gsap.ticker.add(tick); ticking = true; } }
+    else { pointer.x = pointer.tx; pointer.y = pointer.ty; cursor.style.transform = `translate(${pointer.x}px, ${pointer.y}px)`; }
   };
-  const refresh = () => { if (!disposed) size(); };
-  carousel.addEventListener('click', click); carousel.addEventListener('keydown', key);
-  viewport.addEventListener('pointermove', move); viewport.addEventListener('pointerleave', leave);
-  window.addEventListener('scroll', leave, { passive: true });
+  const refresh = () => {
+    if (disposed) return;
+    leave();
+    // Complete an in-flight transition before remeasuring at a breakpoint.
+    transition?.kill(); transition = null; index = requested;
+    gsap?.killTweensOf(frames); gsap?.set(frames, { xPercent: 0 });
+    Object.entries(size()).forEach(([key, value]) => viewport.style.setProperty(key, value));
+    carousel.removeAttribute('aria-busy'); update(); rest();
+  };
+  const bindings = [[carousel, 'click', click], [carousel, 'keydown', key],
+    [document, 'pointermove', move], [viewport, 'pointerleave', leave],
+    [document.documentElement, 'pointerleave', leave], [document, 'pointercancel', leave],
+    [window, 'blur', leave], [window, 'pagehide', leave], [document, 'visibilitychange', leave],
+    [document, 'scroll', leave], [window, 'wheel', leave], [window, 'resize', refresh]];
+  bindings.forEach(([target, event, handler]) => target.addEventListener(event, handler, { passive: event !== 'keydown', capture: event === 'scroll' }));
   let measuredWidth = carousel.clientWidth;
   const observer = new ResizeObserver(() => {
     if (carousel.clientWidth !== measuredWidth) { measuredWidth = carousel.clientWidth; refresh(); }
   });
   observer.observe(carousel);
-  images.forEach(image => { image.loading = 'eager'; image.addEventListener('load', refresh); });
-  update(); refresh(); paint();
+  // Intrinsic dimensions are declared in the markup; late loads must not reset motion.
+  images.forEach(image => { image.loading = 'eager'; });
+  refresh();
   return { refresh, destroy() {
-    disposed = true; leave(); observer.disconnect(); window.gsap?.ticker.remove(tick);
-    window.gsap?.killTweensOf([viewport, cursor]);
-    carousel.removeEventListener('click', click); carousel.removeEventListener('keydown', key);
-    viewport.removeEventListener('pointermove', move); viewport.removeEventListener('pointerleave', leave);
-    window.removeEventListener('scroll', leave);
-    images.forEach(image => image.removeEventListener('load', refresh));
+    disposed = true; leave(); transition?.kill(); observer.disconnect();
+    gsap?.killTweensOf([viewport, cursor, face, arrow, ...frames]);
+    bindings.forEach(([target, event, handler]) => target.removeEventListener(event, handler, event === 'scroll'));
     frames.forEach(frame => { frame.inert = false; frame.removeAttribute('aria-hidden'); frame.style.removeProperty('transform'); frame.style.removeProperty('visibility'); });
-    viewport.style.removeProperty('--viewer-width'); viewport.style.removeProperty('--viewer-height');
+    for (const name of ['--viewer-width', '--viewer-height', '--viewer-top']) viewport.style.removeProperty(name);
+    carousel.style.removeProperty('min-height'); carousel.style.removeProperty('--viewer-width'); carousel.removeAttribute('aria-busy');
     controls.replaceChildren(); zones.remove(); cursor.remove();
     root.classList.remove('has-manual-carousel'); delete carousel.dataset.frame;
   } };
